@@ -21,7 +21,11 @@ const app = express();
 
 // CORS: open by default for easy setup. Once you know your admin panel /
 // mobile app's real origins, tighten this via CORS_ORIGIN (comma-separated).
-const allowedOrigins = process.env.CORS_ORIGIN?.split(",").map((o) => o.trim());
+// Guard against CORS_ORIGIN="" (empty string) being treated as a configured
+// origin — "".split(",") returns [''], which is truthy and would silently
+// block every real origin.
+const corsOriginEnv = process.env.CORS_ORIGIN?.trim();
+const allowedOrigins = corsOriginEnv ? corsOriginEnv.split(",").map((o) => o.trim()) : undefined;
 app.use(cors(allowedOrigins ? { origin: allowedOrigins } : {}));
 
 app.use(express.json());

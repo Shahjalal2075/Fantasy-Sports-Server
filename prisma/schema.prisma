@@ -1,0 +1,325 @@
+// Fantasy Sports App - Database Schema (Prisma ORM 7 style)
+// Sports covered: Cricket, Football
+// Model: Free-to-play with a virtual, non-purchasable, non-withdrawable
+// coin system (NOT real money) for contest entry + prizes.
+
+generator client {
+  provider            = "prisma-client"
+  output              = "../src/generated/prisma"
+  importFileExtension = "ts"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum SportType {
+  CRICKET
+  FOOTBALL
+}
+
+enum MatchStatus {
+  UPCOMING
+  LIVE
+  COMPLETED
+  CANCELLED
+}
+
+enum CoinTransactionType {
+  DAILY_BONUS
+  CONTEST_ENTRY
+  CONTEST_PRIZE
+  ADMIN_BONUS
+  ADMIN_FINE
+}
+
+enum NotificationType {
+  COIN_BONUS
+  COIN_FINE
+  BAN
+  GENERIC
+}
+
+model User {
+  id               String    @id @default(uuid())
+  name             String
+  email            String    @unique
+  phone            String?   @unique
+  passwordHash     String
+  avatarUrl        String?
+  totalPoints      Int       @default(0)
+  isAdmin          Boolean   @default(false)
+  // Virtual, non-purchasable, non-withdrawable in-app currency. Never
+  // exchanged for real money in either direction — see CoinTransaction.
+  coins            Int       @default(0)
+  lastDailyBonusAt DateTime?
+  isBanned         Boolean   @default(false)
+  bannedReason     String?
+  bannedAt         DateTime?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  userTeams     UserTeam[]
+  entries       ContestEntry[]
+  coinLedger    CoinTransaction[]
+  notifications Notification[]
+
+  @@map("users")
+}
+
+// Full audit trail of every coin movement. Coins have no real-world value
+// and are never purchasable or redeemable — this ledger exists purely for
+// transparency/debugging, not for any financial reconciliation.
+model CoinTransaction {
+  id           String              @id @default(uuid())
+  userId       String
+  user         User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type         CoinTransactionType
+  amount       Int                 // positive = credit, negative = debit
+  balanceAfter Int
+  contestId    String?             // set for CONTEST_ENTRY / CONTEST_PRIZE
+  reason       String?             // admin-entered reason for ADMIN_BONUS / ADMIN_FINE
+  createdAt    DateTime            @default(now())
+
+  @@map("coin_transactions")
+}
+
+// In-app alert shown to a user when an admin adjusts their coins or bans them.
+model Notification {
+  id         String           @id @default(uuid())
+  userId     String
+  user       User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type       NotificationType
+  title      String
+  message    String
+  coinAmount Int?
+  isRead     Boolean          @default(false)
+  createdAt  DateTime         @default(now())
+
+  @@map("notifications")
+}
+
+// Single-row app-wide settings (currently just the daily bonus amount).
+model AppSettings {
+  id                Int    @id @default(1)
+  dailyBonusAmount  Int    @default(100)
+
+  @@map("app_settings")
+}
+
+// A reusable Team (e.g. "India", "Bangladesh", "Manchester United").
+// Created once by admin, then picked from dropdowns when creating matches
+// and players — instead of retyping free-text team names every time.
+model Team {
+  id        String    @id @default(uuid())
+  name      String
+  shortName String
+  // hasLogo=false -> logoUrl locked to "" (empty string).
+  // hasLogo=true  -> logoUrl is required and must be a real URL.
+  hasLogo   Boolean   @default(false)
+  logoUrl   String    @default("")
+  sport     SportType
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  players        Player[]
+  matchesAsTeamA Match[]  @relation("MatchTeamA")
+  matchesAsTeamB Match[]  @relation("MatchTeamB")
+
+  @@map("teams")
+}
+
+// A reusable Player belonging to a Team (e.g. "Shakib Al Hasan" -> Bangladesh).
+// Created once in the team's catalog, then picked into individual matches
+// via MatchPlayer — not recreated per match.
+model Player {
+  id          String  @id @default(uuid())
+  name        String
+  teamId      String
+  team        Team    @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  // Role differs by sport: Cricket -> WK/BAT/AR/BOWL, Football -> GK/DEF/MID/FWD
+  role        String
+  creditValue Float   @default(8.0) // fantasy "price" used for the 100-credit budget rule
+  // hasPhoto=false -> imageUrl locked to "" (empty string), no photo shown.
+  // hasPhoto=true  -> imageUrl is required and must be a real URL.
+  hasPhoto    Boolean @default(false)
+  imageUrl    String  @default("")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  matchEntries MatchPlayer[]
+
+  @@map("players")
+}
+
+model Match {
+  id             String      @id @default(uuid())
+  sport          SportType
+  teamAId        String
+  teamA          Team        @relation("MatchTeamA", fields: [teamAId], references: [id])
+  teamBId        String
+  teamB          Team        @relation("MatchTeamB", fields: [teamBId], references: [id])
+  tournamentName String
+  // Must match a PointSystem.format for this sport once one is configured.
+  format         String
+  venue          String?
+  startTime      DateTime
+  status         MatchStatus @default(UPCOMING)
+  // Lock time = when team selection closes (usually = startTime)
+  lockTime       DateTime
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+
+  matchPlayers MatchPlayer[]
+  userTeams    UserTeam[]
+  contests     Contest[]
+
+  @@map("matches")
+}
+
+// A Player's participation + raw performance stats in ONE specific match.
+// This is what gets added via "Add Player" inside a match (picked from the
+// two teams' catalogs), and what the manual "Sync Live Score" scorecard
+// form fills in. Points are computed from these raw stats using the
+// PointSystem configured for the match's (sport, format).
+model MatchPlayer {
+  id        String  @id @default(uuid())
+  matchId   String
+  match     Match   @relation(fields: [matchId], references: [id], onDelete: Cascade)
+  playerId  String
+  player    Player  @relation(fields: [playerId], references: [id], onDelete: Cascade)
+  isPlaying Boolean @default(true) // Playing XI: in/out
+  points    Float   @default(0)    // computed from raw stats + PointSystem
+
+  // ---- Batting ----
+  runs       Int     @default(0)
+  ballsFaced Int     @default(0)
+  fours      Int     @default(0)
+  sixes      Int     @default(0)
+  isOut      Boolean @default(false)
+
+  // ---- Bowling ----
+  ballsBowled       Int @default(0)
+  dotBalls          Int @default(0)
+  maidens           Int @default(0)
+  runsConceded      Int @default(0)
+  wickets           Int @default(0)
+  wicketsBowledOrLBW Int @default(0) // subset of `wickets` that were Bowled or LBW (extra bonus)
+
+  // ---- Fielding (cricket) ----
+  catches         Int @default(0)
+  runOutsDirect   Int @default(0)
+  runOutsIndirect Int @default(0)
+  stumpings       Int @default(0)
+
+  // ---- Football ----
+  minutesPlayed   Int     @default(0)
+  goals           Int     @default(0)
+  assists         Int     @default(0)
+  cleanSheet      Boolean @default(false)
+  yellowCards     Int     @default(0)
+  redCards        Int     @default(0)
+  ownGoals        Int     @default(0)
+  penaltiesSaved  Int     @default(0)
+  penaltiesMissed Int     @default(0)
+  saves           Int     @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userTeamSelections UserTeamPlayer[]
+
+  @@unique([matchId, playerId])
+  @@map("match_players")
+}
+
+model UserTeam {
+  id            String   @id @default(uuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  matchId       String
+  match         Match    @relation(fields: [matchId], references: [id], onDelete: Cascade)
+  teamName      String   @default("My Team")
+  captainId     String   // MatchPlayer.id
+  viceCaptainId String   // MatchPlayer.id
+  totalPoints   Float    @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  players UserTeamPlayer[]
+  entries ContestEntry[]
+
+  @@unique([userId, matchId, teamName])
+  @@map("user_teams")
+}
+
+model UserTeamPlayer {
+  id            String      @id @default(uuid())
+  userTeamId    String
+  userTeam      UserTeam    @relation(fields: [userTeamId], references: [id], onDelete: Cascade)
+  matchPlayerId String
+  matchPlayer   MatchPlayer @relation(fields: [matchPlayerId], references: [id], onDelete: Cascade)
+
+  @@unique([userTeamId, matchPlayerId])
+  @@map("user_team_players")
+}
+
+// A Contest is a leaderboard pool for a match. Joining costs virtual coins
+// (entryCost) purely to rate-limit entries — NOT real money. Winners are
+// paid out in the same virtual coins per prizeDistribution, e.g.
+// [{"rank":1,"coins":500},{"rank":2,"coins":300},{"rank":3,"coins":100}].
+// Coins are never purchasable or withdrawable — see User.coins.
+model Contest {
+  id                String   @id @default(uuid())
+  matchId           String
+  match             Match    @relation(fields: [matchId], references: [id], onDelete: Cascade)
+  name              String
+  maxEntries        Int      @default(10000)
+  entryCost         Int      @default(0)  // coins required to join (0 = free)
+  prizeDistribution Json     @default("[]") // [{ "rank": 1, "coins": 500 }, ...]
+  prizesDistributed Boolean  @default(false) // guards against double-payout
+  createdAt         DateTime @default(now())
+
+  entries ContestEntry[]
+
+  @@map("contests")
+}
+
+enum ContestEntryStatus {
+  ACTIVE
+  LOCKED
+  COMPLETED
+}
+
+model ContestEntry {
+  id         String             @id @default(uuid())
+  contestId  String
+  contest    Contest            @relation(fields: [contestId], references: [id], onDelete: Cascade)
+  userId     String
+  user       User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userTeamId String
+  userTeam   UserTeam           @relation(fields: [userTeamId], references: [id], onDelete: Cascade)
+  status     ContestEntryStatus @default(ACTIVE)
+  rank       Int?
+  createdAt  DateTime           @default(now())
+
+  @@unique([contestId, userTeamId])
+  @@map("contest_entries")
+}
+
+// Admin-configurable scoring rules, one row per (sport, format) — e.g.
+// (CRICKET, "T20") can score differently from (CRICKET, "Test"). When a
+// match is created, its `format` should match one of these. If none
+// matches, the sport's default (isDefault=true) row is used.
+model PointSystem {
+  id        String    @id @default(uuid())
+  sport     SportType
+  format    String    // e.g. "T20", "ODI", "Test", "League", "Knockout"
+  isDefault Boolean   @default(false)
+  rules     Json      // shape depends on sport — see fantasyScoring.ts
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@unique([sport, format])
+  @@map("point_systems")
+}

@@ -1,0 +1,256 @@
+import { Request, Response } from "express";
+import { CoinTransactionType } from "../generated/prisma/client";
+import prisma from "../config/prisma";
+import { createContestSchema, joinContestSchema } from "../utils/validators";
+import { debitCoins, creditCoins, InsufficientCoinsError } from "../services/walletService";
+
+// ---------- Admin ----------
+
+// POST /api/contests  (admin only)
+export async function createContest(req: Request, res: Response) {
+  const parsed = createContestSchema.safeParse(req.body);
+  if (!parsed.success) {
+    return res.status(400).json({ error: parsed.error.issues[0].message });
+  }
+
+  const { matchId, name, maxEntries, entryCost, prizeDistribution } = parsed.data;
+
+  const match = await prisma.match.findUnique({ where: { id: matchId } });
+  if (!match) {
+    return res.status(404).json({ error: "Match not found" });
+  }
+
+  const contest = await prisma.contest.create({
+    data: {
+      matchId,
+      name,
+      maxEntries: maxEntries ?? 10000,
+      entryCost: entryCost ?? 0,
+      prizeDistribution: prizeDistribution ?? [],
+    },
+  });
+
+  return res.status(201).json({ contest });
+}
+
+// ---------- Public ----------
+
+// GET /api/contests?matchId=  — list contests, with a live entry count
+export async function listContests(req: Request, res: Response) {
+  const { matchId } = req.query;
+
+  const contests = await prisma.contest.findMany({
+    where: { matchId: matchId ? (matchId as string) : undefined },
+    include: { _count: { select: { entries: true } } },
+    orderBy: { createdAt: "asc" },
+  });
+
+  return res.status(200).json({
+    contests: contests.map((c) => ({
+      id: c.id,
+      matchId: c.matchId,
+      name: c.name,
+      maxEntries: c.maxEntries,
+      entryCost: c.entryCost,
+      prizeDistribution: c.prizeDistribution,
+      prizesDistributed: c.prizesDistributed,
+      entryCount: c._count.entries,
+      createdAt: c.createdAt,
+    })),
+  });
+}
+
+// GET /api/contests/:id
+export async function getContestById(req: Request, res: Response) {
+  const { id } = req.params as { id: string };
+
+  const contest = await prisma.contest.findUnique({
+    where: { id },
+    include: { match: true, _count: { select: { entries: true } } },
+  });
+
+  if (!contest) {
+    return res.status(404).json({ error: "Contest not found" });
+  }
+
+  return res.status(200).json({
+    contest: {
+      id: contest.id,
+      matchId: contest.matchId,
+      name: contest.name,
+      maxEntries: contest.maxEntries,
+      entryCost: contest.entryCost,
+      prizeDistribution: contest.prizeDistribution,
+      prizesDistributed: contest.prizesDistributed,
+      entryCount: contest._count.entries,
+      match: contest.match,
+      createdAt: contest.createdAt,
+    },
+  });
+}
+
+// ---------- Auth required ----------
+
+// POST /api/contests/:id/join  body: { userTeamId }
+export async function joinContest(req: Request, res: Response) {
+  const { id: contestId } = req.params as { id: string };
+  const userId = req.userId as string;
+
+  const parsed = joinContestSchema.safeParse(req.body);
+  if (!parsed.success) {
+    return res.status(400).json({ error: parsed.error.issues[0].message });
+  }
+  const { userTeamId } = parsed.data;
+
+  const contest = await prisma.contest.findUnique({
+    where: { id: contestId },
+    include: { match: true, _count: { select: { entries: true } } },
+  });
+  if (!contest) {
+    return res.status(404).json({ error: "Contest not found" });
+  }
+
+  // Entries close at the same time team selection locks
+  if (new Date() >= contest.match.lockTime) {
+    return res.status(400).json({ error: "This contest is locked — the match has already started" });
+  }
+
+  if (contest._count.entries >= contest.maxEntries) {
+    return res.status(400).json({ error: "This contest is full" });
+  }
+
+  const userTeam = await prisma.userTeam.findUnique({ where: { id: userTeamId } });
+  if (!userTeam) {
+    return res.status(404).json({ error: "Team not found" });
+  }
+  if (userTeam.userId !== userId) {
+    return res.status(403).json({ error: "This is not your team" });
+  }
+  if (userTeam.matchId !== contest.matchId) {
+    return res.status(400).json({ error: "This team was not built for this contest's match" });
+  }
+
+  try {
+    const entry = await prisma.$transaction(async (tx) => {
+      // Deduct entry cost in coins (0 = free contest, no-op debit skipped)
+      if (contest.entryCost > 0) {
+        await debitCoins(tx, userId, contest.entryCost, CoinTransactionType.CONTEST_ENTRY, {
+          contestId,
+          reason: `Joined contest: ${contest.name}`,
+        });
+      }
+
+      return tx.contestEntry.create({
+        data: { contestId, userId, userTeamId },
+        include: { userTeam: true },
+      });
+    });
+    return res.status(201).json({ entry });
+  } catch (err: any) {
+    if (err instanceof InsufficientCoinsError) {
+      return res.status(402).json({ error: `Not enough coins — this contest costs ${contest.entryCost} coins to join` });
+    }
+    if (err.code === "P2002") {
+      return res.status(409).json({ error: "This team is already entered in this contest" });
+    }
+    throw err;
+  }
+}
+
+// GET /api/contests/:id/leaderboard  — ranked by each entry's team totalPoints
+export async function getLeaderboard(req: Request, res: Response) {
+  const { id: contestId } = req.params as { id: string };
+
+  const contest = await prisma.contest.findUnique({ where: { id: contestId } });
+  if (!contest) {
+    return res.status(404).json({ error: "Contest not found" });
+  }
+
+  const entries = await prisma.contestEntry.findMany({
+    where: { contestId },
+    include: {
+      userTeam: { select: { id: true, teamName: true, totalPoints: true } },
+      user: { select: { id: true, name: true } },
+    },
+    orderBy: { userTeam: { totalPoints: "desc" } },
+  });
+
+  const leaderboard = entries.map((entry, index) => ({
+    rank: index + 1,
+    userId: entry.user.id,
+    userName: entry.user.name,
+    teamName: entry.userTeam.teamName,
+    userTeamId: entry.userTeam.id,
+    points: entry.userTeam.totalPoints,
+  }));
+
+  return res.status(200).json({ contestId, leaderboard });
+}
+
+// GET /api/contests/my?matchId=  — logged-in user's own contest entries
+export async function getMyEntries(req: Request, res: Response) {
+  const userId = req.userId as string;
+  const { matchId } = req.query;
+
+  const entries = await prisma.contestEntry.findMany({
+    where: {
+      userId,
+      contest: matchId ? { matchId: matchId as string } : undefined,
+    },
+    include: {
+      contest: true,
+      userTeam: { select: { id: true, teamName: true, totalPoints: true } },
+    },
+    orderBy: { createdAt: "desc" },
+  });
+
+  return res.status(200).json({ entries });
+}
+
+// POST /api/contests/:id/distribute-prizes  (admin only)
+// Pays out coin prizes to the top-ranked entries according to the
+// contest's prizeDistribution. Call this AFTER the match is complete and
+// points have been calculated (via sync-live-score or calculate-points),
+// so `rank` on each ContestEntry is final. Idempotent — refuses to run
+// twice for the same contest via the prizesDistributed flag.
+export async function distributePrizes(req: Request, res: Response) {
+  const { id: contestId } = req.params as { id: string };
+
+  const contest = await prisma.contest.findUnique({ where: { id: contestId } });
+  if (!contest) {
+    return res.status(404).json({ error: "Contest not found" });
+  }
+  if (contest.prizesDistributed) {
+    return res.status(409).json({ error: "Prizes for this contest have already been distributed" });
+  }
+
+  const prizeMap = new Map<number, number>(
+    (contest.prizeDistribution as { rank: number; coins: number }[]).map((p) => [p.rank, p.coins])
+  );
+
+  if (prizeMap.size === 0) {
+    return res.status(400).json({ error: "This contest has no prize distribution configured" });
+  }
+
+  const winningEntries = await prisma.contestEntry.findMany({
+    where: { contestId, rank: { in: Array.from(prizeMap.keys()) } },
+  });
+
+  const payouts: { userId: string; rank: number; coins: number }[] = [];
+
+  await prisma.$transaction(async (tx) => {
+    for (const entry of winningEntries) {
+      const coins = prizeMap.get(entry.rank as number);
+      if (!coins) continue;
+      await creditCoins(tx, entry.userId, coins, CoinTransactionType.CONTEST_PRIZE, {
+        contestId,
+        reason: `Rank #${entry.rank} prize — ${contest.name}`,
+      });
+      payouts.push({ userId: entry.userId, rank: entry.rank as number, coins });
+    }
+
+    await tx.contest.update({ where: { id: contestId }, data: { prizesDistributed: true } });
+  });
+
+  return res.status(200).json({ message: "Prizes distributed", payouts });
+}

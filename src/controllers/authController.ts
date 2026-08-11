@@ -34,6 +34,7 @@ export async function register(req: Request, res: Response) {
       name: user.name,
       email: user.email,
       totalPoints: user.totalPoints,
+      coins: user.coins,
       isAdmin: user.isAdmin,
     },
   });
@@ -70,6 +71,7 @@ export async function login(req: Request, res: Response) {
       name: user.name,
       email: user.email,
       totalPoints: user.totalPoints,
+      coins: user.coins,
       isAdmin: user.isAdmin,
     },
   });
@@ -85,6 +87,7 @@ export async function getProfile(req: Request, res: Response) {
       phone: true,
       avatarUrl: true,
       totalPoints: true,
+      coins: true,
       isAdmin: true,
       createdAt: true,
     },

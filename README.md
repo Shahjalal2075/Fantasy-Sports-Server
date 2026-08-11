@@ -33,8 +33,7 @@ Prisma 7 changed a lot versus v5/v6:
    ```bash
    npx prisma generate
    npx prisma migrate dev --name init
-   
-   
+   npm run prisma:seed
    ```
    The seed creates default `PointSystem` rows (CRICKET/Default, FOOTBALL/Default) and `AppSettings` (100-coin daily bonus).
 

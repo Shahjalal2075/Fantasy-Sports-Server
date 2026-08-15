@@ -12,17 +12,23 @@ export async function register(req: Request, res: Response) {
     return res.status(400).json({ error: parsed.error.issues[0].message });
   }
 
-  const { name, email, phone, password } = parsed.data;
+  const { name, username, email, phone, password, referralCode } = parsed.data;
 
-  const existingUser = await prisma.user.findUnique({ where: { email } });
-  if (existingUser) {
+  const [existingEmail, existingUsername] = await Promise.all([
+    prisma.user.findUnique({ where: { email } }),
+    prisma.user.findUnique({ where: { username } }),
+  ]);
+  if (existingEmail) {
     return res.status(409).json({ error: "An account with this email already exists" });
+  }
+  if (existingUsername) {
+    return res.status(409).json({ error: "This username is already taken" });
   }
 
   const passwordHash = await bcrypt.hash(password, SALT_ROUNDS);
 
   const user = await prisma.user.create({
-    data: { name, email, phone, passwordHash },
+    data: { name, username, email, phone, passwordHash, referredByCode: referralCode || undefined },
   });
 
   const token = signToken({ userId: user.id, email: user.email });
@@ -32,6 +38,7 @@ export async function register(req: Request, res: Response) {
     user: {
       id: user.id,
       name: user.name,
+      username: user.username,
       email: user.email,
       totalPoints: user.totalPoints,
       coins: user.coins,
@@ -69,6 +76,7 @@ export async function login(req: Request, res: Response) {
     user: {
       id: user.id,
       name: user.name,
+      username: user.username,
       email: user.email,
       totalPoints: user.totalPoints,
       coins: user.coins,
@@ -83,6 +91,7 @@ export async function getProfile(req: Request, res: Response) {
     select: {
       id: true,
       name: true,
+      username: true,
       email: true,
       phone: true,
       avatarUrl: true,

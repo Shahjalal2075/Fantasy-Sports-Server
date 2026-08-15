@@ -39,6 +39,7 @@ export type UserSumAggregateOutputType = {
 export type UserMinAggregateOutputType = {
   id: string | null
   name: string | null
+  username: string | null
   email: string | null
   phone: string | null
   passwordHash: string | null
@@ -50,6 +51,7 @@ export type UserMinAggregateOutputType = {
   isBanned: boolean | null
   bannedReason: string | null
   bannedAt: Date | null
+  referredByCode: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -57,6 +59,7 @@ export type UserMinAggregateOutputType = {
 export type UserMaxAggregateOutputType = {
   id: string | null
   name: string | null
+  username: string | null
   email: string | null
   phone: string | null
   passwordHash: string | null
@@ -68,6 +71,7 @@ export type UserMaxAggregateOutputType = {
   isBanned: boolean | null
   bannedReason: string | null
   bannedAt: Date | null
+  referredByCode: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -75,6 +79,7 @@ export type UserMaxAggregateOutputType = {
 export type UserCountAggregateOutputType = {
   id: number
   name: number
+  username: number
   email: number
   phone: number
   passwordHash: number
@@ -86,6 +91,7 @@ export type UserCountAggregateOutputType = {
   isBanned: number
   bannedReason: number
   bannedAt: number
+  referredByCode: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -105,6 +111,7 @@ export type UserSumAggregateInputType = {
 export type UserMinAggregateInputType = {
   id?: true
   name?: true
+  username?: true
   email?: true
   phone?: true
   passwordHash?: true
@@ -116,6 +123,7 @@ export type UserMinAggregateInputType = {
   isBanned?: true
   bannedReason?: true
   bannedAt?: true
+  referredByCode?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -123,6 +131,7 @@ export type UserMinAggregateInputType = {
 export type UserMaxAggregateInputType = {
   id?: true
   name?: true
+  username?: true
   email?: true
   phone?: true
   passwordHash?: true
@@ -134,6 +143,7 @@ export type UserMaxAggregateInputType = {
   isBanned?: true
   bannedReason?: true
   bannedAt?: true
+  referredByCode?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -141,6 +151,7 @@ export type UserMaxAggregateInputType = {
 export type UserCountAggregateInputType = {
   id?: true
   name?: true
+  username?: true
   email?: true
   phone?: true
   passwordHash?: true
@@ -152,6 +163,7 @@ export type UserCountAggregateInputType = {
   isBanned?: true
   bannedReason?: true
   bannedAt?: true
+  referredByCode?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -246,6 +258,7 @@ export type UserGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
 export type UserGroupByOutputType = {
   id: string
   name: string
+  username: string
   email: string
   phone: string | null
   passwordHash: string
@@ -257,6 +270,7 @@ export type UserGroupByOutputType = {
   isBanned: boolean
   bannedReason: string | null
   bannedAt: Date | null
+  referredByCode: string | null
   createdAt: Date
   updatedAt: Date
   _count: UserCountAggregateOutputType | null
@@ -287,6 +301,7 @@ export type UserWhereInput = {
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   id?: Prisma.StringFilter<"User"> | string
   name?: Prisma.StringFilter<"User"> | string
+  username?: Prisma.StringFilter<"User"> | string
   email?: Prisma.StringFilter<"User"> | string
   phone?: Prisma.StringNullableFilter<"User"> | string | null
   passwordHash?: Prisma.StringFilter<"User"> | string
@@ -298,6 +313,7 @@ export type UserWhereInput = {
   isBanned?: Prisma.BoolFilter<"User"> | boolean
   bannedReason?: Prisma.StringNullableFilter<"User"> | string | null
   bannedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  referredByCode?: Prisma.StringNullableFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   userTeams?: Prisma.UserTeamListRelationFilter
@@ -309,6 +325,7 @@ export type UserWhereInput = {
 export type UserOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  username?: Prisma.SortOrder
   email?: Prisma.SortOrder
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
@@ -320,6 +337,7 @@ export type UserOrderByWithRelationInput = {
   isBanned?: Prisma.SortOrder
   bannedReason?: Prisma.SortOrderInput | Prisma.SortOrder
   bannedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  referredByCode?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   userTeams?: Prisma.UserTeamOrderByRelationAggregateInput
@@ -330,6 +348,7 @@ export type UserOrderByWithRelationInput = {
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  username?: string
   email?: string
   phone?: string
   AND?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
@@ -345,17 +364,19 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   isBanned?: Prisma.BoolFilter<"User"> | boolean
   bannedReason?: Prisma.StringNullableFilter<"User"> | string | null
   bannedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  referredByCode?: Prisma.StringNullableFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   userTeams?: Prisma.UserTeamListRelationFilter
   entries?: Prisma.ContestEntryListRelationFilter
   coinLedger?: Prisma.CoinTransactionListRelationFilter
   notifications?: Prisma.NotificationListRelationFilter
-}, "id" | "email" | "phone">
+}, "id" | "username" | "email" | "phone">
 
 export type UserOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  username?: Prisma.SortOrder
   email?: Prisma.SortOrder
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
@@ -367,6 +388,7 @@ export type UserOrderByWithAggregationInput = {
   isBanned?: Prisma.SortOrder
   bannedReason?: Prisma.SortOrderInput | Prisma.SortOrder
   bannedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  referredByCode?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
@@ -382,6 +404,7 @@ export type UserScalarWhereWithAggregatesInput = {
   NOT?: Prisma.UserScalarWhereWithAggregatesInput | Prisma.UserScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"User"> | string
   name?: Prisma.StringWithAggregatesFilter<"User"> | string
+  username?: Prisma.StringWithAggregatesFilter<"User"> | string
   email?: Prisma.StringWithAggregatesFilter<"User"> | string
   phone?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   passwordHash?: Prisma.StringWithAggregatesFilter<"User"> | string
@@ -393,6 +416,7 @@ export type UserScalarWhereWithAggregatesInput = {
   isBanned?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
   bannedReason?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   bannedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
+  referredByCode?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
 }
@@ -400,6 +424,7 @@ export type UserScalarWhereWithAggregatesInput = {
 export type UserCreateInput = {
   id?: string
   name: string
+  username: string
   email: string
   phone?: string | null
   passwordHash: string
@@ -411,6 +436,7 @@ export type UserCreateInput = {
   isBanned?: boolean
   bannedReason?: string | null
   bannedAt?: Date | string | null
+  referredByCode?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   userTeams?: Prisma.UserTeamCreateNestedManyWithoutUserInput
@@ -422,6 +448,7 @@ export type UserCreateInput = {
 export type UserUncheckedCreateInput = {
   id?: string
   name: string
+  username: string
   email: string
   phone?: string | null
   passwordHash: string
@@ -433,6 +460,7 @@ export type UserUncheckedCreateInput = {
   isBanned?: boolean
   bannedReason?: string | null
   bannedAt?: Date | string | null
+  referredByCode?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   userTeams?: Prisma.UserTeamUncheckedCreateNestedManyWithoutUserInput
@@ -444,6 +472,7 @@ export type UserUncheckedCreateInput = {
 export type UserUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
@@ -455,6 +484,7 @@ export type UserUpdateInput = {
   isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
   bannedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bannedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  referredByCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   userTeams?: Prisma.UserTeamUpdateManyWithoutUserNestedInput
@@ -466,6 +496,7 @@ export type UserUpdateInput = {
 export type UserUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
@@ -477,6 +508,7 @@ export type UserUncheckedUpdateInput = {
   isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
   bannedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bannedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  referredByCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   userTeams?: Prisma.UserTeamUncheckedUpdateManyWithoutUserNestedInput
@@ -488,6 +520,7 @@ export type UserUncheckedUpdateInput = {
 export type UserCreateManyInput = {
   id?: string
   name: string
+  username: string
   email: string
   phone?: string | null
   passwordHash: string
@@ -499,6 +532,7 @@ export type UserCreateManyInput = {
   isBanned?: boolean
   bannedReason?: string | null
   bannedAt?: Date | string | null
+  referredByCode?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -506,6 +540,7 @@ export type UserCreateManyInput = {
 export type UserUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
@@ -517,6 +552,7 @@ export type UserUpdateManyMutationInput = {
   isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
   bannedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bannedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  referredByCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -524,6 +560,7 @@ export type UserUpdateManyMutationInput = {
 export type UserUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
@@ -535,6 +572,7 @@ export type UserUncheckedUpdateManyInput = {
   isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
   bannedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bannedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  referredByCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -542,6 +580,7 @@ export type UserUncheckedUpdateManyInput = {
 export type UserCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  username?: Prisma.SortOrder
   email?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
@@ -553,6 +592,7 @@ export type UserCountOrderByAggregateInput = {
   isBanned?: Prisma.SortOrder
   bannedReason?: Prisma.SortOrder
   bannedAt?: Prisma.SortOrder
+  referredByCode?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -565,6 +605,7 @@ export type UserAvgOrderByAggregateInput = {
 export type UserMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  username?: Prisma.SortOrder
   email?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
@@ -576,6 +617,7 @@ export type UserMaxOrderByAggregateInput = {
   isBanned?: Prisma.SortOrder
   bannedReason?: Prisma.SortOrder
   bannedAt?: Prisma.SortOrder
+  referredByCode?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -583,6 +625,7 @@ export type UserMaxOrderByAggregateInput = {
 export type UserMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  username?: Prisma.SortOrder
   email?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
@@ -594,6 +637,7 @@ export type UserMinOrderByAggregateInput = {
   isBanned?: Prisma.SortOrder
   bannedReason?: Prisma.SortOrder
   bannedAt?: Prisma.SortOrder
+  referredByCode?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -695,6 +739,7 @@ export type UserUpdateOneRequiredWithoutEntriesNestedInput = {
 export type UserCreateWithoutCoinLedgerInput = {
   id?: string
   name: string
+  username: string
   email: string
   phone?: string | null
   passwordHash: string
@@ -706,6 +751,7 @@ export type UserCreateWithoutCoinLedgerInput = {
   isBanned?: boolean
   bannedReason?: string | null
   bannedAt?: Date | string | null
+  referredByCode?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   userTeams?: Prisma.UserTeamCreateNestedManyWithoutUserInput
@@ -716,6 +762,7 @@ export type UserCreateWithoutCoinLedgerInput = {
 export type UserUncheckedCreateWithoutCoinLedgerInput = {
   id?: string
   name: string
+  username: string
   email: string
   phone?: string | null
   passwordHash: string
@@ -727,6 +774,7 @@ export type UserUncheckedCreateWithoutCoinLedgerInput = {
   isBanned?: boolean
   bannedReason?: string | null
   bannedAt?: Date | string | null
+  referredByCode?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   userTeams?: Prisma.UserTeamUncheckedCreateNestedManyWithoutUserInput
@@ -753,6 +801,7 @@ export type UserUpdateToOneWithWhereWithoutCoinLedgerInput = {
 export type UserUpdateWithoutCoinLedgerInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
@@ -764,6 +813,7 @@ export type UserUpdateWithoutCoinLedgerInput = {
   isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
   bannedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bannedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  referredByCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   userTeams?: Prisma.UserTeamUpdateManyWithoutUserNestedInput
@@ -774,6 +824,7 @@ export type UserUpdateWithoutCoinLedgerInput = {
 export type UserUncheckedUpdateWithoutCoinLedgerInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
@@ -785,6 +836,7 @@ export type UserUncheckedUpdateWithoutCoinLedgerInput = {
   isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
   bannedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bannedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  referredByCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   userTeams?: Prisma.UserTeamUncheckedUpdateManyWithoutUserNestedInput
@@ -795,6 +847,7 @@ export type UserUncheckedUpdateWithoutCoinLedgerInput = {
 export type UserCreateWithoutNotificationsInput = {
   id?: string
   name: string
+  username: string
   email: string
   phone?: string | null
   passwordHash: string
@@ -806,6 +859,7 @@ export type UserCreateWithoutNotificationsInput = {
   isBanned?: boolean
   bannedReason?: string | null
   bannedAt?: Date | string | null
+  referredByCode?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   userTeams?: Prisma.UserTeamCreateNestedManyWithoutUserInput
@@ -816,6 +870,7 @@ export type UserCreateWithoutNotificationsInput = {
 export type UserUncheckedCreateWithoutNotificationsInput = {
   id?: string
   name: string
+  username: string
   email: string
   phone?: string | null
   passwordHash: string
@@ -827,6 +882,7 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   isBanned?: boolean
   bannedReason?: string | null
   bannedAt?: Date | string | null
+  referredByCode?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   userTeams?: Prisma.UserTeamUncheckedCreateNestedManyWithoutUserInput
@@ -853,6 +909,7 @@ export type UserUpdateToOneWithWhereWithoutNotificationsInput = {
 export type UserUpdateWithoutNotificationsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
@@ -864,6 +921,7 @@ export type UserUpdateWithoutNotificationsInput = {
   isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
   bannedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bannedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  referredByCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   userTeams?: Prisma.UserTeamUpdateManyWithoutUserNestedInput
@@ -874,6 +932,7 @@ export type UserUpdateWithoutNotificationsInput = {
 export type UserUncheckedUpdateWithoutNotificationsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
@@ -885,6 +944,7 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
   bannedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bannedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  referredByCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   userTeams?: Prisma.UserTeamUncheckedUpdateManyWithoutUserNestedInput
@@ -895,6 +955,7 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
 export type UserCreateWithoutUserTeamsInput = {
   id?: string
   name: string
+  username: string
   email: string
   phone?: string | null
   passwordHash: string
@@ -906,6 +967,7 @@ export type UserCreateWithoutUserTeamsInput = {
   isBanned?: boolean
   bannedReason?: string | null
   bannedAt?: Date | string | null
+  referredByCode?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   entries?: Prisma.ContestEntryCreateNestedManyWithoutUserInput
@@ -916,6 +978,7 @@ export type UserCreateWithoutUserTeamsInput = {
 export type UserUncheckedCreateWithoutUserTeamsInput = {
   id?: string
   name: string
+  username: string
   email: string
   phone?: string | null
   passwordHash: string
@@ -927,6 +990,7 @@ export type UserUncheckedCreateWithoutUserTeamsInput = {
   isBanned?: boolean
   bannedReason?: string | null
   bannedAt?: Date | string | null
+  referredByCode?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   entries?: Prisma.ContestEntryUncheckedCreateNestedManyWithoutUserInput
@@ -953,6 +1017,7 @@ export type UserUpdateToOneWithWhereWithoutUserTeamsInput = {
 export type UserUpdateWithoutUserTeamsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
@@ -964,6 +1029,7 @@ export type UserUpdateWithoutUserTeamsInput = {
   isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
   bannedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bannedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  referredByCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   entries?: Prisma.ContestEntryUpdateManyWithoutUserNestedInput
@@ -974,6 +1040,7 @@ export type UserUpdateWithoutUserTeamsInput = {
 export type UserUncheckedUpdateWithoutUserTeamsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
@@ -985,6 +1052,7 @@ export type UserUncheckedUpdateWithoutUserTeamsInput = {
   isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
   bannedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bannedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  referredByCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   entries?: Prisma.ContestEntryUncheckedUpdateManyWithoutUserNestedInput
@@ -995,6 +1063,7 @@ export type UserUncheckedUpdateWithoutUserTeamsInput = {
 export type UserCreateWithoutEntriesInput = {
   id?: string
   name: string
+  username: string
   email: string
   phone?: string | null
   passwordHash: string
@@ -1006,6 +1075,7 @@ export type UserCreateWithoutEntriesInput = {
   isBanned?: boolean
   bannedReason?: string | null
   bannedAt?: Date | string | null
+  referredByCode?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   userTeams?: Prisma.UserTeamCreateNestedManyWithoutUserInput
@@ -1016,6 +1086,7 @@ export type UserCreateWithoutEntriesInput = {
 export type UserUncheckedCreateWithoutEntriesInput = {
   id?: string
   name: string
+  username: string
   email: string
   phone?: string | null
   passwordHash: string
@@ -1027,6 +1098,7 @@ export type UserUncheckedCreateWithoutEntriesInput = {
   isBanned?: boolean
   bannedReason?: string | null
   bannedAt?: Date | string | null
+  referredByCode?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   userTeams?: Prisma.UserTeamUncheckedCreateNestedManyWithoutUserInput
@@ -1053,6 +1125,7 @@ export type UserUpdateToOneWithWhereWithoutEntriesInput = {
 export type UserUpdateWithoutEntriesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1064,6 +1137,7 @@ export type UserUpdateWithoutEntriesInput = {
   isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
   bannedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bannedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  referredByCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   userTeams?: Prisma.UserTeamUpdateManyWithoutUserNestedInput
@@ -1074,6 +1148,7 @@ export type UserUpdateWithoutEntriesInput = {
 export type UserUncheckedUpdateWithoutEntriesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1085,6 +1160,7 @@ export type UserUncheckedUpdateWithoutEntriesInput = {
   isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
   bannedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bannedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  referredByCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   userTeams?: Prisma.UserTeamUncheckedUpdateManyWithoutUserNestedInput
@@ -1153,6 +1229,7 @@ export type UserCountOutputTypeCountNotificationsArgs<ExtArgs extends runtime.Ty
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
+  username?: boolean
   email?: boolean
   phone?: boolean
   passwordHash?: boolean
@@ -1164,6 +1241,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   isBanned?: boolean
   bannedReason?: boolean
   bannedAt?: boolean
+  referredByCode?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   userTeams?: boolean | Prisma.User$userTeamsArgs<ExtArgs>
@@ -1176,6 +1254,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
 export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
+  username?: boolean
   email?: boolean
   phone?: boolean
   passwordHash?: boolean
@@ -1187,6 +1266,7 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   isBanned?: boolean
   bannedReason?: boolean
   bannedAt?: boolean
+  referredByCode?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["user"]>
@@ -1194,6 +1274,7 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
 export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
+  username?: boolean
   email?: boolean
   phone?: boolean
   passwordHash?: boolean
@@ -1205,6 +1286,7 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   isBanned?: boolean
   bannedReason?: boolean
   bannedAt?: boolean
+  referredByCode?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["user"]>
@@ -1212,6 +1294,7 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
 export type UserSelectScalar = {
   id?: boolean
   name?: boolean
+  username?: boolean
   email?: boolean
   phone?: boolean
   passwordHash?: boolean
@@ -1223,11 +1306,12 @@ export type UserSelectScalar = {
   isBanned?: boolean
   bannedReason?: boolean
   bannedAt?: boolean
+  referredByCode?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "phone" | "passwordHash" | "avatarUrl" | "totalPoints" | "isAdmin" | "coins" | "lastDailyBonusAt" | "isBanned" | "bannedReason" | "bannedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "username" | "email" | "phone" | "passwordHash" | "avatarUrl" | "totalPoints" | "isAdmin" | "coins" | "lastDailyBonusAt" | "isBanned" | "bannedReason" | "bannedAt" | "referredByCode" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   userTeams?: boolean | Prisma.User$userTeamsArgs<ExtArgs>
   entries?: boolean | Prisma.User$entriesArgs<ExtArgs>
@@ -1249,6 +1333,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     name: string
+    username: string
     email: string
     phone: string | null
     passwordHash: string
@@ -1260,6 +1345,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     isBanned: boolean
     bannedReason: string | null
     bannedAt: Date | null
+    referredByCode: string | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["user"]>
@@ -1691,6 +1777,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
 export interface UserFieldRefs {
   readonly id: Prisma.FieldRef<"User", 'String'>
   readonly name: Prisma.FieldRef<"User", 'String'>
+  readonly username: Prisma.FieldRef<"User", 'String'>
   readonly email: Prisma.FieldRef<"User", 'String'>
   readonly phone: Prisma.FieldRef<"User", 'String'>
   readonly passwordHash: Prisma.FieldRef<"User", 'String'>
@@ -1702,6 +1789,7 @@ export interface UserFieldRefs {
   readonly isBanned: Prisma.FieldRef<"User", 'Boolean'>
   readonly bannedReason: Prisma.FieldRef<"User", 'String'>
   readonly bannedAt: Prisma.FieldRef<"User", 'DateTime'>
+  readonly referredByCode: Prisma.FieldRef<"User", 'String'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"User", 'DateTime'>
 }

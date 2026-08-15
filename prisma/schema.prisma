@@ -43,6 +43,7 @@ enum NotificationType {
 model User {
   id               String    @id @default(uuid())
   name             String
+  username         String    @unique
   email            String    @unique
   phone            String?   @unique
   passwordHash     String
@@ -56,6 +57,9 @@ model User {
   isBanned         Boolean   @default(false)
   bannedReason     String?
   bannedAt         DateTime?
+  // The referral code THEY entered at signup (not their own code to
+  // share). No reward logic is wired up yet — this just records it.
+  referredByCode   String?
   createdAt        DateTime  @default(now())
   updatedAt        DateTime  @updatedAt
 

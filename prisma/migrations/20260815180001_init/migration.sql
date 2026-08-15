@@ -17,6 +17,7 @@ CREATE TYPE "ContestEntryStatus" AS ENUM ('ACTIVE', 'LOCKED', 'COMPLETED');
 CREATE TABLE "users" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
+    "username" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "phone" TEXT,
     "passwordHash" TEXT NOT NULL,
@@ -28,6 +29,7 @@ CREATE TABLE "users" (
     "isBanned" BOOLEAN NOT NULL DEFAULT false,
     "bannedReason" TEXT,
     "bannedAt" TIMESTAMP(3),
+    "referredByCode" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -218,6 +220,9 @@ CREATE TABLE "point_systems" (
 
     CONSTRAINT "point_systems_pkey" PRIMARY KEY ("id")
 );
+
+-- CreateIndex
+CREATE UNIQUE INDEX "users_username_key" ON "users"("username");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "users_email_key" ON "users"("email");

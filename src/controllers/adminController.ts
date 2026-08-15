@@ -10,6 +10,7 @@ export async function listUsers(req: Request, res: Response) {
     select: {
       id: true,
       name: true,
+      username: true,
       email: true,
       phone: true,
       coins: true,
@@ -31,6 +32,7 @@ export async function listUsers(req: Request, res: Response) {
   const result = users.map((u) => ({
     id: u.id,
     name: u.name,
+    username: u.username,
     email: u.email,
     phone: u.phone,
     coins: u.coins,

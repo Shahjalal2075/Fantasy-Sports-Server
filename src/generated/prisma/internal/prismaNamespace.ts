@@ -409,7 +409,9 @@ export const ModelName = {
   UserTeamPlayer: 'UserTeamPlayer',
   Contest: 'Contest',
   ContestEntry: 'ContestEntry',
-  PointSystem: 'PointSystem'
+  PointSystem: 'PointSystem',
+  PromoCode: 'PromoCode',
+  PromoCodeClaim: 'PromoCodeClaim'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -425,7 +427,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "coinTransaction" | "notification" | "appSettings" | "team" | "player" | "match" | "matchPlayer" | "userTeam" | "userTeamPlayer" | "contest" | "contestEntry" | "pointSystem"
+    modelProps: "user" | "coinTransaction" | "notification" | "appSettings" | "team" | "player" | "match" | "matchPlayer" | "userTeam" | "userTeamPlayer" | "contest" | "contestEntry" | "pointSystem" | "promoCode" | "promoCodeClaim"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1391,6 +1393,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    PromoCode: {
+      payload: Prisma.$PromoCodePayload<ExtArgs>
+      fields: Prisma.PromoCodeFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PromoCodeFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PromoCodePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PromoCodeFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PromoCodePayload>
+        }
+        findFirst: {
+          args: Prisma.PromoCodeFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PromoCodePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PromoCodeFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PromoCodePayload>
+        }
+        findMany: {
+          args: Prisma.PromoCodeFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PromoCodePayload>[]
+        }
+        create: {
+          args: Prisma.PromoCodeCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PromoCodePayload>
+        }
+        createMany: {
+          args: Prisma.PromoCodeCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PromoCodeCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PromoCodePayload>[]
+        }
+        delete: {
+          args: Prisma.PromoCodeDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PromoCodePayload>
+        }
+        update: {
+          args: Prisma.PromoCodeUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PromoCodePayload>
+        }
+        deleteMany: {
+          args: Prisma.PromoCodeDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PromoCodeUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PromoCodeUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PromoCodePayload>[]
+        }
+        upsert: {
+          args: Prisma.PromoCodeUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PromoCodePayload>
+        }
+        aggregate: {
+          args: Prisma.PromoCodeAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePromoCode>
+        }
+        groupBy: {
+          args: Prisma.PromoCodeGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PromoCodeGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PromoCodeCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PromoCodeCountAggregateOutputType> | number
+        }
+      }
+    }
+    PromoCodeClaim: {
+      payload: Prisma.$PromoCodeClaimPayload<ExtArgs>
+      fields: Prisma.PromoCodeClaimFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PromoCodeClaimFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PromoCodeClaimPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PromoCodeClaimFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PromoCodeClaimPayload>
+        }
+        findFirst: {
+          args: Prisma.PromoCodeClaimFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PromoCodeClaimPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PromoCodeClaimFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PromoCodeClaimPayload>
+        }
+        findMany: {
+          args: Prisma.PromoCodeClaimFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PromoCodeClaimPayload>[]
+        }
+        create: {
+          args: Prisma.PromoCodeClaimCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PromoCodeClaimPayload>
+        }
+        createMany: {
+          args: Prisma.PromoCodeClaimCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PromoCodeClaimCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PromoCodeClaimPayload>[]
+        }
+        delete: {
+          args: Prisma.PromoCodeClaimDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PromoCodeClaimPayload>
+        }
+        update: {
+          args: Prisma.PromoCodeClaimUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PromoCodeClaimPayload>
+        }
+        deleteMany: {
+          args: Prisma.PromoCodeClaimDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PromoCodeClaimUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PromoCodeClaimUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PromoCodeClaimPayload>[]
+        }
+        upsert: {
+          args: Prisma.PromoCodeClaimUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PromoCodeClaimPayload>
+        }
+        aggregate: {
+          args: Prisma.PromoCodeClaimAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePromoCodeClaim>
+        }
+        groupBy: {
+          args: Prisma.PromoCodeClaimGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PromoCodeClaimGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PromoCodeClaimCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PromoCodeClaimCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1606,6 +1756,7 @@ export const ContestScalarFieldEnum = {
   entryCost: 'entryCost',
   prizeDistribution: 'prizeDistribution',
   prizesDistributed: 'prizesDistributed',
+  isCancelled: 'isCancelled',
   createdAt: 'createdAt'
 } as const
 
@@ -1636,6 +1787,29 @@ export const PointSystemScalarFieldEnum = {
 } as const
 
 export type PointSystemScalarFieldEnum = (typeof PointSystemScalarFieldEnum)[keyof typeof PointSystemScalarFieldEnum]
+
+
+export const PromoCodeScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  coinAmount: 'coinAmount',
+  maxClaims: 'maxClaims',
+  expiresAt: 'expiresAt',
+  isActive: 'isActive',
+  createdAt: 'createdAt'
+} as const
+
+export type PromoCodeScalarFieldEnum = (typeof PromoCodeScalarFieldEnum)[keyof typeof PromoCodeScalarFieldEnum]
+
+
+export const PromoCodeClaimScalarFieldEnum = {
+  id: 'id',
+  promoCodeId: 'promoCodeId',
+  userId: 'userId',
+  createdAt: 'createdAt'
+} as const
+
+export type PromoCodeClaimScalarFieldEnum = (typeof PromoCodeClaimScalarFieldEnum)[keyof typeof PromoCodeClaimScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1994,6 +2168,8 @@ export type GlobalOmitConfig = {
   contest?: Prisma.ContestOmit
   contestEntry?: Prisma.ContestEntryOmit
   pointSystem?: Prisma.PointSystemOmit
+  promoCode?: Prisma.PromoCodeOmit
+  promoCodeClaim?: Prisma.PromoCodeClaimOmit
 }
 
 /* Types for Logging */

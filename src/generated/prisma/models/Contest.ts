@@ -43,6 +43,7 @@ export type ContestMinAggregateOutputType = {
   maxEntries: number | null
   entryCost: number | null
   prizesDistributed: boolean | null
+  isCancelled: boolean | null
   createdAt: Date | null
 }
 
@@ -53,6 +54,7 @@ export type ContestMaxAggregateOutputType = {
   maxEntries: number | null
   entryCost: number | null
   prizesDistributed: boolean | null
+  isCancelled: boolean | null
   createdAt: Date | null
 }
 
@@ -64,6 +66,7 @@ export type ContestCountAggregateOutputType = {
   entryCost: number
   prizeDistribution: number
   prizesDistributed: number
+  isCancelled: number
   createdAt: number
   _all: number
 }
@@ -86,6 +89,7 @@ export type ContestMinAggregateInputType = {
   maxEntries?: true
   entryCost?: true
   prizesDistributed?: true
+  isCancelled?: true
   createdAt?: true
 }
 
@@ -96,6 +100,7 @@ export type ContestMaxAggregateInputType = {
   maxEntries?: true
   entryCost?: true
   prizesDistributed?: true
+  isCancelled?: true
   createdAt?: true
 }
 
@@ -107,6 +112,7 @@ export type ContestCountAggregateInputType = {
   entryCost?: true
   prizeDistribution?: true
   prizesDistributed?: true
+  isCancelled?: true
   createdAt?: true
   _all?: true
 }
@@ -205,6 +211,7 @@ export type ContestGroupByOutputType = {
   entryCost: number
   prizeDistribution: runtime.JsonValue
   prizesDistributed: boolean
+  isCancelled: boolean
   createdAt: Date
   _count: ContestCountAggregateOutputType | null
   _avg: ContestAvgAggregateOutputType | null
@@ -239,6 +246,7 @@ export type ContestWhereInput = {
   entryCost?: Prisma.IntFilter<"Contest"> | number
   prizeDistribution?: Prisma.JsonFilter<"Contest">
   prizesDistributed?: Prisma.BoolFilter<"Contest"> | boolean
+  isCancelled?: Prisma.BoolFilter<"Contest"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Contest"> | Date | string
   match?: Prisma.XOR<Prisma.MatchScalarRelationFilter, Prisma.MatchWhereInput>
   entries?: Prisma.ContestEntryListRelationFilter
@@ -252,6 +260,7 @@ export type ContestOrderByWithRelationInput = {
   entryCost?: Prisma.SortOrder
   prizeDistribution?: Prisma.SortOrder
   prizesDistributed?: Prisma.SortOrder
+  isCancelled?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   match?: Prisma.MatchOrderByWithRelationInput
   entries?: Prisma.ContestEntryOrderByRelationAggregateInput
@@ -268,6 +277,7 @@ export type ContestWhereUniqueInput = Prisma.AtLeast<{
   entryCost?: Prisma.IntFilter<"Contest"> | number
   prizeDistribution?: Prisma.JsonFilter<"Contest">
   prizesDistributed?: Prisma.BoolFilter<"Contest"> | boolean
+  isCancelled?: Prisma.BoolFilter<"Contest"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Contest"> | Date | string
   match?: Prisma.XOR<Prisma.MatchScalarRelationFilter, Prisma.MatchWhereInput>
   entries?: Prisma.ContestEntryListRelationFilter
@@ -281,6 +291,7 @@ export type ContestOrderByWithAggregationInput = {
   entryCost?: Prisma.SortOrder
   prizeDistribution?: Prisma.SortOrder
   prizesDistributed?: Prisma.SortOrder
+  isCancelled?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.ContestCountOrderByAggregateInput
   _avg?: Prisma.ContestAvgOrderByAggregateInput
@@ -300,6 +311,7 @@ export type ContestScalarWhereWithAggregatesInput = {
   entryCost?: Prisma.IntWithAggregatesFilter<"Contest"> | number
   prizeDistribution?: Prisma.JsonWithAggregatesFilter<"Contest">
   prizesDistributed?: Prisma.BoolWithAggregatesFilter<"Contest"> | boolean
+  isCancelled?: Prisma.BoolWithAggregatesFilter<"Contest"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Contest"> | Date | string
 }
 
@@ -310,6 +322,7 @@ export type ContestCreateInput = {
   entryCost?: number
   prizeDistribution?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   prizesDistributed?: boolean
+  isCancelled?: boolean
   createdAt?: Date | string
   match: Prisma.MatchCreateNestedOneWithoutContestsInput
   entries?: Prisma.ContestEntryCreateNestedManyWithoutContestInput
@@ -323,6 +336,7 @@ export type ContestUncheckedCreateInput = {
   entryCost?: number
   prizeDistribution?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   prizesDistributed?: boolean
+  isCancelled?: boolean
   createdAt?: Date | string
   entries?: Prisma.ContestEntryUncheckedCreateNestedManyWithoutContestInput
 }
@@ -334,6 +348,7 @@ export type ContestUpdateInput = {
   entryCost?: Prisma.IntFieldUpdateOperationsInput | number
   prizeDistribution?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   prizesDistributed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isCancelled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   match?: Prisma.MatchUpdateOneRequiredWithoutContestsNestedInput
   entries?: Prisma.ContestEntryUpdateManyWithoutContestNestedInput
@@ -347,6 +362,7 @@ export type ContestUncheckedUpdateInput = {
   entryCost?: Prisma.IntFieldUpdateOperationsInput | number
   prizeDistribution?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   prizesDistributed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isCancelled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   entries?: Prisma.ContestEntryUncheckedUpdateManyWithoutContestNestedInput
 }
@@ -359,6 +375,7 @@ export type ContestCreateManyInput = {
   entryCost?: number
   prizeDistribution?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   prizesDistributed?: boolean
+  isCancelled?: boolean
   createdAt?: Date | string
 }
 
@@ -369,6 +386,7 @@ export type ContestUpdateManyMutationInput = {
   entryCost?: Prisma.IntFieldUpdateOperationsInput | number
   prizeDistribution?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   prizesDistributed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isCancelled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -380,6 +398,7 @@ export type ContestUncheckedUpdateManyInput = {
   entryCost?: Prisma.IntFieldUpdateOperationsInput | number
   prizeDistribution?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   prizesDistributed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isCancelled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -401,6 +420,7 @@ export type ContestCountOrderByAggregateInput = {
   entryCost?: Prisma.SortOrder
   prizeDistribution?: Prisma.SortOrder
   prizesDistributed?: Prisma.SortOrder
+  isCancelled?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -416,6 +436,7 @@ export type ContestMaxOrderByAggregateInput = {
   maxEntries?: Prisma.SortOrder
   entryCost?: Prisma.SortOrder
   prizesDistributed?: Prisma.SortOrder
+  isCancelled?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -426,6 +447,7 @@ export type ContestMinOrderByAggregateInput = {
   maxEntries?: Prisma.SortOrder
   entryCost?: Prisma.SortOrder
   prizesDistributed?: Prisma.SortOrder
+  isCancelled?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -502,6 +524,7 @@ export type ContestCreateWithoutMatchInput = {
   entryCost?: number
   prizeDistribution?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   prizesDistributed?: boolean
+  isCancelled?: boolean
   createdAt?: Date | string
   entries?: Prisma.ContestEntryCreateNestedManyWithoutContestInput
 }
@@ -513,6 +536,7 @@ export type ContestUncheckedCreateWithoutMatchInput = {
   entryCost?: number
   prizeDistribution?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   prizesDistributed?: boolean
+  isCancelled?: boolean
   createdAt?: Date | string
   entries?: Prisma.ContestEntryUncheckedCreateNestedManyWithoutContestInput
 }
@@ -554,6 +578,7 @@ export type ContestScalarWhereInput = {
   entryCost?: Prisma.IntFilter<"Contest"> | number
   prizeDistribution?: Prisma.JsonFilter<"Contest">
   prizesDistributed?: Prisma.BoolFilter<"Contest"> | boolean
+  isCancelled?: Prisma.BoolFilter<"Contest"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Contest"> | Date | string
 }
 
@@ -564,6 +589,7 @@ export type ContestCreateWithoutEntriesInput = {
   entryCost?: number
   prizeDistribution?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   prizesDistributed?: boolean
+  isCancelled?: boolean
   createdAt?: Date | string
   match: Prisma.MatchCreateNestedOneWithoutContestsInput
 }
@@ -576,6 +602,7 @@ export type ContestUncheckedCreateWithoutEntriesInput = {
   entryCost?: number
   prizeDistribution?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   prizesDistributed?: boolean
+  isCancelled?: boolean
   createdAt?: Date | string
 }
 
@@ -602,6 +629,7 @@ export type ContestUpdateWithoutEntriesInput = {
   entryCost?: Prisma.IntFieldUpdateOperationsInput | number
   prizeDistribution?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   prizesDistributed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isCancelled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   match?: Prisma.MatchUpdateOneRequiredWithoutContestsNestedInput
 }
@@ -614,6 +642,7 @@ export type ContestUncheckedUpdateWithoutEntriesInput = {
   entryCost?: Prisma.IntFieldUpdateOperationsInput | number
   prizeDistribution?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   prizesDistributed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isCancelled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -624,6 +653,7 @@ export type ContestCreateManyMatchInput = {
   entryCost?: number
   prizeDistribution?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   prizesDistributed?: boolean
+  isCancelled?: boolean
   createdAt?: Date | string
 }
 
@@ -634,6 +664,7 @@ export type ContestUpdateWithoutMatchInput = {
   entryCost?: Prisma.IntFieldUpdateOperationsInput | number
   prizeDistribution?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   prizesDistributed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isCancelled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   entries?: Prisma.ContestEntryUpdateManyWithoutContestNestedInput
 }
@@ -645,6 +676,7 @@ export type ContestUncheckedUpdateWithoutMatchInput = {
   entryCost?: Prisma.IntFieldUpdateOperationsInput | number
   prizeDistribution?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   prizesDistributed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isCancelled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   entries?: Prisma.ContestEntryUncheckedUpdateManyWithoutContestNestedInput
 }
@@ -656,6 +688,7 @@ export type ContestUncheckedUpdateManyWithoutMatchInput = {
   entryCost?: Prisma.IntFieldUpdateOperationsInput | number
   prizeDistribution?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   prizesDistributed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isCancelled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -698,6 +731,7 @@ export type ContestSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   entryCost?: boolean
   prizeDistribution?: boolean
   prizesDistributed?: boolean
+  isCancelled?: boolean
   createdAt?: boolean
   match?: boolean | Prisma.MatchDefaultArgs<ExtArgs>
   entries?: boolean | Prisma.Contest$entriesArgs<ExtArgs>
@@ -712,6 +746,7 @@ export type ContestSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   entryCost?: boolean
   prizeDistribution?: boolean
   prizesDistributed?: boolean
+  isCancelled?: boolean
   createdAt?: boolean
   match?: boolean | Prisma.MatchDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["contest"]>
@@ -724,6 +759,7 @@ export type ContestSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   entryCost?: boolean
   prizeDistribution?: boolean
   prizesDistributed?: boolean
+  isCancelled?: boolean
   createdAt?: boolean
   match?: boolean | Prisma.MatchDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["contest"]>
@@ -736,10 +772,11 @@ export type ContestSelectScalar = {
   entryCost?: boolean
   prizeDistribution?: boolean
   prizesDistributed?: boolean
+  isCancelled?: boolean
   createdAt?: boolean
 }
 
-export type ContestOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "matchId" | "name" | "maxEntries" | "entryCost" | "prizeDistribution" | "prizesDistributed" | "createdAt", ExtArgs["result"]["contest"]>
+export type ContestOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "matchId" | "name" | "maxEntries" | "entryCost" | "prizeDistribution" | "prizesDistributed" | "isCancelled" | "createdAt", ExtArgs["result"]["contest"]>
 export type ContestInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   match?: boolean | Prisma.MatchDefaultArgs<ExtArgs>
   entries?: boolean | Prisma.Contest$entriesArgs<ExtArgs>
@@ -766,6 +803,7 @@ export type $ContestPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     entryCost: number
     prizeDistribution: runtime.JsonValue
     prizesDistributed: boolean
+    isCancelled: boolean
     createdAt: Date
   }, ExtArgs["result"]["contest"]>
   composites: {}
@@ -1199,6 +1237,7 @@ export interface ContestFieldRefs {
   readonly entryCost: Prisma.FieldRef<"Contest", 'Int'>
   readonly prizeDistribution: Prisma.FieldRef<"Contest", 'Json'>
   readonly prizesDistributed: Prisma.FieldRef<"Contest", 'Boolean'>
+  readonly isCancelled: Prisma.FieldRef<"Contest", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"Contest", 'DateTime'>
 }
     

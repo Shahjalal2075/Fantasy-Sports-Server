@@ -11,6 +11,7 @@ import walletRoutes from "./routes/walletRoutes";
 import adminRoutes from "./routes/adminRoutes";
 import pointSystemRoutes from "./routes/pointSystemRoutes";
 import notificationRoutes from "./routes/notificationRoutes";
+import promoCodeRoutes from "./routes/promoCodeRoutes";
 
 // Builds and returns the Express app WITHOUT calling .listen(). This is
 // shared by both entry points:
@@ -46,5 +47,6 @@ app.use("/api/wallet", walletRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/point-systems", pointSystemRoutes);
 app.use("/api/notifications", notificationRoutes);
+app.use("/api/promo-codes", promoCodeRoutes);
 
 export default app;

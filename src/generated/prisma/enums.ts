@@ -31,8 +31,10 @@ export const CoinTransactionType = {
   DAILY_BONUS: 'DAILY_BONUS',
   CONTEST_ENTRY: 'CONTEST_ENTRY',
   CONTEST_PRIZE: 'CONTEST_PRIZE',
+  CONTEST_REFUND: 'CONTEST_REFUND',
   ADMIN_BONUS: 'ADMIN_BONUS',
-  ADMIN_FINE: 'ADMIN_FINE'
+  ADMIN_FINE: 'ADMIN_FINE',
+  PROMO_CODE: 'PROMO_CODE'
 } as const
 
 export type CoinTransactionType = (typeof CoinTransactionType)[keyof typeof CoinTransactionType]

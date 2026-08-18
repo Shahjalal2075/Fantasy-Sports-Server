@@ -106,3 +106,13 @@ export type ContestEntry = Prisma.ContestEntryModel
  * 
  */
 export type PointSystem = Prisma.PointSystemModel
+/**
+ * Model PromoCode
+ * 
+ */
+export type PromoCode = Prisma.PromoCodeModel
+/**
+ * Model PromoCodeClaim
+ * 
+ */
+export type PromoCodeClaim = Prisma.PromoCodeClaimModel

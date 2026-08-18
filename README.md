@@ -244,34 +244,65 @@ number-input grid, and the milestone/band arrays as add/remove row editors
 — matching the sheet's structure directly.
 
 ## Team-Building & Contest Endpoints
-Same as before, but fantasy team selection now uses **MatchPlayer** ids, not raw Player ids:
+Fantasy team selection uses **MatchPlayer** ids, not raw Player ids:
 ```json
 POST /api/teams
 {
   "matchId": "...",
-  "playerIds is now matchPlayerIds": "see below",
   "matchPlayerIds": ["<11 MatchPlayer uuids>"],
   "captainId": "<one of the 11>",
   "viceCaptainId": "<a different one>"
 }
 ```
-Contest join/leaderboard/prize-distribution endpoints are unchanged from before (see git history / prior README section) — still coin-based, no real money.
+
+| Method | Endpoint                       | Auth  | Description                                                    |
+|--------|------------------------------------|-------|----------------------------------------------------------------------|
+| GET    | /api/contests?matchId=&hideFull=    | No    | List contests for a match. `hideFull=true` (mobile app) hides full/cancelled ones |
+| GET    | /api/contests/:id                    | No    | Contest detail, includes `isFull`/`isCancelled`                          |
+| POST   | /api/contests/:id/join                | Yes   | `{ userTeamId }` — one entry per **user** per contest (any team), blocked once full/locked/cancelled |
+| GET    | /api/contests/:id/leaderboard          | No    | Ranked entries                                                             |
+| POST   | /api/contests                          | Admin | Create — `entryCost` has no cap                                             |
+| POST   | /api/contests/:id/distribute-prizes     | Admin | Pay coin prizes to winning ranks (once only)                                  |
+| POST   | /api/contests/:id/cancel                | Admin | Only allowed while **not full** — refunds every joined user's entry coins, marks cancelled |
+
+**Auto Upcoming → Live:** a match's `status` in API responses automatically
+shows `"LIVE"` once `lockTime` has passed (even if the DB row still says
+`UPCOMING`) — no cron job needed. Admins still explicitly mark matches
+`COMPLETED`/`CANCELLED`. This means `GET /api/matches?status=LIVE` reflects
+reality even between admin actions.
 
 ## Virtual Coins (still NOT real money)
 
-- **Daily bonus amount is now admin-configurable** (not hardcoded) via `GET`/`PATCH /api/admin/settings` (`dailyBonusAmount`, default 100). Users still claim via `POST /api/wallet/claim-daily-bonus`, once per UTC day.
-- Contests still cost coins to join (`entryCost`) and pay coins to winners (`prizeDistribution`) — unchanged.
+- Daily bonus amount is admin-configurable via `GET`/`PATCH /api/admin/settings` (`dailyBonusAmount`). Claimed via `POST /api/wallet/claim-daily-bonus`, once per UTC day.
+- Contests cost coins to join (`entryCost`, no cap) and pay coins to winners (`prizeDistribution`).
+- Cancelling a non-full contest refunds every joined user's entry cost (`CONTEST_REFUND` transaction type).
+- Promo codes (below) are another way to earn coins.
 
-## Admin: Users, Bonus/Fine/Ban
+## Promo Codes
+
+| Method | Endpoint                | Auth  | Description                                                          |
+|--------|----------------------------|-------|--------------------------------------------------------------------------|
+| POST   | /api/promo-codes/claim       | Yes   | `{ code }` — credits coins once per user, per code                          |
+| GET    | /api/promo-codes              | Admin | List all codes with live claim counts + expired flag                          |
+| POST   | /api/promo-codes               | Admin | `{ code, coinAmount, maxClaims, validDays }` — `expiresAt` computed from `validDays` at creation |
+| PATCH  | /api/promo-codes/:id             | Admin | `{ isActive }` — disable early                                                  |
+| DELETE | /api/promo-codes/:id             | Admin | Delete                                                                            |
+
+A code stops working once `maxClaims` is hit, `expiresAt` passes, or an
+admin disables it — checked in that order on every claim attempt.
+
+## Admin: Users, Bonus/Fine/Ban, Audit Log
 
 | Method | Endpoint                     | Auth  | Description                                             |
 |--------|----------------------------------|-------|-----------------------------------------------------------|
 | GET    | /api/admin/users                   | Admin | Every user: joined date, coins, matches played, contests joined, banned status |
+| GET    | /api/admin/users/:id                 | Admin | Full detail for one user: profile, coin/win/bonus/fine totals, full contest participation history |
 | POST   | /api/admin/users/:id/bonus           | Admin | `{ amount, reason }` — credits coins, creates a Notification |
 | POST   | /api/admin/users/:id/fine             | Admin | `{ amount, reason }` — debits coins (clamped at 0), creates a Notification |
 | POST   | /api/admin/users/:id/ban               | Admin | `{ reason? }` — blocks login and all authenticated requests |
 | POST   | /api/admin/users/:id/unban              | Admin | Restores access                                               |
 | GET/PATCH | /api/admin/settings                  | Admin | `{ dailyBonusAmount }`                                          |
+| GET    | /api/admin/coin-adjustments             | Admin | Audit log of every bonus/fine ever given, across all users, most recent first |
 
 ## User Notifications (bonus/fine/ban alerts)
 
@@ -292,5 +323,16 @@ carefully against the schema, but run `npx prisma generate` on your own
 machine first thing, then `npm run typecheck`, and let me know if anything
 surfaces.
 
-## Not built yet
-1. Admin panel updates matching this architecture (Team Detail Mode tabs, Player catalog UI, match "Add Player from catalog" flow, manual scorecard form, Point System settings screen, Users page bonus/fine/ban actions) — in progress, backend is ready for all of it.
+## Schema changes in this version — remember to migrate
+Several fields/models were added on top of an already-deployed schema:
+`User.username` (required, unique), `User.referredByCode`, `Contest.isCancelled`,
+`ContestEntry`'s unique constraint changed from `(contestId, userTeamId)` to
+`(contestId, userId)`, `CoinTransactionType` gained `CONTEST_REFUND` and
+`PROMO_CODE`, and two new models: `PromoCode` / `PromoCodeClaim`.
+
+**If you already have real user rows in your database**, adding a
+required+unique `username` column will make `prisma migrate deploy` fail
+until every existing row has one. Either clear the `users` table first (fine
+for a dev/test database with no real users yet), or ask for a migration
+script that backfills a generated username per existing user before the
+column becomes required.

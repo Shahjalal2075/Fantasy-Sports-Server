@@ -3,22 +3,40 @@ import prisma from "../config/prisma";
 import { createMatchSchema, updateMatchSchema } from "../utils/validators";
 import { calculateMatchPlayerPoints, recalculateMatchPoints } from "../services/pointsService";
 
+// A match's status is only ever moved to COMPLETED/CANCELLED explicitly by
+// an admin, but UPCOMING -> LIVE happens automatically once the lock time
+// passes — computed on every read rather than needing a background job.
+// The stored `status` column is left untouched; this is purely a response
+// override.
+function withEffectiveStatus<T extends { status: string; lockTime: Date }>(match: T): T {
+  if (match.status === "UPCOMING" && new Date() >= match.lockTime) {
+    return { ...match, status: "LIVE" };
+  }
+  return match;
+}
+
 // ---------- Public endpoints ----------
 
 // GET /api/matches?sport=CRICKET&status=UPCOMING
 export async function listMatches(req: Request, res: Response) {
   const { sport, status } = req.query;
 
+  // Status filtering happens AFTER computing effective status (below),
+  // since a match that's UPCOMING in the DB may now be effectively LIVE.
   const matches = await prisma.match.findMany({
     where: {
       sport: sport ? (sport as any) : undefined,
-      status: status ? (status as any) : undefined,
     },
     include: { teamA: true, teamB: true },
     orderBy: { startTime: "asc" },
   });
 
-  return res.status(200).json({ matches });
+  let withStatus = matches.map(withEffectiveStatus);
+  if (status) {
+    withStatus = withStatus.filter((m) => m.status === status);
+  }
+
+  return res.status(200).json({ matches: withStatus });
 }
 
 // GET /api/matches/:id
@@ -34,7 +52,7 @@ export async function getMatchById(req: Request, res: Response) {
     return res.status(404).json({ error: "Match not found" });
   }
 
-  return res.status(200).json({ match });
+  return res.status(200).json({ match: withEffectiveStatus(match) });
 }
 
 // ---------- Admin endpoints ----------

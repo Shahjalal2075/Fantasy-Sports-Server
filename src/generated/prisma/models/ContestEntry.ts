@@ -252,7 +252,7 @@ export type ContestEntryOrderByWithRelationInput = {
 
 export type ContestEntryWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  contestId_userTeamId?: Prisma.ContestEntryContestIdUserTeamIdCompoundUniqueInput
+  contestId_userId?: Prisma.ContestEntryContestIdUserIdCompoundUniqueInput
   AND?: Prisma.ContestEntryWhereInput | Prisma.ContestEntryWhereInput[]
   OR?: Prisma.ContestEntryWhereInput[]
   NOT?: Prisma.ContestEntryWhereInput | Prisma.ContestEntryWhereInput[]
@@ -265,7 +265,7 @@ export type ContestEntryWhereUniqueInput = Prisma.AtLeast<{
   contest?: Prisma.XOR<Prisma.ContestScalarRelationFilter, Prisma.ContestWhereInput>
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   userTeam?: Prisma.XOR<Prisma.UserTeamScalarRelationFilter, Prisma.UserTeamWhereInput>
-}, "id" | "contestId_userTeamId">
+}, "id" | "contestId_userId">
 
 export type ContestEntryOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -372,9 +372,9 @@ export type ContestEntryOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
-export type ContestEntryContestIdUserTeamIdCompoundUniqueInput = {
+export type ContestEntryContestIdUserIdCompoundUniqueInput = {
   contestId: string
-  userTeamId: string
+  userId: string
 }
 
 export type ContestEntryCountOrderByAggregateInput = {

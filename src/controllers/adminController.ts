@@ -4,6 +4,30 @@ import { NotificationType } from "../generated/prisma/client";
 import { coinAdjustmentSchema, banUserSchema, updateSettingsSchema } from "../utils/validators";
 import { adminGiveBonus, adminGiveFine } from "../services/walletService";
 
+// GET /api/admin/coin-adjustments  (admin only)
+// Audit log of every ADMIN_BONUS / ADMIN_FINE ever given, across all users.
+export async function listCoinAdjustments(req: Request, res: Response) {
+  const adjustments = await prisma.coinTransaction.findMany({
+    where: { type: { in: ["ADMIN_BONUS", "ADMIN_FINE"] } },
+    include: { user: { select: { id: true, name: true, username: true } } },
+    orderBy: { createdAt: "desc" },
+    take: 200,
+  });
+
+  return res.status(200).json({
+    adjustments: adjustments.map((a) => ({
+      id: a.id,
+      userId: a.user.id,
+      userName: a.user.name,
+      username: a.user.username,
+      type: a.type,
+      amount: a.amount,
+      reason: a.reason,
+      createdAt: a.createdAt,
+    })),
+  });
+}
+
 // GET /api/admin/users  (admin only)
 export async function listUsers(req: Request, res: Response) {
   const users = await prisma.user.findMany({
@@ -44,6 +68,68 @@ export async function listUsers(req: Request, res: Response) {
   }));
 
   return res.status(200).json({ users: result });
+}
+
+// GET /api/admin/users/:id  (admin only) — full detail for one user
+export async function getUserDetail(req: Request, res: Response) {
+  const { id: userId } = req.params as { id: string };
+
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    select: {
+      id: true,
+      name: true,
+      username: true,
+      email: true,
+      phone: true,
+      coins: true,
+      isAdmin: true,
+      isBanned: true,
+      bannedReason: true,
+      bannedAt: true,
+      createdAt: true,
+    },
+  });
+  if (!user) {
+    return res.status(404).json({ error: "User not found" });
+  }
+
+  const [entries, transactions] = await Promise.all([
+    prisma.contestEntry.findMany({
+      where: { userId },
+      include: {
+        contest: { select: { id: true, name: true, matchId: true } },
+        userTeam: { select: { teamName: true, totalPoints: true } },
+      },
+      orderBy: { createdAt: "desc" },
+    }),
+    prisma.coinTransaction.findMany({ where: { userId } }),
+  ]);
+
+  const distinctMatches = new Set(entries.map((e) => e.contest.matchId));
+  const totalCoinsWon = transactions.filter((t) => t.type === "CONTEST_PRIZE").reduce((s, t) => s + t.amount, 0);
+  const totalBonusGiven = transactions.filter((t) => t.type === "ADMIN_BONUS").reduce((s, t) => s + t.amount, 0);
+  const totalFineGiven = transactions.filter((t) => t.type === "ADMIN_FINE").reduce((s, t) => s + Math.abs(t.amount), 0);
+
+  return res.status(200).json({
+    user,
+    stats: {
+      totalMatchesPlayed: distinctMatches.size,
+      totalContestsJoined: entries.length,
+      totalCoinsWon,
+      totalBonusGiven,
+      totalFineGiven,
+    },
+    participations: entries.map((e) => ({
+      contestId: e.contest.id,
+      contestName: e.contest.name,
+      matchId: e.contest.matchId,
+      teamName: e.userTeam.teamName,
+      points: e.userTeam.totalPoints,
+      rank: e.rank,
+      joinedAt: e.createdAt,
+    })),
+  });
 }
 
 // POST /api/admin/users/:id/bonus  (admin only)  body: { amount, reason }

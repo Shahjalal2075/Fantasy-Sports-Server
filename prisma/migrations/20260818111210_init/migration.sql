@@ -5,7 +5,7 @@ CREATE TYPE "SportType" AS ENUM ('CRICKET', 'FOOTBALL');
 CREATE TYPE "MatchStatus" AS ENUM ('UPCOMING', 'LIVE', 'COMPLETED', 'CANCELLED');
 
 -- CreateEnum
-CREATE TYPE "CoinTransactionType" AS ENUM ('DAILY_BONUS', 'CONTEST_ENTRY', 'CONTEST_PRIZE', 'ADMIN_BONUS', 'ADMIN_FINE');
+CREATE TYPE "CoinTransactionType" AS ENUM ('DAILY_BONUS', 'CONTEST_ENTRY', 'CONTEST_PRIZE', 'CONTEST_REFUND', 'ADMIN_BONUS', 'ADMIN_FINE', 'PROMO_CODE');
 
 -- CreateEnum
 CREATE TYPE "NotificationType" AS ENUM ('COIN_BONUS', 'COIN_FINE', 'BAN', 'GENERIC');
@@ -190,6 +190,7 @@ CREATE TABLE "contests" (
     "entryCost" INTEGER NOT NULL DEFAULT 0,
     "prizeDistribution" JSONB NOT NULL DEFAULT '[]',
     "prizesDistributed" BOOLEAN NOT NULL DEFAULT false,
+    "isCancelled" BOOLEAN NOT NULL DEFAULT false,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "contests_pkey" PRIMARY KEY ("id")
@@ -221,6 +222,29 @@ CREATE TABLE "point_systems" (
     CONSTRAINT "point_systems_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "promo_codes" (
+    "id" TEXT NOT NULL,
+    "code" TEXT NOT NULL,
+    "coinAmount" INTEGER NOT NULL,
+    "maxClaims" INTEGER NOT NULL,
+    "expiresAt" TIMESTAMP(3) NOT NULL,
+    "isActive" BOOLEAN NOT NULL DEFAULT true,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "promo_codes_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "promo_code_claims" (
+    "id" TEXT NOT NULL,
+    "promoCodeId" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "promo_code_claims_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "users_username_key" ON "users"("username");
 
@@ -240,10 +264,16 @@ CREATE UNIQUE INDEX "user_teams_userId_matchId_teamName_key" ON "user_teams"("us
 CREATE UNIQUE INDEX "user_team_players_userTeamId_matchPlayerId_key" ON "user_team_players"("userTeamId", "matchPlayerId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "contest_entries_contestId_userTeamId_key" ON "contest_entries"("contestId", "userTeamId");
+CREATE UNIQUE INDEX "contest_entries_contestId_userId_key" ON "contest_entries"("contestId", "userId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "point_systems_sport_format_key" ON "point_systems"("sport", "format");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "promo_codes_code_key" ON "promo_codes"("code");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "promo_code_claims_promoCodeId_userId_key" ON "promo_code_claims"("promoCodeId", "userId");
 
 -- AddForeignKey
 ALTER TABLE "coin_transactions" ADD CONSTRAINT "coin_transactions_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -289,3 +319,9 @@ ALTER TABLE "contest_entries" ADD CONSTRAINT "contest_entries_userId_fkey" FOREI
 
 -- AddForeignKey
 ALTER TABLE "contest_entries" ADD CONSTRAINT "contest_entries_userTeamId_fkey" FOREIGN KEY ("userTeamId") REFERENCES "user_teams"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "promo_code_claims" ADD CONSTRAINT "promo_code_claims_promoCodeId_fkey" FOREIGN KEY ("promoCodeId") REFERENCES "promo_codes"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "promo_code_claims" ADD CONSTRAINT "promo_code_claims_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;

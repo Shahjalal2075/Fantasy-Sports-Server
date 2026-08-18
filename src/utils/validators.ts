@@ -105,7 +105,7 @@ export const createContestSchema = z
     matchId: z.string().uuid(),
     name: z.string().min(1).max(60),
     maxEntries: z.number().int().min(2).max(1000000).optional(),
-    entryCost: z.number().int().min(0).max(100).optional(), // coins to join; capped at the daily bonus amount
+    entryCost: z.number().int().min(0).optional(), // coins to join; no cap
     prizeDistribution: z.array(prizeDistributionEntrySchema).max(50).optional(),
   })
   .superRefine((data, ctx) => {
@@ -235,4 +235,19 @@ export const banUserSchema = z.object({
 
 export const updateSettingsSchema = z.object({
   dailyBonusAmount: z.number().int().min(0).max(100000),
+});
+
+export const createPromoCodeSchema = z.object({
+  code: z
+    .string()
+    .min(3, "Code must be at least 3 characters")
+    .max(30)
+    .regex(/^[a-zA-Z0-9_-]+$/, "Code can only contain letters, numbers, hyphens, and underscores"),
+  coinAmount: z.number().int().min(1),
+  maxClaims: z.number().int().min(1),
+  validDays: z.number().int().min(1).max(3650),
+});
+
+export const updatePromoCodeSchema = z.object({
+  isActive: z.boolean().optional(),
 });

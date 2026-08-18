@@ -35,29 +35,39 @@ export async function createContest(req: Request, res: Response) {
 
 // ---------- Public ----------
 
-// GET /api/contests?matchId=  — list contests, with a live entry count
+// GET /api/contests?matchId=&hideFull=true  — list contests, with a live
+// entry count. Pass hideFull=true (used by the mobile app) to exclude
+// contests that are already at maxEntries — the admin panel omits this so
+// admins can still see/manage full contests.
 export async function listContests(req: Request, res: Response) {
-  const { matchId } = req.query;
+  const { matchId, hideFull } = req.query;
 
   const contests = await prisma.contest.findMany({
-    where: { matchId: matchId ? (matchId as string) : undefined },
+    where: {
+      matchId: matchId ? (matchId as string) : undefined,
+      isCancelled: false,
+    },
     include: { _count: { select: { entries: true } } },
     orderBy: { createdAt: "asc" },
   });
 
-  return res.status(200).json({
-    contests: contests.map((c) => ({
-      id: c.id,
-      matchId: c.matchId,
-      name: c.name,
-      maxEntries: c.maxEntries,
-      entryCost: c.entryCost,
-      prizeDistribution: c.prizeDistribution,
-      prizesDistributed: c.prizesDistributed,
-      entryCount: c._count.entries,
-      createdAt: c.createdAt,
-    })),
-  });
+  const mapped = contests.map((c) => ({
+    id: c.id,
+    matchId: c.matchId,
+    name: c.name,
+    maxEntries: c.maxEntries,
+    entryCost: c.entryCost,
+    prizeDistribution: c.prizeDistribution,
+    prizesDistributed: c.prizesDistributed,
+    isCancelled: c.isCancelled,
+    entryCount: c._count.entries,
+    isFull: c._count.entries >= c.maxEntries,
+    createdAt: c.createdAt,
+  }));
+
+  const result = hideFull === "true" ? mapped.filter((c) => !c.isFull) : mapped;
+
+  return res.status(200).json({ contests: result });
 }
 
 // GET /api/contests/:id
@@ -82,7 +92,9 @@ export async function getContestById(req: Request, res: Response) {
       entryCost: contest.entryCost,
       prizeDistribution: contest.prizeDistribution,
       prizesDistributed: contest.prizesDistributed,
+      isCancelled: contest.isCancelled,
       entryCount: contest._count.entries,
+      isFull: contest._count.entries >= contest.maxEntries,
       match: contest.match,
       createdAt: contest.createdAt,
     },
@@ -106,7 +118,7 @@ export async function joinContest(req: Request, res: Response) {
     where: { id: contestId },
     include: { match: true, _count: { select: { entries: true } } },
   });
-  if (!contest) {
+  if (!contest || contest.isCancelled) {
     return res.status(404).json({ error: "Contest not found" });
   }
 
@@ -117,6 +129,15 @@ export async function joinContest(req: Request, res: Response) {
 
   if (contest._count.entries >= contest.maxEntries) {
     return res.status(400).json({ error: "This contest is full" });
+  }
+
+  // A user may only enter a contest once, with any ONE of their teams —
+  // check this before touching coins so a doomed request never debits.
+  const existingEntry = await prisma.contestEntry.findUnique({
+    where: { contestId_userId: { contestId, userId } },
+  });
+  if (existingEntry) {
+    return res.status(409).json({ error: "You've already joined this contest" });
   }
 
   const userTeam = await prisma.userTeam.findUnique({ where: { id: userTeamId } });
@@ -151,7 +172,7 @@ export async function joinContest(req: Request, res: Response) {
       return res.status(402).json({ error: `Not enough coins — this contest costs ${contest.entryCost} coins to join` });
     }
     if (err.code === "P2002") {
-      return res.status(409).json({ error: "This team is already entered in this contest" });
+      return res.status(409).json({ error: "You've already joined this contest" });
     }
     throw err;
   }
@@ -207,7 +228,47 @@ export async function getMyEntries(req: Request, res: Response) {
   return res.status(200).json({ entries });
 }
 
-// POST /api/contests/:id/distribute-prizes  (admin only)
+// POST /api/contests/:id/cancel  (admin only)
+// Only allowed while the contest is NOT full — once it's full, cancelling
+// isn't offered (use distribute-prizes / let it run its course instead).
+// Refunds every joined user's entry cost in coins, then marks the contest
+// cancelled so it disappears from user-facing listings.
+export async function cancelContest(req: Request, res: Response) {
+  const { id: contestId } = req.params as { id: string };
+
+  const contest = await prisma.contest.findUnique({
+    where: { id: contestId },
+    include: { _count: { select: { entries: true } } },
+  });
+  if (!contest) {
+    return res.status(404).json({ error: "Contest not found" });
+  }
+  if (contest.isCancelled) {
+    return res.status(409).json({ error: "This contest is already cancelled" });
+  }
+  if (contest._count.entries >= contest.maxEntries) {
+    return res.status(400).json({ error: "A full contest can't be cancelled" });
+  }
+
+  const entries = await prisma.contestEntry.findMany({ where: { contestId } });
+
+  const refunds: { userId: string; coins: number }[] = [];
+
+  await prisma.$transaction(async (tx) => {
+    if (contest.entryCost > 0) {
+      for (const entry of entries) {
+        await creditCoins(tx, entry.userId, contest.entryCost, CoinTransactionType.CONTEST_REFUND, {
+          contestId,
+          reason: `Contest cancelled: ${contest.name}`,
+        });
+        refunds.push({ userId: entry.userId, coins: contest.entryCost });
+      }
+    }
+    await tx.contest.update({ where: { id: contestId }, data: { isCancelled: true } });
+  });
+
+  return res.status(200).json({ message: "Contest cancelled", refunds });
+}
 // Pays out coin prizes to the top-ranked entries according to the
 // contest's prizeDistribution. Call this AFTER the match is complete and
 // points have been calculated (via sync-live-score or calculate-points),
@@ -219,6 +280,9 @@ export async function distributePrizes(req: Request, res: Response) {
   const contest = await prisma.contest.findUnique({ where: { id: contestId } });
   if (!contest) {
     return res.status(404).json({ error: "Contest not found" });
+  }
+  if (contest.isCancelled) {
+    return res.status(400).json({ error: "This contest was cancelled — no prizes to distribute" });
   }
   if (contest.prizesDistributed) {
     return res.status(409).json({ error: "Prizes for this contest have already been distributed" });

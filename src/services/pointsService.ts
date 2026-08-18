@@ -79,7 +79,7 @@ export async function recalculateMatchPoints(matchId: string): Promise<Recalcula
     })
   );
 
-  const contests = await prisma.contest.findMany({ where: { matchId } });
+  const contests = await prisma.contest.findMany({ where: { matchId, isCancelled: false } });
 
   for (const contest of contests) {
     const entries = await prisma.contestEntry.findMany({

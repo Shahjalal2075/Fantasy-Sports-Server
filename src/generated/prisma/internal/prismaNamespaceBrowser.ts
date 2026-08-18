@@ -63,7 +63,9 @@ export const ModelName = {
   UserTeamPlayer: 'UserTeamPlayer',
   Contest: 'Contest',
   ContestEntry: 'ContestEntry',
-  PointSystem: 'PointSystem'
+  PointSystem: 'PointSystem',
+  PromoCode: 'PromoCode',
+  PromoCodeClaim: 'PromoCodeClaim'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -258,6 +260,7 @@ export const ContestScalarFieldEnum = {
   entryCost: 'entryCost',
   prizeDistribution: 'prizeDistribution',
   prizesDistributed: 'prizesDistributed',
+  isCancelled: 'isCancelled',
   createdAt: 'createdAt'
 } as const
 
@@ -288,6 +291,29 @@ export const PointSystemScalarFieldEnum = {
 } as const
 
 export type PointSystemScalarFieldEnum = (typeof PointSystemScalarFieldEnum)[keyof typeof PointSystemScalarFieldEnum]
+
+
+export const PromoCodeScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  coinAmount: 'coinAmount',
+  maxClaims: 'maxClaims',
+  expiresAt: 'expiresAt',
+  isActive: 'isActive',
+  createdAt: 'createdAt'
+} as const
+
+export type PromoCodeScalarFieldEnum = (typeof PromoCodeScalarFieldEnum)[keyof typeof PromoCodeScalarFieldEnum]
+
+
+export const PromoCodeClaimScalarFieldEnum = {
+  id: 'id',
+  promoCodeId: 'promoCodeId',
+  userId: 'userId',
+  createdAt: 'createdAt'
+} as const
+
+export type PromoCodeClaimScalarFieldEnum = (typeof PromoCodeClaimScalarFieldEnum)[keyof typeof PromoCodeClaimScalarFieldEnum]
 
 
 export const SortOrder = {

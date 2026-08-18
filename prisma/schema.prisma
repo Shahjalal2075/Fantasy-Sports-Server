@@ -29,8 +29,10 @@ enum CoinTransactionType {
   DAILY_BONUS
   CONTEST_ENTRY
   CONTEST_PRIZE
+  CONTEST_REFUND
   ADMIN_BONUS
   ADMIN_FINE
+  PROMO_CODE
 }
 
 enum NotificationType {
@@ -67,6 +69,7 @@ model User {
   entries       ContestEntry[]
   coinLedger    CoinTransaction[]
   notifications Notification[]
+  promoCodeClaims PromoCodeClaim[]
 
   @@map("users")
 }
@@ -282,6 +285,7 @@ model Contest {
   entryCost         Int      @default(0)  // coins required to join (0 = free)
   prizeDistribution Json     @default("[]") // [{ "rank": 1, "coins": 500 }, ...]
   prizesDistributed Boolean  @default(false) // guards against double-payout
+  isCancelled       Boolean  @default(false)
   createdAt         DateTime @default(now())
 
   entries ContestEntry[]
@@ -307,7 +311,9 @@ model ContestEntry {
   rank       Int?
   createdAt  DateTime           @default(now())
 
-  @@unique([contestId, userTeamId])
+  // A user may only enter a given contest ONCE, regardless of which of
+  // their teams they use — not just once-per-team as before.
+  @@unique([contestId, userId])
   @@map("contest_entries")
 }
 
@@ -326,4 +332,33 @@ model PointSystem {
 
   @@unique([sport, format])
   @@map("point_systems")
+}
+
+// Admin creates these; users claim once each. maxClaims caps total claims
+// across everyone; expiresAt is set at creation (admin picks "valid for N
+// days"). Coins credited are virtual — same rules as everywhere else.
+model PromoCode {
+  id         String   @id @default(uuid())
+  code       String   @unique
+  coinAmount Int
+  maxClaims  Int
+  expiresAt  DateTime
+  isActive   Boolean  @default(true)
+  createdAt  DateTime @default(now())
+
+  claims PromoCodeClaim[]
+
+  @@map("promo_codes")
+}
+
+model PromoCodeClaim {
+  id          String    @id @default(uuid())
+  promoCodeId String
+  promoCode   PromoCode @relation(fields: [promoCodeId], references: [id], onDelete: Cascade)
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt   DateTime  @default(now())
+
+  @@unique([promoCodeId, userId])
+  @@map("promo_code_claims")
 }

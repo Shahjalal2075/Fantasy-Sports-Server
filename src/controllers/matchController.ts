@@ -111,12 +111,22 @@ export async function updateMatch(req: Request, res: Response) {
 
   const data = parsed.data;
 
+  // If the admin updates startTime without also sending a separate
+  // lockTime, keep lockTime in sync with it (same default as create) —
+  // otherwise lockTime silently goes stale and both the countdown display
+  // and the actual join/team-lock enforcement use the wrong time.
+  const nextLockTime = data.lockTime
+    ? new Date(data.lockTime)
+    : data.startTime
+    ? new Date(data.startTime)
+    : undefined;
+
   const match = await prisma.match.update({
     where: { id },
     data: {
       ...data,
       startTime: data.startTime ? new Date(data.startTime) : undefined,
-      lockTime: data.lockTime ? new Date(data.lockTime) : undefined,
+      lockTime: nextLockTime,
     },
     include: { teamA: true, teamB: true },
   });

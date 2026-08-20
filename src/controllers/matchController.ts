@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import prisma from "../config/prisma";
 import { createMatchSchema, updateMatchSchema } from "../utils/validators";
-import { calculateMatchPlayerPoints, recalculateMatchPoints } from "../services/pointsService";
+import { calculateMatchPlayerPoints, recalculateMatchPoints, getCaptainMultipliers } from "../services/pointsService";
 
 // A match's status is only ever moved to COMPLETED/CANCELLED explicitly by
 // an admin, but UPCOMING -> LIVE happens automatically once the lock time
@@ -52,7 +52,12 @@ export async function getMatchById(req: Request, res: Response) {
     return res.status(404).json({ error: "Match not found" });
   }
 
-  return res.status(200).json({ match: withEffectiveStatus(match) });
+  // The captain picker (4.png) and points breakdown (8.jpg) show these as
+  // badges, so they ship with the match rather than being hardcoded
+  // client-side — an admin can change them per PointSystem.
+  const multipliers = await getCaptainMultipliers(match.sport, match.format);
+
+  return res.status(200).json({ match: { ...withEffectiveStatus(match), ...multipliers } });
 }
 
 // ---------- Admin endpoints ----------

@@ -85,15 +85,27 @@ export const updateTeamEntitySchema = z
 export type CreateTeamEntityInput = z.infer<typeof createTeamEntitySchema>;
 export type UpdateTeamEntityInput = z.infer<typeof updateTeamEntitySchema>;
 
+// NOTE: there is deliberately no `teamName` here. Team names are not
+// user-editable — the server generates them as "Username (T1)", "(T2)"…
+// so they stay unique per match and can't be spoofed.
 export const createTeamSchema = z.object({
   matchId: z.string().uuid(),
-  teamName: z.string().min(1).max(30).optional(),
   matchPlayerIds: z.array(z.string().uuid()).length(11, "You must select exactly 11 players"),
   captainId: z.string().uuid(), // one of matchPlayerIds
   viceCaptainId: z.string().uuid(), // one of matchPlayerIds
 });
 
 export type CreateTeamInput = z.infer<typeof createTeamSchema>;
+
+// Editing an existing team replaces the whole XI + captain/VC. The team's
+// match and name never change, so neither is accepted here.
+export const updateTeamSchema = z.object({
+  matchPlayerIds: z.array(z.string().uuid()).length(11, "You must select exactly 11 players"),
+  captainId: z.string().uuid(),
+  viceCaptainId: z.string().uuid(),
+});
+
+export type UpdateTeamInput = z.infer<typeof updateTeamSchema>;
 
 export const prizeDistributionEntrySchema = z.object({
   rank: z.number().int().min(1),

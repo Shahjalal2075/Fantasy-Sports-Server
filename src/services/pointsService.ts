@@ -17,7 +17,7 @@ export interface RecalculateResult {
 // Finds the PointSystem for a match's (sport, format). Falls back to the
 // sport's isDefault row, then to the hardcoded DEFAULT_*_RULES if the admin
 // hasn't configured anything yet.
-async function resolveRules(sport: "CRICKET" | "FOOTBALL", format: string) {
+export async function resolveRules(sport: "CRICKET" | "FOOTBALL", format: string) {
   const exact = await prisma.pointSystem.findUnique({ where: { sport_format: { sport, format } } });
   if (exact) return exact.rules as unknown as CricketPointRules | FootballPointRules;
 
@@ -25,6 +25,21 @@ async function resolveRules(sport: "CRICKET" | "FOOTBALL", format: string) {
   if (def) return def.rules as unknown as CricketPointRules | FootballPointRules;
 
   return sport === "CRICKET" ? DEFAULT_CRICKET_RULES : DEFAULT_FOOTBALL_RULES;
+}
+
+// Just the captain/vice-captain multipliers for a match's (sport, format).
+// The mobile app shows these on the captain picker (4.png) and the points
+// breakdown (8.jpg), so they must come from the configured PointSystem
+// rather than being hardcoded to 2x / 1.5x in the client.
+export async function getCaptainMultipliers(
+  sport: "CRICKET" | "FOOTBALL",
+  format: string
+): Promise<{ captainMultiplier: number; viceCaptainMultiplier: number }> {
+  const rules = await resolveRules(sport, format);
+  return {
+    captainMultiplier: rules.captainMultiplier ?? 2,
+    viceCaptainMultiplier: rules.viceCaptainMultiplier ?? 1.5,
+  };
 }
 
 // STEP 1: compute each MatchPlayer.points from its raw stats, using the

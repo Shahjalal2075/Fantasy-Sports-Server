@@ -255,6 +255,24 @@ POST /api/teams
 }
 ```
 
+**Team names are generated, not supplied.** There is deliberately no
+`teamName` field on create — the server assigns `"<username> (T1)"`,
+`"(T2)"`, … picking the lowest free slot so deleting a team frees its
+number. A user may hold at most **6 teams per match**.
+
+| Method | Endpoint                  | Auth | Description                                                                 |
+|--------|---------------------------|------|-----------------------------------------------------------------------------|
+| POST   | /api/teams                | Yes  | Create a team (max 6 per match, name auto-assigned)                          |
+| PUT    | /api/teams/:id            | Yes  | Replace an existing team's XI + captain/VC. Name and match never change. Rejected once `lockTime` passes, so a save that lands after lock leaves the last saved version intact |
+| GET    | /api/teams/my?matchId=    | Yes  | The user's own teams; also returns `maxTeamsPerMatch`                        |
+| GET    | /api/teams/:id            | Yes  | Detail — **owner only**                                                      |
+| GET    | /api/teams/:id/breakdown  | Yes  | Per-player points for **any** entrant's team (powers the leaderboard tap-through). Gated on the match clock, not ownership: 403 until the match has been live 5 minutes, except for the owner, who can always see their own |
+| DELETE | /api/teams/:id            | Yes  | Delete, before lock only                                                     |
+
+`GET /api/matches/:id` also returns `captainMultiplier` /
+`viceCaptainMultiplier`, read from the match's PointSystem, so clients
+never hardcode 2x / 1.5x.
+
 | Method | Endpoint                       | Auth  | Description                                                    |
 |--------|------------------------------------|-------|----------------------------------------------------------------------|
 | GET    | /api/contests?matchId=&hideFull=    | No    | List contests for a match. `hideFull=true` (mobile app) hides full/cancelled ones |

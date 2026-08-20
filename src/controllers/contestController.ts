@@ -219,13 +219,28 @@ export async function getMyEntries(req: Request, res: Response) {
       contest: matchId ? { matchId: matchId as string } : undefined,
     },
     include: {
-      contest: true,
+      contest: { include: { _count: { select: { entries: true } } } },
       userTeam: { select: { id: true, teamName: true, totalPoints: true } },
     },
     orderBy: { createdAt: "desc" },
   });
 
-  return res.status(200).json({ entries });
+  // Shape each nested contest like listContests does, so the app's
+  // "My Contest" view can render the same card (spots filled, progress
+  // bar) without a second round-trip per contest.
+  const shaped = entries.map((entry) => {
+    const { _count, ...contest } = entry.contest;
+    return {
+      ...entry,
+      contest: {
+        ...contest,
+        entryCount: _count.entries,
+        isFull: _count.entries >= contest.maxEntries,
+      },
+    };
+  });
+
+  return res.status(200).json({ entries: shaped });
 }
 
 // POST /api/contests/:id/cancel  (admin only)

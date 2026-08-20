@@ -4,6 +4,8 @@
 export const TOTAL_PLAYERS = 11;
 export const BUDGET_CREDITS = 100;
 export const MAX_PLAYERS_FROM_ONE_TEAM = 7;
+// A user may build at most this many fantasy teams for a single match.
+export const MAX_TEAMS_PER_MATCH = 6;
 
 interface RoleRule {
   min: number;

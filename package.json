@@ -23,8 +23,10 @@
     "bcryptjs": "^3.0.3",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
+    "expo-server-sdk": "^7.1.0",
     "express": "^5.2.1",
     "jsonwebtoken": "^9.0.3",
+    "nodemailer": "^9.0.5",
     "pg": "^8.22.0",
     "prisma": "^7.9.1",
     "tsx": "^4.23.11",
@@ -36,6 +38,7 @@
     "@types/express": "^5.0.6",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^26.1.2",
+    "@types/nodemailer": "^8.0.1",
     "@types/pg": "^8.21.0",
     "typescript": "^5.6.3"
   }

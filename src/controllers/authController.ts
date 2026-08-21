@@ -7,7 +7,11 @@ import {
   loginSchema,
   changePasswordSchema,
   updateProfileSchema,
+  sendOtpSchema,
+  verifyEmailSchema,
+  resetPasswordSchema,
 } from "../utils/validators";
+import { sendOtp, verifyOtp } from "../services/otpService";
 import {
   generateUniqueReferralCode,
   resolveReferral,
@@ -75,20 +79,127 @@ export async function register(req: Request, res: Response) {
     await prisma.user.update({ where: { id: user.id }, data: { referredById: referrerId } });
   }
 
-  const token = signToken({ userId: user.id, email: user.email });
+  // No token yet — the account exists but can't be used until the email
+  // OTP is confirmed. Returning a token here would make verification
+  // optional in practice.
+  const sent = await sendOtp(user.email, "EMAIL_VERIFICATION");
 
   return res.status(201).json({
+    requiresVerification: true,
+    email: user.email,
+    // A failure to email isn't fatal: the account is created and the
+    // user can hit "resend" from the verification screen.
+    emailSent: sent.ok,
+    message: sent.ok
+      ? "We've sent a 6-digit code to your email."
+      : "Account created, but we couldn't send the code. Please try resending.",
+  });
+}
+
+// POST /api/auth/verify-email   body: { email, code }
+export async function verifyEmail(req: Request, res: Response) {
+  const parsed = verifyEmailSchema.safeParse(req.body);
+  if (!parsed.success) {
+    return res.status(400).json({ error: parsed.error.issues[0].message });
+  }
+
+  const email = parsed.data.email.trim().toLowerCase();
+  const user = await prisma.user.findUnique({ where: { email } });
+  if (!user) {
+    return res.status(404).json({ error: "No account found for that email" });
+  }
+  if (user.emailVerified) {
+    return res.status(400).json({ error: "This email is already verified. Please log in." });
+  }
+
+  const result = await verifyOtp(email, "EMAIL_VERIFICATION", parsed.data.code);
+  if (!result.ok) {
+    return res.status(400).json({ error: result.error });
+  }
+
+  const verified = await prisma.user.update({
+    where: { id: user.id },
+    data: { emailVerified: true },
+  });
+
+  // Verification doubles as the first login, so the user lands straight
+  // in the app instead of being sent back to a login form.
+  const token = signToken({ userId: verified.id, email: verified.email });
+
+  return res.status(200).json({
     token,
     user: {
-      id: user.id,
-      name: user.name,
-      username: user.username,
-      email: user.email,
-      totalPoints: user.totalPoints,
-      coins: user.coins,
-      isAdmin: user.isAdmin,
+      id: verified.id,
+      name: verified.name,
+      username: verified.username,
+      email: verified.email,
+      totalPoints: verified.totalPoints,
+      coins: verified.coins,
+      isAdmin: verified.isAdmin,
     },
   });
+}
+
+// POST /api/auth/send-otp   body: { email, purpose }
+export async function requestOtp(req: Request, res: Response) {
+  const parsed = sendOtpSchema.safeParse(req.body);
+  if (!parsed.success) {
+    return res.status(400).json({ error: parsed.error.issues[0].message });
+  }
+
+  const email = parsed.data.email.trim().toLowerCase();
+  const user = await prisma.user.findUnique({ where: { email } });
+
+  // Password reset deliberately returns success even when the email is
+  // unknown, so the endpoint can't be used to discover who has an
+  // account. Verification can be honest — the address just registered.
+  if (parsed.data.purpose === "PASSWORD_RESET" && !user) {
+    return res.status(200).json({ message: "If that email has an account, a code is on its way." });
+  }
+  if (parsed.data.purpose === "EMAIL_VERIFICATION") {
+    if (!user) return res.status(404).json({ error: "No account found for that email" });
+    if (user.emailVerified) {
+      return res.status(400).json({ error: "This email is already verified. Please log in." });
+    }
+  }
+
+  const result = await sendOtp(email, parsed.data.purpose);
+  if (!result.ok) {
+    return res.status(429).json({ error: result.error });
+  }
+
+  return res.status(200).json({ message: "Code sent. Check your email." });
+}
+
+// POST /api/auth/reset-password   body: { email, code, newPassword }
+export async function resetPassword(req: Request, res: Response) {
+  const parsed = resetPasswordSchema.safeParse(req.body);
+  if (!parsed.success) {
+    return res.status(400).json({ error: parsed.error.issues[0].message });
+  }
+
+  const email = parsed.data.email.trim().toLowerCase();
+  const user = await prisma.user.findUnique({ where: { email } });
+  if (!user) {
+    return res.status(404).json({ error: "No account found for that email" });
+  }
+
+  const result = await verifyOtp(email, "PASSWORD_RESET", parsed.data.code);
+  if (!result.ok) {
+    return res.status(400).json({ error: result.error });
+  }
+
+  await prisma.user.update({
+    where: { id: user.id },
+    data: {
+      passwordHash: await bcrypt.hash(parsed.data.newPassword, SALT_ROUNDS),
+      // Someone who proves control of the inbox has verified it, so a
+      // half-finished signup can be completed this way too.
+      emailVerified: true,
+    },
+  });
+
+  return res.status(200).json({ message: "Password updated. You can now log in." });
 }
 
 export async function login(req: Request, res: Response) {
@@ -97,20 +208,38 @@ export async function login(req: Request, res: Response) {
     return res.status(400).json({ error: parsed.error.issues[0].message });
   }
 
-  const { email, password } = parsed.data;
+  const { identifier, password } = parsed.data;
+  const trimmed = identifier.trim();
 
-  const user = await prisma.user.findUnique({ where: { email } });
+  // Sign in with either an email or a phone number. Email is matched
+  // case-insensitively because addresses are stored lowercased; phones
+  // are matched as typed.
+  const user = await prisma.user.findFirst({
+    where: {
+      OR: [{ email: trimmed.toLowerCase() }, { phone: trimmed }],
+    },
+  });
   if (!user) {
-    return res.status(401).json({ error: "Invalid email or password" });
+    return res.status(401).json({ error: "Invalid login or password" });
   }
 
   const isValidPassword = await bcrypt.compare(password, user.passwordHash);
   if (!isValidPassword) {
-    return res.status(401).json({ error: "Invalid email or password" });
+    return res.status(401).json({ error: "Invalid login or password" });
   }
 
   if (user.isBanned) {
     return res.status(403).json({ error: user.bannedReason || "This account has been banned" });
+  }
+
+  // An unverified signup can't log in — but tell the client *why*, so it
+  // can send them to the code screen rather than a dead "wrong password".
+  if (!user.emailVerified) {
+    return res.status(403).json({
+      error: "Please verify your email before logging in.",
+      requiresVerification: true,
+      email: user.email,
+    });
   }
 
   const token = signToken({ userId: user.id, email: user.email });

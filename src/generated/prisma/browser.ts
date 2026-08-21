@@ -38,6 +38,31 @@ export type Notification = Prisma.NotificationModel
  */
 export type AppSettings = Prisma.AppSettingsModel
 /**
+ * Model GiftRequest
+ * 
+ */
+export type GiftRequest = Prisma.GiftRequestModel
+/**
+ * Model PushToken
+ * 
+ */
+export type PushToken = Prisma.PushTokenModel
+/**
+ * Model PushCampaign
+ * 
+ */
+export type PushCampaign = Prisma.PushCampaignModel
+/**
+ * Model OtpCode
+ * 
+ */
+export type OtpCode = Prisma.OtpCodeModel
+/**
+ * Model ContactMethod
+ * 
+ */
+export type ContactMethod = Prisma.ContactMethodModel
+/**
  * Model Banner
  * 
  */

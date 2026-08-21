@@ -1,5 +1,6 @@
 import { Prisma, CoinTransactionType, NotificationType } from "../generated/prisma/client";
 import prisma from "../config/prisma";
+import { pushToUser, isPushEnabled } from "./pushService";
 
 // Coins are a virtual, non-purchasable, non-withdrawable in-app currency.
 // They are NEVER exchanged for real money in either direction. This file
@@ -129,8 +130,8 @@ export async function creditCoins(
 // Admin gives a user bonus coins (custom amount + reason), and the user
 // gets a Notification about it. Wrapped in one transaction.
 export async function adminGiveBonus(userId: string, amount: number, reason: string) {
-  return prisma.$transaction(async (tx) => {
-    const balance = await creditCoins(tx, userId, amount, CoinTransactionType.ADMIN_BONUS, { reason });
+  const balance = await prisma.$transaction(async (tx) => {
+    const newBalance = await creditCoins(tx, userId, amount, CoinTransactionType.ADMIN_BONUS, { reason });
     await tx.notification.create({
       data: {
         userId,
@@ -140,7 +141,22 @@ export async function adminGiveBonus(userId: string, amount: number, reason: str
         coinAmount: amount,
       },
     });
-    return balance;
+    return newBalance;
+  });
+
+  // Push after the transaction commits, and never let a push failure
+  // roll back a coin credit that already happened.
+  notifyBonus(userId, amount, reason).catch((err) => console.error("Bonus push failed:", err));
+
+  return balance;
+}
+
+async function notifyBonus(userId: string, amount: number, reason: string) {
+  if (!(await isPushEnabled("coinBonus"))) return;
+  await pushToUser(userId, {
+    title: `You received ${amount} bonus coins`,
+    body: reason || "Open the app to see your new balance.",
+    linkTo: "CoinHistory",
   });
 }
 

@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import prisma from "../config/prisma";
 import { recordHeartbeat } from "../services/presenceService";
+import { runDueNotifications } from "../services/pushService";
 import { getActiveBanners } from "./bannerController";
 
 // Banners are read on the same hot path and change just as rarely, so
@@ -110,6 +111,14 @@ export async function getAppConfig(req: Request, res: Response) {
 
       dailyBonusAmount: settings.dailyBonusAmount,
 
+      // Shown when someone taps the (non-functional) Deposit button.
+      deposit: {
+        message: settings.depositMessage,
+        buttonText: settings.depositButtonText,
+        buttonLogo: settings.depositButtonLogo,
+        buttonUrl: settings.depositButtonUrl,
+      },
+
       support: {
         email: settings.supportEmail,
         phone: settings.supportPhone,
@@ -134,6 +143,11 @@ export async function postHeartbeat(req: Request, res: Response) {
   if (!deviceId || typeof deviceId !== "string") {
     return res.status(400).json({ error: "deviceId is required" });
   }
+
+  // Piggy-backs the scheduler on the heartbeat: there's no cron on this
+  // host, and heartbeats arrive every few minutes from every open app.
+  // Fire-and-forget so a slow push never delays the response.
+  runDueNotifications().catch((err) => console.error("Scheduled push failed:", err));
 
   const { liveCount } = await recordHeartbeat({
     deviceId,

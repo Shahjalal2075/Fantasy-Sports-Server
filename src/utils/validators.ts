@@ -13,9 +13,32 @@ export const registerSchema = z.object({
   referralCode: z.string().max(30).optional(),
 });
 
+// "identifier" rather than "email": users sign in with either their
+// email or their phone number, whichever they remember.
 export const loginSchema = z.object({
-  email: z.string().email("Invalid email address"),
+  identifier: z.string().min(1, "Enter your email or phone number"),
   password: z.string().min(1, "Password is required"),
+});
+
+export const sendOtpSchema = z.object({
+  email: z.string().email("Invalid email address"),
+  purpose: z.enum(["EMAIL_VERIFICATION", "PASSWORD_RESET"]),
+});
+
+export const verifyEmailSchema = z.object({
+  email: z.string().email("Invalid email address"),
+  code: z.string().min(4, "Enter the code from your email").max(10),
+});
+
+export const resetPasswordSchema = z.object({
+  email: z.string().email("Invalid email address"),
+  code: z.string().min(4, "Enter the code from your email").max(10),
+  newPassword: z.string().min(6, "Password must be at least 6 characters"),
+});
+
+// Admin-initiated reset — no code required, the admin is the authority.
+export const adminResetPasswordSchema = z.object({
+  newPassword: z.string().min(6, "Password must be at least 6 characters"),
 });
 
 export type RegisterInput = z.infer<typeof registerSchema>;
@@ -256,6 +279,24 @@ const versionString = z
 export const updateSettingsSchema = z
   .object({
     dailyBonusAmount: z.number().int().min(0).max(100000).optional(),
+
+    pushEnabled: z.boolean().optional(),
+    pushOnCoinBonus: z.boolean().optional(),
+    pushOnGiftUpdate: z.boolean().optional(),
+    pushOnPrizeDistributed: z.boolean().optional(),
+    pushOnMatchLock: z.boolean().optional(),
+    matchLockReminderMinutes: z.number().int().min(5).max(720).optional(),
+
+    giftRequestsEnabled: z.boolean().optional(),
+    giftRequestCooldownHours: z.number().int().min(0).max(720).optional(),
+    giftRequestMinCoins: z.number().int().min(0).max(1000000).optional(),
+    giftRequestExpiryDays: z.number().int().min(1).max(90).optional(),
+    giftRequestNote: z.string().max(500).optional(),
+
+    depositMessage: z.string().max(500).optional(),
+    depositButtonText: z.string().max(40).optional(),
+    depositButtonLogo: z.string().url().or(z.literal("")).optional(),
+    depositButtonUrl: z.string().url().or(z.literal("")).optional(),
 
     referralSignupBonus: z.number().int().min(0).max(100000).optional(),
     referralInviterBonus: z.number().int().min(0).max(100000).optional(),

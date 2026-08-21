@@ -34,6 +34,8 @@ enum CoinTransactionType {
   ADMIN_FINE
   PROMO_CODE
   REFERRAL_BONUS
+  GIFT_REQUEST
+  GIFT_REFUND
 }
 
 enum NotificationType {
@@ -83,6 +85,9 @@ model User {
   referralRewardPaid Boolean @default(false)
   // Blue tick, set by an admin.
   isVerified       Boolean   @default(false)
+  // Set once the signup email OTP is confirmed. Unverified accounts
+  // exist but can't log in.
+  emailVerified    Boolean   @default(false)
   createdAt        DateTime  @default(now())
   updatedAt        DateTime  @updatedAt
 
@@ -92,6 +97,8 @@ model User {
   notifications Notification[]
   promoCodeClaims PromoCodeClaim[]
   activeSessions  ActiveSession[]
+  giftRequests    GiftRequest[]
+  pushTokens      PushToken[]
 
   @@map("users")
 }
@@ -132,6 +139,34 @@ model Notification {
 model AppSettings {
   id               Int    @id @default(1)
   dailyBonusAmount Int    @default(100)
+
+  // Gift redemption. Requests below the minimum are rejected outright,
+  // and a pending request auto-refunds after giftRequestExpiryDays.
+  giftRequestsEnabled   Boolean @default(true)
+  giftRequestMinCoins   Int     @default(1000)
+  giftRequestExpiryDays Int     @default(10)
+  // A user may submit one request per this many hours.
+  giftRequestCooldownHours Int  @default(24)
+  // Shown on the app's request screen so users know what to expect.
+  giftRequestNote       String  @default("Our team reviews every request. If yours isn't selected, your coins are returned in full.")
+
+  // Push notifications. The master switch plus per-event toggles, so an
+  // admin can silence one kind of push without disabling all of them.
+  pushEnabled            Boolean @default(true)
+  pushOnCoinBonus        Boolean @default(true)
+  pushOnGiftUpdate       Boolean @default(true)
+  pushOnPrizeDistributed Boolean @default(true)
+  pushOnMatchLock        Boolean @default(true)
+  // How long before lockTime the match reminder fires.
+  matchLockReminderMinutes Int   @default(30)
+
+  // Deposit isn't supported — coins can't be bought. This is the copy
+  // and call-to-action shown when someone taps Deposit anyway, editable
+  // so support channels can change without an app release.
+  depositMessage    String @default("Sorry, this app does not support deposit. If you have any query, contact our support.")
+  depositButtonText String @default("Contact Support")
+  depositButtonLogo String @default("")
+  depositButtonUrl  String @default("")
 
   // Referral rewards. The invitee is credited the moment they sign up
   // with a valid code; the inviter is credited only once that invitee
@@ -176,6 +211,132 @@ model AppSettings {
   updatedAt DateTime @updatedAt @default(now())
 
   @@map("app_settings")
+}
+
+// A user's request to redeem coins for a physical gift.
+//
+// Coins are debited the moment the request is made and held against this
+// row. Any outcome other than APPROVED refunds them in full, including
+// the automatic expiry — so a user can never lose coins to a request
+// that nobody ever looked at.
+model GiftRequest {
+  id         String            @id @default(uuid())
+  userId     String
+  user       User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  coinAmount Int
+  status     GiftRequestStatus @default(PENDING)
+
+  // Required when approving — the user sees this in their history so
+  // they can follow the delivery.
+  trackingId String @default("")
+  // Required when cancelling, and shown to the user with their refund.
+  cancelReason String @default("")
+
+  // How to reach the user about the gift. The method's name and logo are
+  // SNAPSHOT here rather than only referenced, so deleting a contact
+  // method later doesn't blank out old requests.
+  contactMethodId   String?
+  contactMethod     ContactMethod? @relation(fields: [contactMethodId], references: [id], onDelete: SetNull)
+  contactMethodName String  @default("")
+  contactMethodLogo String  @default("")
+  contactNumber     String  @default("")
+
+  // A pending request auto-cancels and refunds after this moment, so
+  // coins are never held indefinitely by an oversight.
+  expiresAt  DateTime
+  resolvedAt DateTime?
+  // Which admin approved or cancelled it.
+  resolvedById String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([status, createdAt])
+  @@index([userId, createdAt])
+  @@map("gift_requests")
+}
+
+// One row per device that has push enabled. Tokens are issued by Expo's
+// push service and are unique per install; a device that reinstalls gets
+// a new one, so old rows are deactivated when Expo reports them invalid.
+model PushToken {
+  id       String  @id @default(uuid())
+  token    String  @unique
+  userId   String?
+  user     User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  // "android" / "ios". iOS tokens simply never get registered while push
+  // is Android-only, so no filtering is needed when sending.
+  platform String  @default("android")
+  deviceId String  @default("")
+  isActive Boolean @default(true)
+
+  lastUsedAt DateTime @default(now())
+  createdAt  DateTime @default(now())
+
+  @@index([isActive])
+  @@map("push_tokens")
+}
+
+// An admin-composed push, either sent immediately or scheduled. Kept as
+// a row rather than fired and forgotten so the admin panel can show a
+// history and so a scheduled send survives a server restart.
+model PushCampaign {
+  id      String @id @default(uuid())
+  title   String
+  body    String
+  // Optional deep link target, e.g. "Home" or "MyContest".
+  linkTo  String @default("")
+
+  status       PushCampaignStatus @default(SCHEDULED)
+  // Null means "send now".
+  scheduledFor DateTime?
+  sentAt       DateTime?
+  sentCount    Int @default(0)
+  failedCount  Int @default(0)
+  error        String @default("")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([status, scheduledFor])
+  @@map("push_campaigns")
+}
+
+// Short-lived email codes for signup verification and password reset.
+// Only a hash is stored, so a database leak doesn't hand out live codes.
+model OtpCode {
+  id        String     @id @default(uuid())
+  email     String
+  codeHash  String
+  purpose   OtpPurpose
+  expiresAt DateTime
+  // Wrong guesses; the code is burned after too many.
+  attempts  Int        @default(0)
+  consumedAt DateTime?
+  createdAt DateTime   @default(now())
+
+  @@index([email, purpose])
+  @@map("otp_codes")
+}
+
+// A way for the admin to reach a user about their gift — WhatsApp,
+// Telegram, and so on. Managed entirely from the admin panel so new
+// channels don't need a code change.
+model ContactMethod {
+  id        String  @id @default(uuid())
+  // Shown to the user exactly as typed, e.g. "WhatsApp".
+  name      String
+  logoUrl   String  @default("")
+  sortOrder Int     @default(0)
+  isActive  Boolean @default(true)
+
+  giftRequests GiftRequest[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([isActive, sortOrder])
+  @@map("contact_methods")
 }
 
 // A home-screen banner. Several can be active at once, in which case the
@@ -299,6 +460,8 @@ model Match {
   // the leaderboard's "Last Updated" stamp, so users see when the numbers
   // last actually moved rather than when they opened the screen.
   pointsCalculatedAt DateTime?
+  // Guards the automatic "match locks soon" push against double-sending.
+  lockReminderSentAt DateTime?
   createdAt      DateTime    @default(now())
   updatedAt      DateTime    @updatedAt
 
@@ -419,6 +582,24 @@ model Contest {
   entries ContestEntry[]
 
   @@map("contests")
+}
+
+enum OtpPurpose {
+  EMAIL_VERIFICATION
+  PASSWORD_RESET
+}
+
+enum PushCampaignStatus {
+  SCHEDULED
+  SENT
+  FAILED
+  CANCELLED
+}
+
+enum GiftRequestStatus {
+  PENDING
+  APPROVED
+  CANCELLED
 }
 
 enum ContestEntryStatus {

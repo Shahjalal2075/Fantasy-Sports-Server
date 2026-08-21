@@ -4,6 +4,9 @@ import { NotificationType } from "../generated/prisma/client";
 import { coinAdjustmentSchema, banUserSchema, updateSettingsSchema } from "../utils/validators";
 import { adminGiveBonus, adminGiveFine } from "../services/walletService";
 import { getLiveCount, getLiveSessions, getVisitorHistory, LIVE_WINDOW_MS } from "../services/presenceService";
+import { pushToUser, isPushEnabled } from "../services/pushService";
+import bcrypt from "bcryptjs";
+import { adminResetPasswordSchema } from "../utils/validators";
 import { compareVersions, invalidateSettingsCache } from "./appConfigController";
 
 // GET /api/admin/coin-adjustments  (admin only)
@@ -255,6 +258,18 @@ export async function updateSettings(req: Request, res: Response) {
     });
   }
 
+  // Enabling gift requests without a contact method would leave users
+  // able to spend coins with no way for anyone to reach them, so the
+  // toggle simply can't be switched on until one exists.
+  if (parsed.data.giftRequestsEnabled === true) {
+    const activeMethods = await prisma.contactMethod.count({ where: { isActive: true } });
+    if (activeMethods === 0) {
+      return res.status(400).json({
+        error: "Add at least one active contact method before turning gift requests on.",
+      });
+    }
+  }
+
   // Surface "last updated" on the app's legal screens, but only move it
   // when the documents themselves actually change.
   const legalChanged =
@@ -339,4 +354,45 @@ export async function setUserVerified(req: Request, res: Response) {
   });
 
   return res.status(200).json({ user: updated });
+}
+
+// POST /api/admin/users/:id/reset-password  (admin only)
+// A support escape hatch for users who can't complete the email flow —
+// no OTP needed, because the admin is the authority here.
+export async function adminResetUserPassword(req: Request, res: Response) {
+  const { id: userId } = req.params as { id: string };
+
+  const parsed = adminResetPasswordSchema.safeParse(req.body);
+  if (!parsed.success) {
+    return res.status(400).json({ error: parsed.error.issues[0].message });
+  }
+
+  const user = await prisma.user.findUnique({ where: { id: userId }, select: { id: true } });
+  if (!user) {
+    return res.status(404).json({ error: "User not found" });
+  }
+
+  await prisma.user.update({
+    where: { id: userId },
+    data: {
+      // Cost 8 matches the auth controller — see the note there about
+      // bcryptjs on a constrained CPU.
+      passwordHash: await bcrypt.hash(parsed.data.newPassword, 8),
+      // An admin resetting the password implies the account is legitimate,
+      // so this also unblocks a signup stuck at verification.
+      emailVerified: true,
+    },
+  });
+
+  await prisma.notification.create({
+    data: {
+      userId,
+      type: "GENERIC",
+      title: "Your password was reset",
+      message:
+        "An administrator set a new password for your account. If you didn't request this, contact support immediately.",
+    },
+  });
+
+  return res.status(200).json({ message: "Password reset" });
 }

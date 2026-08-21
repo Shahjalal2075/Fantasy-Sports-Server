@@ -55,6 +55,11 @@ export const ModelName = {
   CoinTransaction: 'CoinTransaction',
   Notification: 'Notification',
   AppSettings: 'AppSettings',
+  GiftRequest: 'GiftRequest',
+  PushToken: 'PushToken',
+  PushCampaign: 'PushCampaign',
+  OtpCode: 'OtpCode',
+  ContactMethod: 'ContactMethod',
   Banner: 'Banner',
   ActiveSession: 'ActiveSession',
   VisitorStat: 'VisitorStat',
@@ -111,6 +116,7 @@ export const UserScalarFieldEnum = {
   referredById: 'referredById',
   referralRewardPaid: 'referralRewardPaid',
   isVerified: 'isVerified',
+  emailVerified: 'emailVerified',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -149,6 +155,21 @@ export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[k
 export const AppSettingsScalarFieldEnum = {
   id: 'id',
   dailyBonusAmount: 'dailyBonusAmount',
+  giftRequestsEnabled: 'giftRequestsEnabled',
+  giftRequestMinCoins: 'giftRequestMinCoins',
+  giftRequestExpiryDays: 'giftRequestExpiryDays',
+  giftRequestCooldownHours: 'giftRequestCooldownHours',
+  giftRequestNote: 'giftRequestNote',
+  pushEnabled: 'pushEnabled',
+  pushOnCoinBonus: 'pushOnCoinBonus',
+  pushOnGiftUpdate: 'pushOnGiftUpdate',
+  pushOnPrizeDistributed: 'pushOnPrizeDistributed',
+  pushOnMatchLock: 'pushOnMatchLock',
+  matchLockReminderMinutes: 'matchLockReminderMinutes',
+  depositMessage: 'depositMessage',
+  depositButtonText: 'depositButtonText',
+  depositButtonLogo: 'depositButtonLogo',
+  depositButtonUrl: 'depositButtonUrl',
   referralSignupBonus: 'referralSignupBonus',
   referralInviterBonus: 'referralInviterBonus',
   privacyPolicy: 'privacyPolicy',
@@ -169,6 +190,86 @@ export const AppSettingsScalarFieldEnum = {
 } as const
 
 export type AppSettingsScalarFieldEnum = (typeof AppSettingsScalarFieldEnum)[keyof typeof AppSettingsScalarFieldEnum]
+
+
+export const GiftRequestScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  coinAmount: 'coinAmount',
+  status: 'status',
+  trackingId: 'trackingId',
+  cancelReason: 'cancelReason',
+  contactMethodId: 'contactMethodId',
+  contactMethodName: 'contactMethodName',
+  contactMethodLogo: 'contactMethodLogo',
+  contactNumber: 'contactNumber',
+  expiresAt: 'expiresAt',
+  resolvedAt: 'resolvedAt',
+  resolvedById: 'resolvedById',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type GiftRequestScalarFieldEnum = (typeof GiftRequestScalarFieldEnum)[keyof typeof GiftRequestScalarFieldEnum]
+
+
+export const PushTokenScalarFieldEnum = {
+  id: 'id',
+  token: 'token',
+  userId: 'userId',
+  platform: 'platform',
+  deviceId: 'deviceId',
+  isActive: 'isActive',
+  lastUsedAt: 'lastUsedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type PushTokenScalarFieldEnum = (typeof PushTokenScalarFieldEnum)[keyof typeof PushTokenScalarFieldEnum]
+
+
+export const PushCampaignScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  body: 'body',
+  linkTo: 'linkTo',
+  status: 'status',
+  scheduledFor: 'scheduledFor',
+  sentAt: 'sentAt',
+  sentCount: 'sentCount',
+  failedCount: 'failedCount',
+  error: 'error',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PushCampaignScalarFieldEnum = (typeof PushCampaignScalarFieldEnum)[keyof typeof PushCampaignScalarFieldEnum]
+
+
+export const OtpCodeScalarFieldEnum = {
+  id: 'id',
+  email: 'email',
+  codeHash: 'codeHash',
+  purpose: 'purpose',
+  expiresAt: 'expiresAt',
+  attempts: 'attempts',
+  consumedAt: 'consumedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type OtpCodeScalarFieldEnum = (typeof OtpCodeScalarFieldEnum)[keyof typeof OtpCodeScalarFieldEnum]
+
+
+export const ContactMethodScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  logoUrl: 'logoUrl',
+  sortOrder: 'sortOrder',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ContactMethodScalarFieldEnum = (typeof ContactMethodScalarFieldEnum)[keyof typeof ContactMethodScalarFieldEnum]
 
 
 export const BannerScalarFieldEnum = {
@@ -250,6 +351,7 @@ export const MatchScalarFieldEnum = {
   status: 'status',
   lockTime: 'lockTime',
   pointsCalculatedAt: 'pointsCalculatedAt',
+  lockReminderSentAt: 'lockReminderSentAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

@@ -5,10 +5,19 @@ CREATE TYPE "SportType" AS ENUM ('CRICKET', 'FOOTBALL');
 CREATE TYPE "MatchStatus" AS ENUM ('UPCOMING', 'LIVE', 'COMPLETED', 'CANCELLED');
 
 -- CreateEnum
-CREATE TYPE "CoinTransactionType" AS ENUM ('DAILY_BONUS', 'CONTEST_ENTRY', 'CONTEST_PRIZE', 'CONTEST_REFUND', 'ADMIN_BONUS', 'ADMIN_FINE', 'PROMO_CODE', 'REFERRAL_BONUS');
+CREATE TYPE "CoinTransactionType" AS ENUM ('DAILY_BONUS', 'CONTEST_ENTRY', 'CONTEST_PRIZE', 'CONTEST_REFUND', 'ADMIN_BONUS', 'ADMIN_FINE', 'PROMO_CODE', 'REFERRAL_BONUS', 'GIFT_REQUEST', 'GIFT_REFUND');
 
 -- CreateEnum
 CREATE TYPE "NotificationType" AS ENUM ('COIN_BONUS', 'COIN_FINE', 'BAN', 'GENERIC');
+
+-- CreateEnum
+CREATE TYPE "OtpPurpose" AS ENUM ('EMAIL_VERIFICATION', 'PASSWORD_RESET');
+
+-- CreateEnum
+CREATE TYPE "PushCampaignStatus" AS ENUM ('SCHEDULED', 'SENT', 'FAILED', 'CANCELLED');
+
+-- CreateEnum
+CREATE TYPE "GiftRequestStatus" AS ENUM ('PENDING', 'APPROVED', 'CANCELLED');
 
 -- CreateEnum
 CREATE TYPE "ContestEntryStatus" AS ENUM ('ACTIVE', 'LOCKED', 'COMPLETED');
@@ -38,6 +47,7 @@ CREATE TABLE "users" (
     "referredById" TEXT,
     "referralRewardPaid" BOOLEAN NOT NULL DEFAULT false,
     "isVerified" BOOLEAN NOT NULL DEFAULT false,
+    "emailVerified" BOOLEAN NOT NULL DEFAULT false,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -76,6 +86,21 @@ CREATE TABLE "notifications" (
 CREATE TABLE "app_settings" (
     "id" INTEGER NOT NULL DEFAULT 1,
     "dailyBonusAmount" INTEGER NOT NULL DEFAULT 100,
+    "giftRequestsEnabled" BOOLEAN NOT NULL DEFAULT true,
+    "giftRequestMinCoins" INTEGER NOT NULL DEFAULT 1000,
+    "giftRequestExpiryDays" INTEGER NOT NULL DEFAULT 10,
+    "giftRequestCooldownHours" INTEGER NOT NULL DEFAULT 24,
+    "giftRequestNote" TEXT NOT NULL DEFAULT 'Our team reviews every request. If yours isn''t selected, your coins are returned in full.',
+    "pushEnabled" BOOLEAN NOT NULL DEFAULT true,
+    "pushOnCoinBonus" BOOLEAN NOT NULL DEFAULT true,
+    "pushOnGiftUpdate" BOOLEAN NOT NULL DEFAULT true,
+    "pushOnPrizeDistributed" BOOLEAN NOT NULL DEFAULT true,
+    "pushOnMatchLock" BOOLEAN NOT NULL DEFAULT true,
+    "matchLockReminderMinutes" INTEGER NOT NULL DEFAULT 30,
+    "depositMessage" TEXT NOT NULL DEFAULT 'Sorry, this app does not support deposit. If you have any query, contact our support.',
+    "depositButtonText" TEXT NOT NULL DEFAULT 'Contact Support',
+    "depositButtonLogo" TEXT NOT NULL DEFAULT '',
+    "depositButtonUrl" TEXT NOT NULL DEFAULT '',
     "referralSignupBonus" INTEGER NOT NULL DEFAULT 100,
     "referralInviterBonus" INTEGER NOT NULL DEFAULT 100,
     "privacyPolicy" TEXT NOT NULL DEFAULT '',
@@ -95,6 +120,86 @@ CREATE TABLE "app_settings" (
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "app_settings_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "gift_requests" (
+    "id" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+    "coinAmount" INTEGER NOT NULL,
+    "status" "GiftRequestStatus" NOT NULL DEFAULT 'PENDING',
+    "trackingId" TEXT NOT NULL DEFAULT '',
+    "cancelReason" TEXT NOT NULL DEFAULT '',
+    "contactMethodId" TEXT,
+    "contactMethodName" TEXT NOT NULL DEFAULT '',
+    "contactMethodLogo" TEXT NOT NULL DEFAULT '',
+    "contactNumber" TEXT NOT NULL DEFAULT '',
+    "expiresAt" TIMESTAMP(3) NOT NULL,
+    "resolvedAt" TIMESTAMP(3),
+    "resolvedById" TEXT,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "gift_requests_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "push_tokens" (
+    "id" TEXT NOT NULL,
+    "token" TEXT NOT NULL,
+    "userId" TEXT,
+    "platform" TEXT NOT NULL DEFAULT 'android',
+    "deviceId" TEXT NOT NULL DEFAULT '',
+    "isActive" BOOLEAN NOT NULL DEFAULT true,
+    "lastUsedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "push_tokens_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "push_campaigns" (
+    "id" TEXT NOT NULL,
+    "title" TEXT NOT NULL,
+    "body" TEXT NOT NULL,
+    "linkTo" TEXT NOT NULL DEFAULT '',
+    "status" "PushCampaignStatus" NOT NULL DEFAULT 'SCHEDULED',
+    "scheduledFor" TIMESTAMP(3),
+    "sentAt" TIMESTAMP(3),
+    "sentCount" INTEGER NOT NULL DEFAULT 0,
+    "failedCount" INTEGER NOT NULL DEFAULT 0,
+    "error" TEXT NOT NULL DEFAULT '',
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "push_campaigns_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "otp_codes" (
+    "id" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
+    "codeHash" TEXT NOT NULL,
+    "purpose" "OtpPurpose" NOT NULL,
+    "expiresAt" TIMESTAMP(3) NOT NULL,
+    "attempts" INTEGER NOT NULL DEFAULT 0,
+    "consumedAt" TIMESTAMP(3),
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "otp_codes_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "contact_methods" (
+    "id" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "logoUrl" TEXT NOT NULL DEFAULT '',
+    "sortOrder" INTEGER NOT NULL DEFAULT 0,
+    "isActive" BOOLEAN NOT NULL DEFAULT true,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "contact_methods_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -177,6 +282,7 @@ CREATE TABLE "matches" (
     "status" "MatchStatus" NOT NULL DEFAULT 'UPCOMING',
     "lockTime" TIMESTAMP(3) NOT NULL,
     "pointsCalculatedAt" TIMESTAMP(3),
+    "lockReminderSentAt" TIMESTAMP(3),
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -322,6 +428,27 @@ CREATE UNIQUE INDEX "users_phone_key" ON "users"("phone");
 CREATE UNIQUE INDEX "users_referralCode_key" ON "users"("referralCode");
 
 -- CreateIndex
+CREATE INDEX "gift_requests_status_createdAt_idx" ON "gift_requests"("status", "createdAt");
+
+-- CreateIndex
+CREATE INDEX "gift_requests_userId_createdAt_idx" ON "gift_requests"("userId", "createdAt");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "push_tokens_token_key" ON "push_tokens"("token");
+
+-- CreateIndex
+CREATE INDEX "push_tokens_isActive_idx" ON "push_tokens"("isActive");
+
+-- CreateIndex
+CREATE INDEX "push_campaigns_status_scheduledFor_idx" ON "push_campaigns"("status", "scheduledFor");
+
+-- CreateIndex
+CREATE INDEX "otp_codes_email_purpose_idx" ON "otp_codes"("email", "purpose");
+
+-- CreateIndex
+CREATE INDEX "contact_methods_isActive_sortOrder_idx" ON "contact_methods"("isActive", "sortOrder");
+
+-- CreateIndex
 CREATE INDEX "banners_isActive_sortOrder_idx" ON "banners"("isActive", "sortOrder");
 
 -- CreateIndex
@@ -362,6 +489,15 @@ ALTER TABLE "coin_transactions" ADD CONSTRAINT "coin_transactions_userId_fkey" F
 
 -- AddForeignKey
 ALTER TABLE "notifications" ADD CONSTRAINT "notifications_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "gift_requests" ADD CONSTRAINT "gift_requests_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "gift_requests" ADD CONSTRAINT "gift_requests_contactMethodId_fkey" FOREIGN KEY ("contactMethodId") REFERENCES "contact_methods"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "push_tokens" ADD CONSTRAINT "push_tokens_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "active_sessions" ADD CONSTRAINT "active_sessions_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE SET NULL ON UPDATE CASCADE;

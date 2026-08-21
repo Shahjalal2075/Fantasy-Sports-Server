@@ -35,7 +35,9 @@ export const CoinTransactionType = {
   ADMIN_BONUS: 'ADMIN_BONUS',
   ADMIN_FINE: 'ADMIN_FINE',
   PROMO_CODE: 'PROMO_CODE',
-  REFERRAL_BONUS: 'REFERRAL_BONUS'
+  REFERRAL_BONUS: 'REFERRAL_BONUS',
+  GIFT_REQUEST: 'GIFT_REQUEST',
+  GIFT_REFUND: 'GIFT_REFUND'
 } as const
 
 export type CoinTransactionType = (typeof CoinTransactionType)[keyof typeof CoinTransactionType]
@@ -49,6 +51,33 @@ export const NotificationType = {
 } as const
 
 export type NotificationType = (typeof NotificationType)[keyof typeof NotificationType]
+
+
+export const OtpPurpose = {
+  EMAIL_VERIFICATION: 'EMAIL_VERIFICATION',
+  PASSWORD_RESET: 'PASSWORD_RESET'
+} as const
+
+export type OtpPurpose = (typeof OtpPurpose)[keyof typeof OtpPurpose]
+
+
+export const PushCampaignStatus = {
+  SCHEDULED: 'SCHEDULED',
+  SENT: 'SENT',
+  FAILED: 'FAILED',
+  CANCELLED: 'CANCELLED'
+} as const
+
+export type PushCampaignStatus = (typeof PushCampaignStatus)[keyof typeof PushCampaignStatus]
+
+
+export const GiftRequestStatus = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  CANCELLED: 'CANCELLED'
+} as const
+
+export type GiftRequestStatus = (typeof GiftRequestStatus)[keyof typeof GiftRequestStatus]
 
 
 export const ContestEntryStatus = {

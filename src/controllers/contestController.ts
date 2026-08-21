@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { CoinTransactionType } from "../generated/prisma/client";
 import prisma from "../config/prisma";
 import { payInviterIfDue } from "../services/referralService";
+import { pushToUser, isPushEnabled } from "../services/pushService";
 import { createContestSchema, joinContestSchema } from "../utils/validators";
 import { debitCoins, creditCoins, InsufficientCoinsError } from "../services/walletService";
 
@@ -338,6 +339,18 @@ export async function distributePrizes(req: Request, res: Response) {
 
     await tx.contest.update({ where: { id: contestId }, data: { prizesDistributed: true } });
   });
+
+  // Push after the payout transaction commits. Fire-and-forget: a push
+  // failure must never make a successful payout look like an error.
+  if (await isPushEnabled("prizeDistributed")) {
+    for (const payout of payouts) {
+      pushToUser(payout.userId, {
+        title: `You won ${payout.coins.toLocaleString()} coins!`,
+        body: `Rank #${payout.rank} in ${contest.name}. The coins are in your wallet.`,
+        linkTo: "MyContest",
+      }).catch((err) => console.error("Prize push failed:", err));
+    }
+  }
 
   return res.status(200).json({ message: "Prizes distributed", payouts });
 }

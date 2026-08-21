@@ -4,7 +4,7 @@ import { NotificationType } from "../generated/prisma/client";
 import { coinAdjustmentSchema, banUserSchema, updateSettingsSchema } from "../utils/validators";
 import { adminGiveBonus, adminGiveFine } from "../services/walletService";
 import { getLiveCount, getLiveSessions, getVisitorHistory, LIVE_WINDOW_MS } from "../services/presenceService";
-import { compareVersions } from "./appConfigController";
+import { compareVersions, invalidateSettingsCache } from "./appConfigController";
 
 // GET /api/admin/coin-adjustments  (admin only)
 // Audit log of every ADMIN_BONUS / ADMIN_FINE ever given, across all users.
@@ -43,6 +43,8 @@ export async function listUsers(req: Request, res: Response) {
       // Admin-only fields — the app collects these but never shows them.
       dateOfBirth: true,
       nidNumber: true,
+      isVerified: true,
+      referralCode: true,
       usernameChangedAt: true,
       coins: true,
       isAdmin: true,
@@ -89,6 +91,13 @@ export async function getUserDetail(req: Request, res: Response) {
       username: true,
       email: true,
       phone: true,
+      avatarUrl: true,
+      // Admin-only: the app collects these but never displays them back.
+      dateOfBirth: true,
+      nidNumber: true,
+      isVerified: true,
+      referralCode: true,
+      usernameChangedAt: true,
       coins: true,
       isAdmin: true,
       isBanned: true,
@@ -246,10 +255,22 @@ export async function updateSettings(req: Request, res: Response) {
     });
   }
 
+  // Surface "last updated" on the app's legal screens, but only move it
+  // when the documents themselves actually change.
+  const legalChanged =
+    (parsed.data.privacyPolicy !== undefined &&
+      parsed.data.privacyPolicy !== current.privacyPolicy) ||
+    (parsed.data.termsAndConditions !== undefined &&
+      parsed.data.termsAndConditions !== current.termsAndConditions);
+
   const settings = await prisma.appSettings.update({
     where: { id: 1 },
-    data: parsed.data,
+    data: legalChanged ? { ...parsed.data, legalUpdatedAt: new Date() } : parsed.data,
   });
+
+  // Without this, flipping maintenance mode on would take up to a minute
+  // to reach anyone — which defeats the point of an emergency switch.
+  invalidateSettingsCache();
 
   return res.status(200).json({ settings });
 }
@@ -281,4 +302,41 @@ export async function getVisitorAnalytics(req: Request, res: Response) {
     })),
     history,
   });
+}
+
+// PATCH /api/admin/users/:id/verify  (admin only)  body: { isVerified }
+// Drives the blue tick shown next to a user's name in the app.
+export async function setUserVerified(req: Request, res: Response) {
+  const { id: userId } = req.params as { id: string };
+  const isVerified = req.body?.isVerified;
+
+  if (typeof isVerified !== "boolean") {
+    return res.status(400).json({ error: "isVerified must be true or false" });
+  }
+
+  const user = await prisma.user.findUnique({ where: { id: userId }, select: { id: true, name: true } });
+  if (!user) {
+    return res.status(404).json({ error: "User not found" });
+  }
+
+  const updated = await prisma.user.update({
+    where: { id: userId },
+    data: { isVerified },
+    select: { id: true, name: true, username: true, isVerified: true },
+  });
+
+  // Tell the user either way — a badge appearing or disappearing without
+  // explanation is confusing.
+  await prisma.notification.create({
+    data: {
+      userId,
+      type: "GENERIC",
+      title: isVerified ? "You're verified" : "Verification removed",
+      message: isVerified
+        ? "Your account has been verified. A blue tick now appears next to your name."
+        : "Your account verification has been removed.",
+    },
+  });
+
+  return res.status(200).json({ user: updated });
 }

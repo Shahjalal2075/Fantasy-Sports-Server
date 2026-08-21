@@ -2,6 +2,7 @@ import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import appConfigRoutes from "./routes/appConfigRoutes";
+import uploadRoutes from "./routes/uploadRoutes";
 import authRoutes from "./routes/authRoutes";
 import matchRoutes from "./routes/matchRoutes";
 import playerRoutes from "./routes/playerRoutes";
@@ -30,7 +31,10 @@ const corsOriginEnv = process.env.CORS_ORIGIN?.trim();
 const allowedOrigins = corsOriginEnv ? corsOriginEnv.split(",").map((o) => o.trim()) : undefined;
 app.use(cors(allowedOrigins ? { origin: allowedOrigins } : {}));
 
-app.use(express.json());
+// Base64 image uploads go through /api/uploads, and base64 inflates a
+// payload by roughly a third — Express's 100kb default would reject any
+// real photo. The upload handler enforces its own 8 MB image cap.
+app.use(express.json({ limit: "12mb" }));
 
 // Health check
 app.get("/health", (_req, res) => {
@@ -39,6 +43,7 @@ app.get("/health", (_req, res) => {
 
 // Routes
 app.use("/api/app-config", appConfigRoutes); // public: maintenance, forced update, banner, heartbeat
+app.use("/api/uploads", uploadRoutes);     // imgbb proxy for avatars, logos, player photos
 app.use("/api/auth", authRoutes);
 app.use("/api/matches", matchRoutes);
 app.use("/api/players", playerRoutes);          // player CATALOG admin CRUD

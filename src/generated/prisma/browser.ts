@@ -38,6 +38,11 @@ export type Notification = Prisma.NotificationModel
  */
 export type AppSettings = Prisma.AppSettingsModel
 /**
+ * Model Banner
+ * 
+ */
+export type Banner = Prisma.BannerModel
+/**
  * Model ActiveSession
  * 
  */

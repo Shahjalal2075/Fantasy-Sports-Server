@@ -68,11 +68,14 @@ export function validateTeamSelection(
     errors.push("Duplicate players are not allowed in the same team");
   }
 
-  // 3. All selected players must currently be marked as playing
-  const notPlaying = selectedPlayers.filter((p) => !p.isPlaying);
-  if (notPlaying.length > 0) {
-    errors.push(`These players are not in the playing XI: ${notPlaying.map((p) => p.id).join(", ")}`);
-  }
+  // 3. Playing XI is deliberately NOT enforced here.
+  //
+  // isPlaying now defaults to false and is only switched on once the
+  // admin confirms the real lineup — which usually happens shortly
+  // before the toss. Requiring it would make it impossible to build a
+  // team until then, so instead the app marks each player with a green
+  // (confirmed) or red (unconfirmed) dot and lets the user decide.
+  // Players who never make the XI simply score no points.
 
   // 4. Budget check
   const totalCredits = selectedPlayers.reduce((sum, p) => sum + p.creditValue, 0);

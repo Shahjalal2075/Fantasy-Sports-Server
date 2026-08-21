@@ -257,8 +257,12 @@ export const updateSettingsSchema = z
   .object({
     dailyBonusAmount: z.number().int().min(0).max(100000).optional(),
 
-    hasBanner: z.boolean().optional(),
-    bannerImageUrl: z.string().url().or(z.literal("")).optional(),
+    referralSignupBonus: z.number().int().min(0).max(100000).optional(),
+    referralInviterBonus: z.number().int().min(0).max(100000).optional(),
+
+    // Generous cap — these are full legal documents, not blurbs.
+    privacyPolicy: z.string().max(50000).optional(),
+    termsAndConditions: z.string().max(50000).optional(),
 
     maintenanceMode: z.boolean().optional(),
     maintenanceMessage: z.string().max(500).optional(),
@@ -274,10 +278,9 @@ export const updateSettingsSchema = z
     supportFacebook: z.string().url().or(z.literal("")).optional(),
     supportHours: z.string().max(120).optional(),
   })
-  .refine((data) => !(data.hasBanner === true && data.bannerImageUrl === ""), {
-    message: "Add a banner image URL before turning the banner on",
-    path: ["bannerImageUrl"],
-  });
+  // Banners moved to their own endpoints (/api/admin/banners), so there's
+  // nothing left here that needs cross-field validation.
+  ;
 
 export const createPromoCodeSchema = z.object({
   code: z
@@ -322,7 +325,9 @@ export const updateProfileSchema = z.object({
     .string()
     .regex(/^\d{4}-\d{2}-\d{2}$/, "Date of birth must be in YYYY-MM-DD format"),
   nidNumber: z.string().max(30).optional().or(z.literal("")),
-  avatarUrl: z.string().url("Enter a valid image URL").optional().or(z.literal("")),
+  // Set by the app's uploader, which returns a hosted imgbb URL — users
+  // no longer type this by hand.
+  avatarUrl: z.string().url("Invalid image URL").optional().or(z.literal("")),
 });
 
 export type UpdateProfileInput = z.infer<typeof updateProfileSchema>;

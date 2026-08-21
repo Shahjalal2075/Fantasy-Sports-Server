@@ -1,9 +1,25 @@
 import prisma from "../config/prisma";
 
 // A device counts as "online" if it has pinged within this window. The
-// app heartbeats every 60s, so two minutes tolerates one dropped ping
+// app heartbeats every 5 minutes, so ~7 tolerates one dropped ping
 // without a user flickering out of the count.
-export const LIVE_WINDOW_MS = 2 * 60 * 1000;
+//
+// The interval was widened from 60s deliberately: at one ping per device
+// per minute, 200 concurrent users generated ~17 queries/second before
+// anyone had actually *done* anything, and it also kept the database
+// permanently awake, which burns a serverless free tier's compute
+// allowance. Five minutes costs a little freshness and cuts that load by
+// roughly 80%.
+export const LIVE_WINDOW_MS = 7 * 60 * 1000;
+
+// The hourly graph is a sampled statistic, not an audit log. Rolling it
+// up on every single ping meant three extra queries per device per
+// interval; doing it on a fraction of pings produces a
+// visually identical chart for a fraction of the writes.
+//
+// With 5-minute pings and 50 concurrent devices that's still ~1 rollup
+// every 4 seconds, which is plenty of resolution for an hourly bucket.
+const ROLLUP_SAMPLE_RATE = 0.1;
 
 // Sessions older than this are pruned — they're finished visits, and the
 // hourly VisitorStat rollup already preserves the history.
@@ -48,30 +64,11 @@ export async function recordHeartbeat(input: {
   });
 
   const liveCount = await getLiveCount(now);
-  const bucketStart = hourBucket(now);
 
-  // Distinct devices seen this hour, counted from the sessions table
-  // rather than kept as a running total, so a device that pings 60 times
-  // still only counts once.
-  const uniqueDevices = await prisma.activeSession.count({
-    where: { lastSeenAt: { gte: bucketStart } },
-  });
-
-  const existing = await prisma.visitorStat.findUnique({ where: { bucketStart } });
-
-  if (!existing) {
-    await prisma.visitorStat.create({
-      data: { bucketStart, peakConcurrent: liveCount, uniqueDevices },
-    });
-  } else {
-    await prisma.visitorStat.update({
-      where: { bucketStart },
-      data: {
-        // Peak only ever climbs within its hour.
-        peakConcurrent: Math.max(existing.peakConcurrent, liveCount),
-        uniqueDevices: Math.max(existing.uniqueDevices, uniqueDevices),
-      },
-    });
+  // Sampled: most pings stop here, having cost a single upsert plus one
+  // count. Only the sampled minority pay for the rollup below.
+  if (Math.random() < ROLLUP_SAMPLE_RATE) {
+    await rollUpHour(now, liveCount);
   }
 
   // Opportunistic cleanup — cheap, indexed, and keeps the table bounded
@@ -83,6 +80,43 @@ export async function recordHeartbeat(input: {
   }
 
   return { liveCount };
+}
+
+/**
+ * Folds the current live count into this hour's bucket. Split out of the
+ * heartbeat path so it can be sampled rather than run on every ping.
+ */
+async function rollUpHour(now: Date, liveCount: number): Promise<void> {
+  const bucketStart = hourBucket(now);
+
+  // Distinct devices seen this hour, counted from the sessions table
+  // rather than kept as a running total, so a device that pings many
+  // times still only counts once.
+  const uniqueDevices = await prisma.activeSession.count({
+    where: { lastSeenAt: { gte: bucketStart } },
+  });
+
+  // upsert with a conditional-style update: peak and unique counts only
+  // ever climb within their hour, so a stale sample can't drag them down.
+  const existing = await prisma.visitorStat.findUnique({ where: { bucketStart } });
+
+  if (!existing) {
+    await prisma.visitorStat.create({
+      data: { bucketStart, peakConcurrent: liveCount, uniqueDevices },
+    });
+    return;
+  }
+
+  // Nothing to write if this sample didn't beat what's already recorded.
+  if (liveCount <= existing.peakConcurrent && uniqueDevices <= existing.uniqueDevices) return;
+
+  await prisma.visitorStat.update({
+    where: { bucketStart },
+    data: {
+      peakConcurrent: Math.max(existing.peakConcurrent, liveCount),
+      uniqueDevices: Math.max(existing.uniqueDevices, uniqueDevices),
+    },
+  });
 }
 
 export async function getLiveCount(now: Date = new Date()): Promise<number> {

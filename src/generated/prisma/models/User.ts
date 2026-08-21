@@ -56,6 +56,10 @@ export type UserMinAggregateOutputType = {
   bannedReason: string | null
   bannedAt: Date | null
   referredByCode: string | null
+  referralCode: string | null
+  referredById: string | null
+  referralRewardPaid: boolean | null
+  isVerified: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -80,6 +84,10 @@ export type UserMaxAggregateOutputType = {
   bannedReason: string | null
   bannedAt: Date | null
   referredByCode: string | null
+  referralCode: string | null
+  referredById: string | null
+  referralRewardPaid: boolean | null
+  isVerified: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -104,6 +112,10 @@ export type UserCountAggregateOutputType = {
   bannedReason: number
   bannedAt: number
   referredByCode: number
+  referralCode: number
+  referredById: number
+  referralRewardPaid: number
+  isVerified: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -140,6 +152,10 @@ export type UserMinAggregateInputType = {
   bannedReason?: true
   bannedAt?: true
   referredByCode?: true
+  referralCode?: true
+  referredById?: true
+  referralRewardPaid?: true
+  isVerified?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -164,6 +180,10 @@ export type UserMaxAggregateInputType = {
   bannedReason?: true
   bannedAt?: true
   referredByCode?: true
+  referralCode?: true
+  referredById?: true
+  referralRewardPaid?: true
+  isVerified?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -188,6 +208,10 @@ export type UserCountAggregateInputType = {
   bannedReason?: true
   bannedAt?: true
   referredByCode?: true
+  referralCode?: true
+  referredById?: true
+  referralRewardPaid?: true
+  isVerified?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -299,6 +323,10 @@ export type UserGroupByOutputType = {
   bannedReason: string | null
   bannedAt: Date | null
   referredByCode: string | null
+  referralCode: string
+  referredById: string | null
+  referralRewardPaid: boolean
+  isVerified: boolean
   createdAt: Date
   updatedAt: Date
   _count: UserCountAggregateOutputType | null
@@ -346,8 +374,14 @@ export type UserWhereInput = {
   bannedReason?: Prisma.StringNullableFilter<"User"> | string | null
   bannedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   referredByCode?: Prisma.StringNullableFilter<"User"> | string | null
+  referralCode?: Prisma.StringFilter<"User"> | string
+  referredById?: Prisma.StringNullableFilter<"User"> | string | null
+  referralRewardPaid?: Prisma.BoolFilter<"User"> | boolean
+  isVerified?: Prisma.BoolFilter<"User"> | boolean
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
+  referredBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  referrals?: Prisma.UserListRelationFilter
   userTeams?: Prisma.UserTeamListRelationFilter
   entries?: Prisma.ContestEntryListRelationFilter
   coinLedger?: Prisma.CoinTransactionListRelationFilter
@@ -376,8 +410,14 @@ export type UserOrderByWithRelationInput = {
   bannedReason?: Prisma.SortOrderInput | Prisma.SortOrder
   bannedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   referredByCode?: Prisma.SortOrderInput | Prisma.SortOrder
+  referralCode?: Prisma.SortOrder
+  referredById?: Prisma.SortOrderInput | Prisma.SortOrder
+  referralRewardPaid?: Prisma.SortOrder
+  isVerified?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  referredBy?: Prisma.UserOrderByWithRelationInput
+  referrals?: Prisma.UserOrderByRelationAggregateInput
   userTeams?: Prisma.UserTeamOrderByRelationAggregateInput
   entries?: Prisma.ContestEntryOrderByRelationAggregateInput
   coinLedger?: Prisma.CoinTransactionOrderByRelationAggregateInput
@@ -391,6 +431,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   username?: string
   email?: string
   phone?: string
+  referralCode?: string
   AND?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   OR?: Prisma.UserWhereInput[]
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
@@ -409,15 +450,20 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   bannedReason?: Prisma.StringNullableFilter<"User"> | string | null
   bannedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   referredByCode?: Prisma.StringNullableFilter<"User"> | string | null
+  referredById?: Prisma.StringNullableFilter<"User"> | string | null
+  referralRewardPaid?: Prisma.BoolFilter<"User"> | boolean
+  isVerified?: Prisma.BoolFilter<"User"> | boolean
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
+  referredBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  referrals?: Prisma.UserListRelationFilter
   userTeams?: Prisma.UserTeamListRelationFilter
   entries?: Prisma.ContestEntryListRelationFilter
   coinLedger?: Prisma.CoinTransactionListRelationFilter
   notifications?: Prisma.NotificationListRelationFilter
   promoCodeClaims?: Prisma.PromoCodeClaimListRelationFilter
   activeSessions?: Prisma.ActiveSessionListRelationFilter
-}, "id" | "username" | "email" | "phone">
+}, "id" | "username" | "email" | "phone" | "referralCode">
 
 export type UserOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -439,6 +485,10 @@ export type UserOrderByWithAggregationInput = {
   bannedReason?: Prisma.SortOrderInput | Prisma.SortOrder
   bannedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   referredByCode?: Prisma.SortOrderInput | Prisma.SortOrder
+  referralCode?: Prisma.SortOrder
+  referredById?: Prisma.SortOrderInput | Prisma.SortOrder
+  referralRewardPaid?: Prisma.SortOrder
+  isVerified?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
@@ -471,6 +521,10 @@ export type UserScalarWhereWithAggregatesInput = {
   bannedReason?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   bannedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
   referredByCode?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  referralCode?: Prisma.StringWithAggregatesFilter<"User"> | string
+  referredById?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  referralRewardPaid?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
+  isVerified?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
 }
@@ -495,8 +549,13 @@ export type UserCreateInput = {
   bannedReason?: string | null
   bannedAt?: Date | string | null
   referredByCode?: string | null
+  referralCode: string
+  referralRewardPaid?: boolean
+  isVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  referredBy?: Prisma.UserCreateNestedOneWithoutReferralsInput
+  referrals?: Prisma.UserCreateNestedManyWithoutReferredByInput
   userTeams?: Prisma.UserTeamCreateNestedManyWithoutUserInput
   entries?: Prisma.ContestEntryCreateNestedManyWithoutUserInput
   coinLedger?: Prisma.CoinTransactionCreateNestedManyWithoutUserInput
@@ -525,8 +584,13 @@ export type UserUncheckedCreateInput = {
   bannedReason?: string | null
   bannedAt?: Date | string | null
   referredByCode?: string | null
+  referralCode: string
+  referredById?: string | null
+  referralRewardPaid?: boolean
+  isVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  referrals?: Prisma.UserUncheckedCreateNestedManyWithoutReferredByInput
   userTeams?: Prisma.UserTeamUncheckedCreateNestedManyWithoutUserInput
   entries?: Prisma.ContestEntryUncheckedCreateNestedManyWithoutUserInput
   coinLedger?: Prisma.CoinTransactionUncheckedCreateNestedManyWithoutUserInput
@@ -555,8 +619,13 @@ export type UserUpdateInput = {
   bannedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bannedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   referredByCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  referralCode?: Prisma.StringFieldUpdateOperationsInput | string
+  referralRewardPaid?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  referredBy?: Prisma.UserUpdateOneWithoutReferralsNestedInput
+  referrals?: Prisma.UserUpdateManyWithoutReferredByNestedInput
   userTeams?: Prisma.UserTeamUpdateManyWithoutUserNestedInput
   entries?: Prisma.ContestEntryUpdateManyWithoutUserNestedInput
   coinLedger?: Prisma.CoinTransactionUpdateManyWithoutUserNestedInput
@@ -585,8 +654,13 @@ export type UserUncheckedUpdateInput = {
   bannedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bannedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   referredByCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  referralCode?: Prisma.StringFieldUpdateOperationsInput | string
+  referredById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  referralRewardPaid?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  referrals?: Prisma.UserUncheckedUpdateManyWithoutReferredByNestedInput
   userTeams?: Prisma.UserTeamUncheckedUpdateManyWithoutUserNestedInput
   entries?: Prisma.ContestEntryUncheckedUpdateManyWithoutUserNestedInput
   coinLedger?: Prisma.CoinTransactionUncheckedUpdateManyWithoutUserNestedInput
@@ -615,6 +689,10 @@ export type UserCreateManyInput = {
   bannedReason?: string | null
   bannedAt?: Date | string | null
   referredByCode?: string | null
+  referralCode: string
+  referredById?: string | null
+  referralRewardPaid?: boolean
+  isVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -639,6 +717,9 @@ export type UserUpdateManyMutationInput = {
   bannedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bannedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   referredByCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  referralCode?: Prisma.StringFieldUpdateOperationsInput | string
+  referralRewardPaid?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -663,8 +744,27 @@ export type UserUncheckedUpdateManyInput = {
   bannedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bannedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   referredByCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  referralCode?: Prisma.StringFieldUpdateOperationsInput | string
+  referredById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  referralRewardPaid?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type UserNullableScalarRelationFilter = {
+  is?: Prisma.UserWhereInput | null
+  isNot?: Prisma.UserWhereInput | null
+}
+
+export type UserListRelationFilter = {
+  every?: Prisma.UserWhereInput
+  some?: Prisma.UserWhereInput
+  none?: Prisma.UserWhereInput
+}
+
+export type UserOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
 }
 
 export type UserCountOrderByAggregateInput = {
@@ -687,6 +787,10 @@ export type UserCountOrderByAggregateInput = {
   bannedReason?: Prisma.SortOrder
   bannedAt?: Prisma.SortOrder
   referredByCode?: Prisma.SortOrder
+  referralCode?: Prisma.SortOrder
+  referredById?: Prisma.SortOrder
+  referralRewardPaid?: Prisma.SortOrder
+  isVerified?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -716,6 +820,10 @@ export type UserMaxOrderByAggregateInput = {
   bannedReason?: Prisma.SortOrder
   bannedAt?: Prisma.SortOrder
   referredByCode?: Prisma.SortOrder
+  referralCode?: Prisma.SortOrder
+  referredById?: Prisma.SortOrder
+  referralRewardPaid?: Prisma.SortOrder
+  isVerified?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -740,6 +848,10 @@ export type UserMinOrderByAggregateInput = {
   bannedReason?: Prisma.SortOrder
   bannedAt?: Prisma.SortOrder
   referredByCode?: Prisma.SortOrder
+  referralCode?: Prisma.SortOrder
+  referredById?: Prisma.SortOrder
+  referralRewardPaid?: Prisma.SortOrder
+  isVerified?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -754,9 +866,24 @@ export type UserScalarRelationFilter = {
   isNot?: Prisma.UserWhereInput
 }
 
-export type UserNullableScalarRelationFilter = {
-  is?: Prisma.UserWhereInput | null
-  isNot?: Prisma.UserWhereInput | null
+export type UserCreateNestedOneWithoutReferralsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutReferralsInput, Prisma.UserUncheckedCreateWithoutReferralsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutReferralsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserCreateNestedManyWithoutReferredByInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutReferredByInput, Prisma.UserUncheckedCreateWithoutReferredByInput> | Prisma.UserCreateWithoutReferredByInput[] | Prisma.UserUncheckedCreateWithoutReferredByInput[]
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutReferredByInput | Prisma.UserCreateOrConnectWithoutReferredByInput[]
+  createMany?: Prisma.UserCreateManyReferredByInputEnvelope
+  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+}
+
+export type UserUncheckedCreateNestedManyWithoutReferredByInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutReferredByInput, Prisma.UserUncheckedCreateWithoutReferredByInput> | Prisma.UserCreateWithoutReferredByInput[] | Prisma.UserUncheckedCreateWithoutReferredByInput[]
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutReferredByInput | Prisma.UserCreateOrConnectWithoutReferredByInput[]
+  createMany?: Prisma.UserCreateManyReferredByInputEnvelope
+  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
 }
 
 export type StringFieldUpdateOperationsInput = {
@@ -785,6 +912,44 @@ export type BoolFieldUpdateOperationsInput = {
 
 export type DateTimeFieldUpdateOperationsInput = {
   set?: Date | string
+}
+
+export type UserUpdateOneWithoutReferralsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutReferralsInput, Prisma.UserUncheckedCreateWithoutReferralsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutReferralsInput
+  upsert?: Prisma.UserUpsertWithoutReferralsInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutReferralsInput, Prisma.UserUpdateWithoutReferralsInput>, Prisma.UserUncheckedUpdateWithoutReferralsInput>
+}
+
+export type UserUpdateManyWithoutReferredByNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutReferredByInput, Prisma.UserUncheckedCreateWithoutReferredByInput> | Prisma.UserCreateWithoutReferredByInput[] | Prisma.UserUncheckedCreateWithoutReferredByInput[]
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutReferredByInput | Prisma.UserCreateOrConnectWithoutReferredByInput[]
+  upsert?: Prisma.UserUpsertWithWhereUniqueWithoutReferredByInput | Prisma.UserUpsertWithWhereUniqueWithoutReferredByInput[]
+  createMany?: Prisma.UserCreateManyReferredByInputEnvelope
+  set?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  disconnect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  delete?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  update?: Prisma.UserUpdateWithWhereUniqueWithoutReferredByInput | Prisma.UserUpdateWithWhereUniqueWithoutReferredByInput[]
+  updateMany?: Prisma.UserUpdateManyWithWhereWithoutReferredByInput | Prisma.UserUpdateManyWithWhereWithoutReferredByInput[]
+  deleteMany?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
+}
+
+export type UserUncheckedUpdateManyWithoutReferredByNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutReferredByInput, Prisma.UserUncheckedCreateWithoutReferredByInput> | Prisma.UserCreateWithoutReferredByInput[] | Prisma.UserUncheckedCreateWithoutReferredByInput[]
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutReferredByInput | Prisma.UserCreateOrConnectWithoutReferredByInput[]
+  upsert?: Prisma.UserUpsertWithWhereUniqueWithoutReferredByInput | Prisma.UserUpsertWithWhereUniqueWithoutReferredByInput[]
+  createMany?: Prisma.UserCreateManyReferredByInputEnvelope
+  set?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  disconnect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  delete?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  update?: Prisma.UserUpdateWithWhereUniqueWithoutReferredByInput | Prisma.UserUpdateWithWhereUniqueWithoutReferredByInput[]
+  updateMany?: Prisma.UserUpdateManyWithWhereWithoutReferredByInput | Prisma.UserUpdateManyWithWhereWithoutReferredByInput[]
+  deleteMany?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
 }
 
 export type UserCreateNestedOneWithoutCoinLedgerInput = {
@@ -873,6 +1038,283 @@ export type UserUpdateOneRequiredWithoutPromoCodeClaimsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutPromoCodeClaimsInput, Prisma.UserUpdateWithoutPromoCodeClaimsInput>, Prisma.UserUncheckedUpdateWithoutPromoCodeClaimsInput>
 }
 
+export type UserCreateWithoutReferralsInput = {
+  id?: string
+  name: string
+  username: string
+  email: string
+  phone?: string | null
+  passwordHash: string
+  avatarUrl?: string | null
+  dateOfBirth?: Date | string | null
+  nidNumber?: string | null
+  usernameChangedAt?: Date | string | null
+  avatarChangedAt?: Date | string | null
+  totalPoints?: number
+  isAdmin?: boolean
+  coins?: number
+  lastDailyBonusAt?: Date | string | null
+  isBanned?: boolean
+  bannedReason?: string | null
+  bannedAt?: Date | string | null
+  referredByCode?: string | null
+  referralCode: string
+  referralRewardPaid?: boolean
+  isVerified?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  referredBy?: Prisma.UserCreateNestedOneWithoutReferralsInput
+  userTeams?: Prisma.UserTeamCreateNestedManyWithoutUserInput
+  entries?: Prisma.ContestEntryCreateNestedManyWithoutUserInput
+  coinLedger?: Prisma.CoinTransactionCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  promoCodeClaims?: Prisma.PromoCodeClaimCreateNestedManyWithoutUserInput
+  activeSessions?: Prisma.ActiveSessionCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutReferralsInput = {
+  id?: string
+  name: string
+  username: string
+  email: string
+  phone?: string | null
+  passwordHash: string
+  avatarUrl?: string | null
+  dateOfBirth?: Date | string | null
+  nidNumber?: string | null
+  usernameChangedAt?: Date | string | null
+  avatarChangedAt?: Date | string | null
+  totalPoints?: number
+  isAdmin?: boolean
+  coins?: number
+  lastDailyBonusAt?: Date | string | null
+  isBanned?: boolean
+  bannedReason?: string | null
+  bannedAt?: Date | string | null
+  referredByCode?: string | null
+  referralCode: string
+  referredById?: string | null
+  referralRewardPaid?: boolean
+  isVerified?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  userTeams?: Prisma.UserTeamUncheckedCreateNestedManyWithoutUserInput
+  entries?: Prisma.ContestEntryUncheckedCreateNestedManyWithoutUserInput
+  coinLedger?: Prisma.CoinTransactionUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  promoCodeClaims?: Prisma.PromoCodeClaimUncheckedCreateNestedManyWithoutUserInput
+  activeSessions?: Prisma.ActiveSessionUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutReferralsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutReferralsInput, Prisma.UserUncheckedCreateWithoutReferralsInput>
+}
+
+export type UserCreateWithoutReferredByInput = {
+  id?: string
+  name: string
+  username: string
+  email: string
+  phone?: string | null
+  passwordHash: string
+  avatarUrl?: string | null
+  dateOfBirth?: Date | string | null
+  nidNumber?: string | null
+  usernameChangedAt?: Date | string | null
+  avatarChangedAt?: Date | string | null
+  totalPoints?: number
+  isAdmin?: boolean
+  coins?: number
+  lastDailyBonusAt?: Date | string | null
+  isBanned?: boolean
+  bannedReason?: string | null
+  bannedAt?: Date | string | null
+  referredByCode?: string | null
+  referralCode: string
+  referralRewardPaid?: boolean
+  isVerified?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  referrals?: Prisma.UserCreateNestedManyWithoutReferredByInput
+  userTeams?: Prisma.UserTeamCreateNestedManyWithoutUserInput
+  entries?: Prisma.ContestEntryCreateNestedManyWithoutUserInput
+  coinLedger?: Prisma.CoinTransactionCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  promoCodeClaims?: Prisma.PromoCodeClaimCreateNestedManyWithoutUserInput
+  activeSessions?: Prisma.ActiveSessionCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutReferredByInput = {
+  id?: string
+  name: string
+  username: string
+  email: string
+  phone?: string | null
+  passwordHash: string
+  avatarUrl?: string | null
+  dateOfBirth?: Date | string | null
+  nidNumber?: string | null
+  usernameChangedAt?: Date | string | null
+  avatarChangedAt?: Date | string | null
+  totalPoints?: number
+  isAdmin?: boolean
+  coins?: number
+  lastDailyBonusAt?: Date | string | null
+  isBanned?: boolean
+  bannedReason?: string | null
+  bannedAt?: Date | string | null
+  referredByCode?: string | null
+  referralCode: string
+  referralRewardPaid?: boolean
+  isVerified?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  referrals?: Prisma.UserUncheckedCreateNestedManyWithoutReferredByInput
+  userTeams?: Prisma.UserTeamUncheckedCreateNestedManyWithoutUserInput
+  entries?: Prisma.ContestEntryUncheckedCreateNestedManyWithoutUserInput
+  coinLedger?: Prisma.CoinTransactionUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  promoCodeClaims?: Prisma.PromoCodeClaimUncheckedCreateNestedManyWithoutUserInput
+  activeSessions?: Prisma.ActiveSessionUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutReferredByInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutReferredByInput, Prisma.UserUncheckedCreateWithoutReferredByInput>
+}
+
+export type UserCreateManyReferredByInputEnvelope = {
+  data: Prisma.UserCreateManyReferredByInput | Prisma.UserCreateManyReferredByInput[]
+  skipDuplicates?: boolean
+}
+
+export type UserUpsertWithoutReferralsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutReferralsInput, Prisma.UserUncheckedUpdateWithoutReferralsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutReferralsInput, Prisma.UserUncheckedCreateWithoutReferralsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutReferralsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutReferralsInput, Prisma.UserUncheckedUpdateWithoutReferralsInput>
+}
+
+export type UserUpdateWithoutReferralsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  nidNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  usernameChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatarChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  isAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  coins?: Prisma.IntFieldUpdateOperationsInput | number
+  lastDailyBonusAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  bannedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bannedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  referredByCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  referralCode?: Prisma.StringFieldUpdateOperationsInput | string
+  referralRewardPaid?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  referredBy?: Prisma.UserUpdateOneWithoutReferralsNestedInput
+  userTeams?: Prisma.UserTeamUpdateManyWithoutUserNestedInput
+  entries?: Prisma.ContestEntryUpdateManyWithoutUserNestedInput
+  coinLedger?: Prisma.CoinTransactionUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  promoCodeClaims?: Prisma.PromoCodeClaimUpdateManyWithoutUserNestedInput
+  activeSessions?: Prisma.ActiveSessionUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutReferralsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  nidNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  usernameChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatarChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  isAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  coins?: Prisma.IntFieldUpdateOperationsInput | number
+  lastDailyBonusAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  bannedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bannedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  referredByCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  referralCode?: Prisma.StringFieldUpdateOperationsInput | string
+  referredById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  referralRewardPaid?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userTeams?: Prisma.UserTeamUncheckedUpdateManyWithoutUserNestedInput
+  entries?: Prisma.ContestEntryUncheckedUpdateManyWithoutUserNestedInput
+  coinLedger?: Prisma.CoinTransactionUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  promoCodeClaims?: Prisma.PromoCodeClaimUncheckedUpdateManyWithoutUserNestedInput
+  activeSessions?: Prisma.ActiveSessionUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserUpsertWithWhereUniqueWithoutReferredByInput = {
+  where: Prisma.UserWhereUniqueInput
+  update: Prisma.XOR<Prisma.UserUpdateWithoutReferredByInput, Prisma.UserUncheckedUpdateWithoutReferredByInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutReferredByInput, Prisma.UserUncheckedCreateWithoutReferredByInput>
+}
+
+export type UserUpdateWithWhereUniqueWithoutReferredByInput = {
+  where: Prisma.UserWhereUniqueInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutReferredByInput, Prisma.UserUncheckedUpdateWithoutReferredByInput>
+}
+
+export type UserUpdateManyWithWhereWithoutReferredByInput = {
+  where: Prisma.UserScalarWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateManyMutationInput, Prisma.UserUncheckedUpdateManyWithoutReferredByInput>
+}
+
+export type UserScalarWhereInput = {
+  AND?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
+  OR?: Prisma.UserScalarWhereInput[]
+  NOT?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
+  id?: Prisma.StringFilter<"User"> | string
+  name?: Prisma.StringFilter<"User"> | string
+  username?: Prisma.StringFilter<"User"> | string
+  email?: Prisma.StringFilter<"User"> | string
+  phone?: Prisma.StringNullableFilter<"User"> | string | null
+  passwordHash?: Prisma.StringFilter<"User"> | string
+  avatarUrl?: Prisma.StringNullableFilter<"User"> | string | null
+  dateOfBirth?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  nidNumber?: Prisma.StringNullableFilter<"User"> | string | null
+  usernameChangedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  avatarChangedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  totalPoints?: Prisma.IntFilter<"User"> | number
+  isAdmin?: Prisma.BoolFilter<"User"> | boolean
+  coins?: Prisma.IntFilter<"User"> | number
+  lastDailyBonusAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  isBanned?: Prisma.BoolFilter<"User"> | boolean
+  bannedReason?: Prisma.StringNullableFilter<"User"> | string | null
+  bannedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  referredByCode?: Prisma.StringNullableFilter<"User"> | string | null
+  referralCode?: Prisma.StringFilter<"User"> | string
+  referredById?: Prisma.StringNullableFilter<"User"> | string | null
+  referralRewardPaid?: Prisma.BoolFilter<"User"> | boolean
+  isVerified?: Prisma.BoolFilter<"User"> | boolean
+  createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
+}
+
 export type UserCreateWithoutCoinLedgerInput = {
   id?: string
   name: string
@@ -893,8 +1335,13 @@ export type UserCreateWithoutCoinLedgerInput = {
   bannedReason?: string | null
   bannedAt?: Date | string | null
   referredByCode?: string | null
+  referralCode: string
+  referralRewardPaid?: boolean
+  isVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  referredBy?: Prisma.UserCreateNestedOneWithoutReferralsInput
+  referrals?: Prisma.UserCreateNestedManyWithoutReferredByInput
   userTeams?: Prisma.UserTeamCreateNestedManyWithoutUserInput
   entries?: Prisma.ContestEntryCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
@@ -922,8 +1369,13 @@ export type UserUncheckedCreateWithoutCoinLedgerInput = {
   bannedReason?: string | null
   bannedAt?: Date | string | null
   referredByCode?: string | null
+  referralCode: string
+  referredById?: string | null
+  referralRewardPaid?: boolean
+  isVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  referrals?: Prisma.UserUncheckedCreateNestedManyWithoutReferredByInput
   userTeams?: Prisma.UserTeamUncheckedCreateNestedManyWithoutUserInput
   entries?: Prisma.ContestEntryUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
@@ -967,8 +1419,13 @@ export type UserUpdateWithoutCoinLedgerInput = {
   bannedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bannedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   referredByCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  referralCode?: Prisma.StringFieldUpdateOperationsInput | string
+  referralRewardPaid?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  referredBy?: Prisma.UserUpdateOneWithoutReferralsNestedInput
+  referrals?: Prisma.UserUpdateManyWithoutReferredByNestedInput
   userTeams?: Prisma.UserTeamUpdateManyWithoutUserNestedInput
   entries?: Prisma.ContestEntryUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
@@ -996,8 +1453,13 @@ export type UserUncheckedUpdateWithoutCoinLedgerInput = {
   bannedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bannedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   referredByCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  referralCode?: Prisma.StringFieldUpdateOperationsInput | string
+  referredById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  referralRewardPaid?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  referrals?: Prisma.UserUncheckedUpdateManyWithoutReferredByNestedInput
   userTeams?: Prisma.UserTeamUncheckedUpdateManyWithoutUserNestedInput
   entries?: Prisma.ContestEntryUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
@@ -1025,8 +1487,13 @@ export type UserCreateWithoutNotificationsInput = {
   bannedReason?: string | null
   bannedAt?: Date | string | null
   referredByCode?: string | null
+  referralCode: string
+  referralRewardPaid?: boolean
+  isVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  referredBy?: Prisma.UserCreateNestedOneWithoutReferralsInput
+  referrals?: Prisma.UserCreateNestedManyWithoutReferredByInput
   userTeams?: Prisma.UserTeamCreateNestedManyWithoutUserInput
   entries?: Prisma.ContestEntryCreateNestedManyWithoutUserInput
   coinLedger?: Prisma.CoinTransactionCreateNestedManyWithoutUserInput
@@ -1054,8 +1521,13 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   bannedReason?: string | null
   bannedAt?: Date | string | null
   referredByCode?: string | null
+  referralCode: string
+  referredById?: string | null
+  referralRewardPaid?: boolean
+  isVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  referrals?: Prisma.UserUncheckedCreateNestedManyWithoutReferredByInput
   userTeams?: Prisma.UserTeamUncheckedCreateNestedManyWithoutUserInput
   entries?: Prisma.ContestEntryUncheckedCreateNestedManyWithoutUserInput
   coinLedger?: Prisma.CoinTransactionUncheckedCreateNestedManyWithoutUserInput
@@ -1099,8 +1571,13 @@ export type UserUpdateWithoutNotificationsInput = {
   bannedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bannedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   referredByCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  referralCode?: Prisma.StringFieldUpdateOperationsInput | string
+  referralRewardPaid?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  referredBy?: Prisma.UserUpdateOneWithoutReferralsNestedInput
+  referrals?: Prisma.UserUpdateManyWithoutReferredByNestedInput
   userTeams?: Prisma.UserTeamUpdateManyWithoutUserNestedInput
   entries?: Prisma.ContestEntryUpdateManyWithoutUserNestedInput
   coinLedger?: Prisma.CoinTransactionUpdateManyWithoutUserNestedInput
@@ -1128,8 +1605,13 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   bannedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bannedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   referredByCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  referralCode?: Prisma.StringFieldUpdateOperationsInput | string
+  referredById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  referralRewardPaid?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  referrals?: Prisma.UserUncheckedUpdateManyWithoutReferredByNestedInput
   userTeams?: Prisma.UserTeamUncheckedUpdateManyWithoutUserNestedInput
   entries?: Prisma.ContestEntryUncheckedUpdateManyWithoutUserNestedInput
   coinLedger?: Prisma.CoinTransactionUncheckedUpdateManyWithoutUserNestedInput
@@ -1157,8 +1639,13 @@ export type UserCreateWithoutActiveSessionsInput = {
   bannedReason?: string | null
   bannedAt?: Date | string | null
   referredByCode?: string | null
+  referralCode: string
+  referralRewardPaid?: boolean
+  isVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  referredBy?: Prisma.UserCreateNestedOneWithoutReferralsInput
+  referrals?: Prisma.UserCreateNestedManyWithoutReferredByInput
   userTeams?: Prisma.UserTeamCreateNestedManyWithoutUserInput
   entries?: Prisma.ContestEntryCreateNestedManyWithoutUserInput
   coinLedger?: Prisma.CoinTransactionCreateNestedManyWithoutUserInput
@@ -1186,8 +1673,13 @@ export type UserUncheckedCreateWithoutActiveSessionsInput = {
   bannedReason?: string | null
   bannedAt?: Date | string | null
   referredByCode?: string | null
+  referralCode: string
+  referredById?: string | null
+  referralRewardPaid?: boolean
+  isVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  referrals?: Prisma.UserUncheckedCreateNestedManyWithoutReferredByInput
   userTeams?: Prisma.UserTeamUncheckedCreateNestedManyWithoutUserInput
   entries?: Prisma.ContestEntryUncheckedCreateNestedManyWithoutUserInput
   coinLedger?: Prisma.CoinTransactionUncheckedCreateNestedManyWithoutUserInput
@@ -1231,8 +1723,13 @@ export type UserUpdateWithoutActiveSessionsInput = {
   bannedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bannedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   referredByCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  referralCode?: Prisma.StringFieldUpdateOperationsInput | string
+  referralRewardPaid?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  referredBy?: Prisma.UserUpdateOneWithoutReferralsNestedInput
+  referrals?: Prisma.UserUpdateManyWithoutReferredByNestedInput
   userTeams?: Prisma.UserTeamUpdateManyWithoutUserNestedInput
   entries?: Prisma.ContestEntryUpdateManyWithoutUserNestedInput
   coinLedger?: Prisma.CoinTransactionUpdateManyWithoutUserNestedInput
@@ -1260,8 +1757,13 @@ export type UserUncheckedUpdateWithoutActiveSessionsInput = {
   bannedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bannedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   referredByCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  referralCode?: Prisma.StringFieldUpdateOperationsInput | string
+  referredById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  referralRewardPaid?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  referrals?: Prisma.UserUncheckedUpdateManyWithoutReferredByNestedInput
   userTeams?: Prisma.UserTeamUncheckedUpdateManyWithoutUserNestedInput
   entries?: Prisma.ContestEntryUncheckedUpdateManyWithoutUserNestedInput
   coinLedger?: Prisma.CoinTransactionUncheckedUpdateManyWithoutUserNestedInput
@@ -1289,8 +1791,13 @@ export type UserCreateWithoutUserTeamsInput = {
   bannedReason?: string | null
   bannedAt?: Date | string | null
   referredByCode?: string | null
+  referralCode: string
+  referralRewardPaid?: boolean
+  isVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  referredBy?: Prisma.UserCreateNestedOneWithoutReferralsInput
+  referrals?: Prisma.UserCreateNestedManyWithoutReferredByInput
   entries?: Prisma.ContestEntryCreateNestedManyWithoutUserInput
   coinLedger?: Prisma.CoinTransactionCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
@@ -1318,8 +1825,13 @@ export type UserUncheckedCreateWithoutUserTeamsInput = {
   bannedReason?: string | null
   bannedAt?: Date | string | null
   referredByCode?: string | null
+  referralCode: string
+  referredById?: string | null
+  referralRewardPaid?: boolean
+  isVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  referrals?: Prisma.UserUncheckedCreateNestedManyWithoutReferredByInput
   entries?: Prisma.ContestEntryUncheckedCreateNestedManyWithoutUserInput
   coinLedger?: Prisma.CoinTransactionUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
@@ -1363,8 +1875,13 @@ export type UserUpdateWithoutUserTeamsInput = {
   bannedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bannedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   referredByCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  referralCode?: Prisma.StringFieldUpdateOperationsInput | string
+  referralRewardPaid?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  referredBy?: Prisma.UserUpdateOneWithoutReferralsNestedInput
+  referrals?: Prisma.UserUpdateManyWithoutReferredByNestedInput
   entries?: Prisma.ContestEntryUpdateManyWithoutUserNestedInput
   coinLedger?: Prisma.CoinTransactionUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
@@ -1392,8 +1909,13 @@ export type UserUncheckedUpdateWithoutUserTeamsInput = {
   bannedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bannedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   referredByCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  referralCode?: Prisma.StringFieldUpdateOperationsInput | string
+  referredById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  referralRewardPaid?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  referrals?: Prisma.UserUncheckedUpdateManyWithoutReferredByNestedInput
   entries?: Prisma.ContestEntryUncheckedUpdateManyWithoutUserNestedInput
   coinLedger?: Prisma.CoinTransactionUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
@@ -1421,8 +1943,13 @@ export type UserCreateWithoutEntriesInput = {
   bannedReason?: string | null
   bannedAt?: Date | string | null
   referredByCode?: string | null
+  referralCode: string
+  referralRewardPaid?: boolean
+  isVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  referredBy?: Prisma.UserCreateNestedOneWithoutReferralsInput
+  referrals?: Prisma.UserCreateNestedManyWithoutReferredByInput
   userTeams?: Prisma.UserTeamCreateNestedManyWithoutUserInput
   coinLedger?: Prisma.CoinTransactionCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
@@ -1450,8 +1977,13 @@ export type UserUncheckedCreateWithoutEntriesInput = {
   bannedReason?: string | null
   bannedAt?: Date | string | null
   referredByCode?: string | null
+  referralCode: string
+  referredById?: string | null
+  referralRewardPaid?: boolean
+  isVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  referrals?: Prisma.UserUncheckedCreateNestedManyWithoutReferredByInput
   userTeams?: Prisma.UserTeamUncheckedCreateNestedManyWithoutUserInput
   coinLedger?: Prisma.CoinTransactionUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
@@ -1495,8 +2027,13 @@ export type UserUpdateWithoutEntriesInput = {
   bannedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bannedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   referredByCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  referralCode?: Prisma.StringFieldUpdateOperationsInput | string
+  referralRewardPaid?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  referredBy?: Prisma.UserUpdateOneWithoutReferralsNestedInput
+  referrals?: Prisma.UserUpdateManyWithoutReferredByNestedInput
   userTeams?: Prisma.UserTeamUpdateManyWithoutUserNestedInput
   coinLedger?: Prisma.CoinTransactionUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
@@ -1524,8 +2061,13 @@ export type UserUncheckedUpdateWithoutEntriesInput = {
   bannedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bannedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   referredByCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  referralCode?: Prisma.StringFieldUpdateOperationsInput | string
+  referredById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  referralRewardPaid?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  referrals?: Prisma.UserUncheckedUpdateManyWithoutReferredByNestedInput
   userTeams?: Prisma.UserTeamUncheckedUpdateManyWithoutUserNestedInput
   coinLedger?: Prisma.CoinTransactionUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
@@ -1553,8 +2095,13 @@ export type UserCreateWithoutPromoCodeClaimsInput = {
   bannedReason?: string | null
   bannedAt?: Date | string | null
   referredByCode?: string | null
+  referralCode: string
+  referralRewardPaid?: boolean
+  isVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  referredBy?: Prisma.UserCreateNestedOneWithoutReferralsInput
+  referrals?: Prisma.UserCreateNestedManyWithoutReferredByInput
   userTeams?: Prisma.UserTeamCreateNestedManyWithoutUserInput
   entries?: Prisma.ContestEntryCreateNestedManyWithoutUserInput
   coinLedger?: Prisma.CoinTransactionCreateNestedManyWithoutUserInput
@@ -1582,8 +2129,13 @@ export type UserUncheckedCreateWithoutPromoCodeClaimsInput = {
   bannedReason?: string | null
   bannedAt?: Date | string | null
   referredByCode?: string | null
+  referralCode: string
+  referredById?: string | null
+  referralRewardPaid?: boolean
+  isVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  referrals?: Prisma.UserUncheckedCreateNestedManyWithoutReferredByInput
   userTeams?: Prisma.UserTeamUncheckedCreateNestedManyWithoutUserInput
   entries?: Prisma.ContestEntryUncheckedCreateNestedManyWithoutUserInput
   coinLedger?: Prisma.CoinTransactionUncheckedCreateNestedManyWithoutUserInput
@@ -1627,8 +2179,13 @@ export type UserUpdateWithoutPromoCodeClaimsInput = {
   bannedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bannedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   referredByCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  referralCode?: Prisma.StringFieldUpdateOperationsInput | string
+  referralRewardPaid?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  referredBy?: Prisma.UserUpdateOneWithoutReferralsNestedInput
+  referrals?: Prisma.UserUpdateManyWithoutReferredByNestedInput
   userTeams?: Prisma.UserTeamUpdateManyWithoutUserNestedInput
   entries?: Prisma.ContestEntryUpdateManyWithoutUserNestedInput
   coinLedger?: Prisma.CoinTransactionUpdateManyWithoutUserNestedInput
@@ -1656,13 +2213,140 @@ export type UserUncheckedUpdateWithoutPromoCodeClaimsInput = {
   bannedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bannedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   referredByCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  referralCode?: Prisma.StringFieldUpdateOperationsInput | string
+  referredById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  referralRewardPaid?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  referrals?: Prisma.UserUncheckedUpdateManyWithoutReferredByNestedInput
   userTeams?: Prisma.UserTeamUncheckedUpdateManyWithoutUserNestedInput
   entries?: Prisma.ContestEntryUncheckedUpdateManyWithoutUserNestedInput
   coinLedger?: Prisma.CoinTransactionUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   activeSessions?: Prisma.ActiveSessionUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateManyReferredByInput = {
+  id?: string
+  name: string
+  username: string
+  email: string
+  phone?: string | null
+  passwordHash: string
+  avatarUrl?: string | null
+  dateOfBirth?: Date | string | null
+  nidNumber?: string | null
+  usernameChangedAt?: Date | string | null
+  avatarChangedAt?: Date | string | null
+  totalPoints?: number
+  isAdmin?: boolean
+  coins?: number
+  lastDailyBonusAt?: Date | string | null
+  isBanned?: boolean
+  bannedReason?: string | null
+  bannedAt?: Date | string | null
+  referredByCode?: string | null
+  referralCode: string
+  referralRewardPaid?: boolean
+  isVerified?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type UserUpdateWithoutReferredByInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  nidNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  usernameChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatarChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  isAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  coins?: Prisma.IntFieldUpdateOperationsInput | number
+  lastDailyBonusAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  bannedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bannedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  referredByCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  referralCode?: Prisma.StringFieldUpdateOperationsInput | string
+  referralRewardPaid?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  referrals?: Prisma.UserUpdateManyWithoutReferredByNestedInput
+  userTeams?: Prisma.UserTeamUpdateManyWithoutUserNestedInput
+  entries?: Prisma.ContestEntryUpdateManyWithoutUserNestedInput
+  coinLedger?: Prisma.CoinTransactionUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  promoCodeClaims?: Prisma.PromoCodeClaimUpdateManyWithoutUserNestedInput
+  activeSessions?: Prisma.ActiveSessionUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutReferredByInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  nidNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  usernameChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatarChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  isAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  coins?: Prisma.IntFieldUpdateOperationsInput | number
+  lastDailyBonusAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  bannedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bannedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  referredByCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  referralCode?: Prisma.StringFieldUpdateOperationsInput | string
+  referralRewardPaid?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  referrals?: Prisma.UserUncheckedUpdateManyWithoutReferredByNestedInput
+  userTeams?: Prisma.UserTeamUncheckedUpdateManyWithoutUserNestedInput
+  entries?: Prisma.ContestEntryUncheckedUpdateManyWithoutUserNestedInput
+  coinLedger?: Prisma.CoinTransactionUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  promoCodeClaims?: Prisma.PromoCodeClaimUncheckedUpdateManyWithoutUserNestedInput
+  activeSessions?: Prisma.ActiveSessionUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateManyWithoutReferredByInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  nidNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  usernameChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatarChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  isAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  coins?: Prisma.IntFieldUpdateOperationsInput | number
+  lastDailyBonusAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  bannedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bannedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  referredByCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  referralCode?: Prisma.StringFieldUpdateOperationsInput | string
+  referralRewardPaid?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 
@@ -1671,6 +2355,7 @@ export type UserUncheckedUpdateWithoutPromoCodeClaimsInput = {
  */
 
 export type UserCountOutputType = {
+  referrals: number
   userTeams: number
   entries: number
   coinLedger: number
@@ -1680,6 +2365,7 @@ export type UserCountOutputType = {
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  referrals?: boolean | UserCountOutputTypeCountReferralsArgs
   userTeams?: boolean | UserCountOutputTypeCountUserTeamsArgs
   entries?: boolean | UserCountOutputTypeCountEntriesArgs
   coinLedger?: boolean | UserCountOutputTypeCountCoinLedgerArgs
@@ -1696,6 +2382,13 @@ export type UserCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensi
    * Select specific fields to fetch from the UserCountOutputType
    */
   select?: Prisma.UserCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountReferralsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.UserWhereInput
 }
 
 /**
@@ -1761,8 +2454,14 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   bannedReason?: boolean
   bannedAt?: boolean
   referredByCode?: boolean
+  referralCode?: boolean
+  referredById?: boolean
+  referralRewardPaid?: boolean
+  isVerified?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  referredBy?: boolean | Prisma.User$referredByArgs<ExtArgs>
+  referrals?: boolean | Prisma.User$referralsArgs<ExtArgs>
   userTeams?: boolean | Prisma.User$userTeamsArgs<ExtArgs>
   entries?: boolean | Prisma.User$entriesArgs<ExtArgs>
   coinLedger?: boolean | Prisma.User$coinLedgerArgs<ExtArgs>
@@ -1792,8 +2491,13 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   bannedReason?: boolean
   bannedAt?: boolean
   referredByCode?: boolean
+  referralCode?: boolean
+  referredById?: boolean
+  referralRewardPaid?: boolean
+  isVerified?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  referredBy?: boolean | Prisma.User$referredByArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1816,8 +2520,13 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   bannedReason?: boolean
   bannedAt?: boolean
   referredByCode?: boolean
+  referralCode?: boolean
+  referredById?: boolean
+  referralRewardPaid?: boolean
+  isVerified?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  referredBy?: boolean | Prisma.User$referredByArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectScalar = {
@@ -1840,12 +2549,18 @@ export type UserSelectScalar = {
   bannedReason?: boolean
   bannedAt?: boolean
   referredByCode?: boolean
+  referralCode?: boolean
+  referredById?: boolean
+  referralRewardPaid?: boolean
+  isVerified?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "username" | "email" | "phone" | "passwordHash" | "avatarUrl" | "dateOfBirth" | "nidNumber" | "usernameChangedAt" | "avatarChangedAt" | "totalPoints" | "isAdmin" | "coins" | "lastDailyBonusAt" | "isBanned" | "bannedReason" | "bannedAt" | "referredByCode" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "username" | "email" | "phone" | "passwordHash" | "avatarUrl" | "dateOfBirth" | "nidNumber" | "usernameChangedAt" | "avatarChangedAt" | "totalPoints" | "isAdmin" | "coins" | "lastDailyBonusAt" | "isBanned" | "bannedReason" | "bannedAt" | "referredByCode" | "referralCode" | "referredById" | "referralRewardPaid" | "isVerified" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  referredBy?: boolean | Prisma.User$referredByArgs<ExtArgs>
+  referrals?: boolean | Prisma.User$referralsArgs<ExtArgs>
   userTeams?: boolean | Prisma.User$userTeamsArgs<ExtArgs>
   entries?: boolean | Prisma.User$entriesArgs<ExtArgs>
   coinLedger?: boolean | Prisma.User$coinLedgerArgs<ExtArgs>
@@ -1854,12 +2569,18 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   activeSessions?: boolean | Prisma.User$activeSessionsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
-export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
-export type UserIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  referredBy?: boolean | Prisma.User$referredByArgs<ExtArgs>
+}
+export type UserIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  referredBy?: boolean | Prisma.User$referredByArgs<ExtArgs>
+}
 
 export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "User"
   objects: {
+    referredBy: Prisma.$UserPayload<ExtArgs> | null
+    referrals: Prisma.$UserPayload<ExtArgs>[]
     userTeams: Prisma.$UserTeamPayload<ExtArgs>[]
     entries: Prisma.$ContestEntryPayload<ExtArgs>[]
     coinLedger: Prisma.$CoinTransactionPayload<ExtArgs>[]
@@ -1887,6 +2608,10 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     bannedReason: string | null
     bannedAt: Date | null
     referredByCode: string | null
+    referralCode: string
+    referredById: string | null
+    referralRewardPaid: boolean
+    isVerified: boolean
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["user"]>
@@ -2283,6 +3008,8 @@ readonly fields: UserFieldRefs;
  */
 export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  referredBy<T extends Prisma.User$referredByArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$referredByArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  referrals<T extends Prisma.User$referralsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$referralsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   userTeams<T extends Prisma.User$userTeamsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$userTeamsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserTeamPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   entries<T extends Prisma.User$entriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$entriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ContestEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   coinLedger<T extends Prisma.User$coinLedgerArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$coinLedgerArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CoinTransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -2337,6 +3064,10 @@ export interface UserFieldRefs {
   readonly bannedReason: Prisma.FieldRef<"User", 'String'>
   readonly bannedAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly referredByCode: Prisma.FieldRef<"User", 'String'>
+  readonly referralCode: Prisma.FieldRef<"User", 'String'>
+  readonly referredById: Prisma.FieldRef<"User", 'String'>
+  readonly referralRewardPaid: Prisma.FieldRef<"User", 'Boolean'>
+  readonly isVerified: Prisma.FieldRef<"User", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"User", 'DateTime'>
 }
@@ -2593,6 +3324,10 @@ export type UserCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions
    */
   data: Prisma.UserCreateManyInput | Prisma.UserCreateManyInput[]
   skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -2663,6 +3398,10 @@ export type UserUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions
    * Limit how many Users to update.
    */
   limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -2729,6 +3468,49 @@ export type UserDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
    * Limit how many Users to delete.
    */
   limit?: number
+}
+
+/**
+ * User.referredBy
+ */
+export type User$referredByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the User
+   */
+  select?: Prisma.UserSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the User
+   */
+  omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  where?: Prisma.UserWhereInput
+}
+
+/**
+ * User.referrals
+ */
+export type User$referralsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the User
+   */
+  select?: Prisma.UserSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the User
+   */
+  omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  where?: Prisma.UserWhereInput
+  orderBy?: Prisma.UserOrderByWithRelationInput | Prisma.UserOrderByWithRelationInput[]
+  cursor?: Prisma.UserWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.UserScalarFieldEnum | Prisma.UserScalarFieldEnum[]
 }
 
 /**

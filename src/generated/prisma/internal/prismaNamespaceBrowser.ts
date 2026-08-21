@@ -55,6 +55,7 @@ export const ModelName = {
   CoinTransaction: 'CoinTransaction',
   Notification: 'Notification',
   AppSettings: 'AppSettings',
+  Banner: 'Banner',
   ActiveSession: 'ActiveSession',
   VisitorStat: 'VisitorStat',
   Team: 'Team',
@@ -106,6 +107,10 @@ export const UserScalarFieldEnum = {
   bannedReason: 'bannedReason',
   bannedAt: 'bannedAt',
   referredByCode: 'referredByCode',
+  referralCode: 'referralCode',
+  referredById: 'referredById',
+  referralRewardPaid: 'referralRewardPaid',
+  isVerified: 'isVerified',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -144,8 +149,11 @@ export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[k
 export const AppSettingsScalarFieldEnum = {
   id: 'id',
   dailyBonusAmount: 'dailyBonusAmount',
-  hasBanner: 'hasBanner',
-  bannerImageUrl: 'bannerImageUrl',
+  referralSignupBonus: 'referralSignupBonus',
+  referralInviterBonus: 'referralInviterBonus',
+  privacyPolicy: 'privacyPolicy',
+  termsAndConditions: 'termsAndConditions',
+  legalUpdatedAt: 'legalUpdatedAt',
   maintenanceMode: 'maintenanceMode',
   maintenanceMessage: 'maintenanceMessage',
   latestAppVersion: 'latestAppVersion',
@@ -161,6 +169,20 @@ export const AppSettingsScalarFieldEnum = {
 } as const
 
 export type AppSettingsScalarFieldEnum = (typeof AppSettingsScalarFieldEnum)[keyof typeof AppSettingsScalarFieldEnum]
+
+
+export const BannerScalarFieldEnum = {
+  id: 'id',
+  imageUrl: 'imageUrl',
+  linkUrl: 'linkUrl',
+  title: 'title',
+  sortOrder: 'sortOrder',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BannerScalarFieldEnum = (typeof BannerScalarFieldEnum)[keyof typeof BannerScalarFieldEnum]
 
 
 export const ActiveSessionScalarFieldEnum = {

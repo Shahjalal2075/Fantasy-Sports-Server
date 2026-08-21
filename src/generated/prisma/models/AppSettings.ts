@@ -29,18 +29,25 @@ export type AggregateAppSettings = {
 export type AppSettingsAvgAggregateOutputType = {
   id: number | null
   dailyBonusAmount: number | null
+  referralSignupBonus: number | null
+  referralInviterBonus: number | null
 }
 
 export type AppSettingsSumAggregateOutputType = {
   id: number | null
   dailyBonusAmount: number | null
+  referralSignupBonus: number | null
+  referralInviterBonus: number | null
 }
 
 export type AppSettingsMinAggregateOutputType = {
   id: number | null
   dailyBonusAmount: number | null
-  hasBanner: boolean | null
-  bannerImageUrl: string | null
+  referralSignupBonus: number | null
+  referralInviterBonus: number | null
+  privacyPolicy: string | null
+  termsAndConditions: string | null
+  legalUpdatedAt: Date | null
   maintenanceMode: boolean | null
   maintenanceMessage: string | null
   latestAppVersion: string | null
@@ -58,8 +65,11 @@ export type AppSettingsMinAggregateOutputType = {
 export type AppSettingsMaxAggregateOutputType = {
   id: number | null
   dailyBonusAmount: number | null
-  hasBanner: boolean | null
-  bannerImageUrl: string | null
+  referralSignupBonus: number | null
+  referralInviterBonus: number | null
+  privacyPolicy: string | null
+  termsAndConditions: string | null
+  legalUpdatedAt: Date | null
   maintenanceMode: boolean | null
   maintenanceMessage: string | null
   latestAppVersion: string | null
@@ -77,8 +87,11 @@ export type AppSettingsMaxAggregateOutputType = {
 export type AppSettingsCountAggregateOutputType = {
   id: number
   dailyBonusAmount: number
-  hasBanner: number
-  bannerImageUrl: number
+  referralSignupBonus: number
+  referralInviterBonus: number
+  privacyPolicy: number
+  termsAndConditions: number
+  legalUpdatedAt: number
   maintenanceMode: number
   maintenanceMessage: number
   latestAppVersion: number
@@ -98,18 +111,25 @@ export type AppSettingsCountAggregateOutputType = {
 export type AppSettingsAvgAggregateInputType = {
   id?: true
   dailyBonusAmount?: true
+  referralSignupBonus?: true
+  referralInviterBonus?: true
 }
 
 export type AppSettingsSumAggregateInputType = {
   id?: true
   dailyBonusAmount?: true
+  referralSignupBonus?: true
+  referralInviterBonus?: true
 }
 
 export type AppSettingsMinAggregateInputType = {
   id?: true
   dailyBonusAmount?: true
-  hasBanner?: true
-  bannerImageUrl?: true
+  referralSignupBonus?: true
+  referralInviterBonus?: true
+  privacyPolicy?: true
+  termsAndConditions?: true
+  legalUpdatedAt?: true
   maintenanceMode?: true
   maintenanceMessage?: true
   latestAppVersion?: true
@@ -127,8 +147,11 @@ export type AppSettingsMinAggregateInputType = {
 export type AppSettingsMaxAggregateInputType = {
   id?: true
   dailyBonusAmount?: true
-  hasBanner?: true
-  bannerImageUrl?: true
+  referralSignupBonus?: true
+  referralInviterBonus?: true
+  privacyPolicy?: true
+  termsAndConditions?: true
+  legalUpdatedAt?: true
   maintenanceMode?: true
   maintenanceMessage?: true
   latestAppVersion?: true
@@ -146,8 +169,11 @@ export type AppSettingsMaxAggregateInputType = {
 export type AppSettingsCountAggregateInputType = {
   id?: true
   dailyBonusAmount?: true
-  hasBanner?: true
-  bannerImageUrl?: true
+  referralSignupBonus?: true
+  referralInviterBonus?: true
+  privacyPolicy?: true
+  termsAndConditions?: true
+  legalUpdatedAt?: true
   maintenanceMode?: true
   maintenanceMessage?: true
   latestAppVersion?: true
@@ -252,8 +278,11 @@ export type AppSettingsGroupByArgs<ExtArgs extends runtime.Types.Extensions.Inte
 export type AppSettingsGroupByOutputType = {
   id: number
   dailyBonusAmount: number
-  hasBanner: boolean
-  bannerImageUrl: string
+  referralSignupBonus: number
+  referralInviterBonus: number
+  privacyPolicy: string
+  termsAndConditions: string
+  legalUpdatedAt: Date | null
   maintenanceMode: boolean
   maintenanceMessage: string
   latestAppVersion: string
@@ -294,8 +323,11 @@ export type AppSettingsWhereInput = {
   NOT?: Prisma.AppSettingsWhereInput | Prisma.AppSettingsWhereInput[]
   id?: Prisma.IntFilter<"AppSettings"> | number
   dailyBonusAmount?: Prisma.IntFilter<"AppSettings"> | number
-  hasBanner?: Prisma.BoolFilter<"AppSettings"> | boolean
-  bannerImageUrl?: Prisma.StringFilter<"AppSettings"> | string
+  referralSignupBonus?: Prisma.IntFilter<"AppSettings"> | number
+  referralInviterBonus?: Prisma.IntFilter<"AppSettings"> | number
+  privacyPolicy?: Prisma.StringFilter<"AppSettings"> | string
+  termsAndConditions?: Prisma.StringFilter<"AppSettings"> | string
+  legalUpdatedAt?: Prisma.DateTimeNullableFilter<"AppSettings"> | Date | string | null
   maintenanceMode?: Prisma.BoolFilter<"AppSettings"> | boolean
   maintenanceMessage?: Prisma.StringFilter<"AppSettings"> | string
   latestAppVersion?: Prisma.StringFilter<"AppSettings"> | string
@@ -313,8 +345,11 @@ export type AppSettingsWhereInput = {
 export type AppSettingsOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   dailyBonusAmount?: Prisma.SortOrder
-  hasBanner?: Prisma.SortOrder
-  bannerImageUrl?: Prisma.SortOrder
+  referralSignupBonus?: Prisma.SortOrder
+  referralInviterBonus?: Prisma.SortOrder
+  privacyPolicy?: Prisma.SortOrder
+  termsAndConditions?: Prisma.SortOrder
+  legalUpdatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   maintenanceMode?: Prisma.SortOrder
   maintenanceMessage?: Prisma.SortOrder
   latestAppVersion?: Prisma.SortOrder
@@ -335,8 +370,11 @@ export type AppSettingsWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.AppSettingsWhereInput[]
   NOT?: Prisma.AppSettingsWhereInput | Prisma.AppSettingsWhereInput[]
   dailyBonusAmount?: Prisma.IntFilter<"AppSettings"> | number
-  hasBanner?: Prisma.BoolFilter<"AppSettings"> | boolean
-  bannerImageUrl?: Prisma.StringFilter<"AppSettings"> | string
+  referralSignupBonus?: Prisma.IntFilter<"AppSettings"> | number
+  referralInviterBonus?: Prisma.IntFilter<"AppSettings"> | number
+  privacyPolicy?: Prisma.StringFilter<"AppSettings"> | string
+  termsAndConditions?: Prisma.StringFilter<"AppSettings"> | string
+  legalUpdatedAt?: Prisma.DateTimeNullableFilter<"AppSettings"> | Date | string | null
   maintenanceMode?: Prisma.BoolFilter<"AppSettings"> | boolean
   maintenanceMessage?: Prisma.StringFilter<"AppSettings"> | string
   latestAppVersion?: Prisma.StringFilter<"AppSettings"> | string
@@ -354,8 +392,11 @@ export type AppSettingsWhereUniqueInput = Prisma.AtLeast<{
 export type AppSettingsOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   dailyBonusAmount?: Prisma.SortOrder
-  hasBanner?: Prisma.SortOrder
-  bannerImageUrl?: Prisma.SortOrder
+  referralSignupBonus?: Prisma.SortOrder
+  referralInviterBonus?: Prisma.SortOrder
+  privacyPolicy?: Prisma.SortOrder
+  termsAndConditions?: Prisma.SortOrder
+  legalUpdatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   maintenanceMode?: Prisma.SortOrder
   maintenanceMessage?: Prisma.SortOrder
   latestAppVersion?: Prisma.SortOrder
@@ -381,8 +422,11 @@ export type AppSettingsScalarWhereWithAggregatesInput = {
   NOT?: Prisma.AppSettingsScalarWhereWithAggregatesInput | Prisma.AppSettingsScalarWhereWithAggregatesInput[]
   id?: Prisma.IntWithAggregatesFilter<"AppSettings"> | number
   dailyBonusAmount?: Prisma.IntWithAggregatesFilter<"AppSettings"> | number
-  hasBanner?: Prisma.BoolWithAggregatesFilter<"AppSettings"> | boolean
-  bannerImageUrl?: Prisma.StringWithAggregatesFilter<"AppSettings"> | string
+  referralSignupBonus?: Prisma.IntWithAggregatesFilter<"AppSettings"> | number
+  referralInviterBonus?: Prisma.IntWithAggregatesFilter<"AppSettings"> | number
+  privacyPolicy?: Prisma.StringWithAggregatesFilter<"AppSettings"> | string
+  termsAndConditions?: Prisma.StringWithAggregatesFilter<"AppSettings"> | string
+  legalUpdatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"AppSettings"> | Date | string | null
   maintenanceMode?: Prisma.BoolWithAggregatesFilter<"AppSettings"> | boolean
   maintenanceMessage?: Prisma.StringWithAggregatesFilter<"AppSettings"> | string
   latestAppVersion?: Prisma.StringWithAggregatesFilter<"AppSettings"> | string
@@ -400,8 +444,11 @@ export type AppSettingsScalarWhereWithAggregatesInput = {
 export type AppSettingsCreateInput = {
   id?: number
   dailyBonusAmount?: number
-  hasBanner?: boolean
-  bannerImageUrl?: string
+  referralSignupBonus?: number
+  referralInviterBonus?: number
+  privacyPolicy?: string
+  termsAndConditions?: string
+  legalUpdatedAt?: Date | string | null
   maintenanceMode?: boolean
   maintenanceMessage?: string
   latestAppVersion?: string
@@ -419,8 +466,11 @@ export type AppSettingsCreateInput = {
 export type AppSettingsUncheckedCreateInput = {
   id?: number
   dailyBonusAmount?: number
-  hasBanner?: boolean
-  bannerImageUrl?: string
+  referralSignupBonus?: number
+  referralInviterBonus?: number
+  privacyPolicy?: string
+  termsAndConditions?: string
+  legalUpdatedAt?: Date | string | null
   maintenanceMode?: boolean
   maintenanceMessage?: string
   latestAppVersion?: string
@@ -438,8 +488,11 @@ export type AppSettingsUncheckedCreateInput = {
 export type AppSettingsUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   dailyBonusAmount?: Prisma.IntFieldUpdateOperationsInput | number
-  hasBanner?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  bannerImageUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  referralSignupBonus?: Prisma.IntFieldUpdateOperationsInput | number
+  referralInviterBonus?: Prisma.IntFieldUpdateOperationsInput | number
+  privacyPolicy?: Prisma.StringFieldUpdateOperationsInput | string
+  termsAndConditions?: Prisma.StringFieldUpdateOperationsInput | string
+  legalUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   maintenanceMode?: Prisma.BoolFieldUpdateOperationsInput | boolean
   maintenanceMessage?: Prisma.StringFieldUpdateOperationsInput | string
   latestAppVersion?: Prisma.StringFieldUpdateOperationsInput | string
@@ -457,8 +510,11 @@ export type AppSettingsUpdateInput = {
 export type AppSettingsUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   dailyBonusAmount?: Prisma.IntFieldUpdateOperationsInput | number
-  hasBanner?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  bannerImageUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  referralSignupBonus?: Prisma.IntFieldUpdateOperationsInput | number
+  referralInviterBonus?: Prisma.IntFieldUpdateOperationsInput | number
+  privacyPolicy?: Prisma.StringFieldUpdateOperationsInput | string
+  termsAndConditions?: Prisma.StringFieldUpdateOperationsInput | string
+  legalUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   maintenanceMode?: Prisma.BoolFieldUpdateOperationsInput | boolean
   maintenanceMessage?: Prisma.StringFieldUpdateOperationsInput | string
   latestAppVersion?: Prisma.StringFieldUpdateOperationsInput | string
@@ -476,8 +532,11 @@ export type AppSettingsUncheckedUpdateInput = {
 export type AppSettingsCreateManyInput = {
   id?: number
   dailyBonusAmount?: number
-  hasBanner?: boolean
-  bannerImageUrl?: string
+  referralSignupBonus?: number
+  referralInviterBonus?: number
+  privacyPolicy?: string
+  termsAndConditions?: string
+  legalUpdatedAt?: Date | string | null
   maintenanceMode?: boolean
   maintenanceMessage?: string
   latestAppVersion?: string
@@ -495,8 +554,11 @@ export type AppSettingsCreateManyInput = {
 export type AppSettingsUpdateManyMutationInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   dailyBonusAmount?: Prisma.IntFieldUpdateOperationsInput | number
-  hasBanner?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  bannerImageUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  referralSignupBonus?: Prisma.IntFieldUpdateOperationsInput | number
+  referralInviterBonus?: Prisma.IntFieldUpdateOperationsInput | number
+  privacyPolicy?: Prisma.StringFieldUpdateOperationsInput | string
+  termsAndConditions?: Prisma.StringFieldUpdateOperationsInput | string
+  legalUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   maintenanceMode?: Prisma.BoolFieldUpdateOperationsInput | boolean
   maintenanceMessage?: Prisma.StringFieldUpdateOperationsInput | string
   latestAppVersion?: Prisma.StringFieldUpdateOperationsInput | string
@@ -514,8 +576,11 @@ export type AppSettingsUpdateManyMutationInput = {
 export type AppSettingsUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   dailyBonusAmount?: Prisma.IntFieldUpdateOperationsInput | number
-  hasBanner?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  bannerImageUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  referralSignupBonus?: Prisma.IntFieldUpdateOperationsInput | number
+  referralInviterBonus?: Prisma.IntFieldUpdateOperationsInput | number
+  privacyPolicy?: Prisma.StringFieldUpdateOperationsInput | string
+  termsAndConditions?: Prisma.StringFieldUpdateOperationsInput | string
+  legalUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   maintenanceMode?: Prisma.BoolFieldUpdateOperationsInput | boolean
   maintenanceMessage?: Prisma.StringFieldUpdateOperationsInput | string
   latestAppVersion?: Prisma.StringFieldUpdateOperationsInput | string
@@ -533,8 +598,11 @@ export type AppSettingsUncheckedUpdateManyInput = {
 export type AppSettingsCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   dailyBonusAmount?: Prisma.SortOrder
-  hasBanner?: Prisma.SortOrder
-  bannerImageUrl?: Prisma.SortOrder
+  referralSignupBonus?: Prisma.SortOrder
+  referralInviterBonus?: Prisma.SortOrder
+  privacyPolicy?: Prisma.SortOrder
+  termsAndConditions?: Prisma.SortOrder
+  legalUpdatedAt?: Prisma.SortOrder
   maintenanceMode?: Prisma.SortOrder
   maintenanceMessage?: Prisma.SortOrder
   latestAppVersion?: Prisma.SortOrder
@@ -552,13 +620,18 @@ export type AppSettingsCountOrderByAggregateInput = {
 export type AppSettingsAvgOrderByAggregateInput = {
   id?: Prisma.SortOrder
   dailyBonusAmount?: Prisma.SortOrder
+  referralSignupBonus?: Prisma.SortOrder
+  referralInviterBonus?: Prisma.SortOrder
 }
 
 export type AppSettingsMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   dailyBonusAmount?: Prisma.SortOrder
-  hasBanner?: Prisma.SortOrder
-  bannerImageUrl?: Prisma.SortOrder
+  referralSignupBonus?: Prisma.SortOrder
+  referralInviterBonus?: Prisma.SortOrder
+  privacyPolicy?: Prisma.SortOrder
+  termsAndConditions?: Prisma.SortOrder
+  legalUpdatedAt?: Prisma.SortOrder
   maintenanceMode?: Prisma.SortOrder
   maintenanceMessage?: Prisma.SortOrder
   latestAppVersion?: Prisma.SortOrder
@@ -576,8 +649,11 @@ export type AppSettingsMaxOrderByAggregateInput = {
 export type AppSettingsMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   dailyBonusAmount?: Prisma.SortOrder
-  hasBanner?: Prisma.SortOrder
-  bannerImageUrl?: Prisma.SortOrder
+  referralSignupBonus?: Prisma.SortOrder
+  referralInviterBonus?: Prisma.SortOrder
+  privacyPolicy?: Prisma.SortOrder
+  termsAndConditions?: Prisma.SortOrder
+  legalUpdatedAt?: Prisma.SortOrder
   maintenanceMode?: Prisma.SortOrder
   maintenanceMessage?: Prisma.SortOrder
   latestAppVersion?: Prisma.SortOrder
@@ -595,6 +671,8 @@ export type AppSettingsMinOrderByAggregateInput = {
 export type AppSettingsSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
   dailyBonusAmount?: Prisma.SortOrder
+  referralSignupBonus?: Prisma.SortOrder
+  referralInviterBonus?: Prisma.SortOrder
 }
 
 
@@ -602,8 +680,11 @@ export type AppSettingsSumOrderByAggregateInput = {
 export type AppSettingsSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   dailyBonusAmount?: boolean
-  hasBanner?: boolean
-  bannerImageUrl?: boolean
+  referralSignupBonus?: boolean
+  referralInviterBonus?: boolean
+  privacyPolicy?: boolean
+  termsAndConditions?: boolean
+  legalUpdatedAt?: boolean
   maintenanceMode?: boolean
   maintenanceMessage?: boolean
   latestAppVersion?: boolean
@@ -621,8 +702,11 @@ export type AppSettingsSelect<ExtArgs extends runtime.Types.Extensions.InternalA
 export type AppSettingsSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   dailyBonusAmount?: boolean
-  hasBanner?: boolean
-  bannerImageUrl?: boolean
+  referralSignupBonus?: boolean
+  referralInviterBonus?: boolean
+  privacyPolicy?: boolean
+  termsAndConditions?: boolean
+  legalUpdatedAt?: boolean
   maintenanceMode?: boolean
   maintenanceMessage?: boolean
   latestAppVersion?: boolean
@@ -640,8 +724,11 @@ export type AppSettingsSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
 export type AppSettingsSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   dailyBonusAmount?: boolean
-  hasBanner?: boolean
-  bannerImageUrl?: boolean
+  referralSignupBonus?: boolean
+  referralInviterBonus?: boolean
+  privacyPolicy?: boolean
+  termsAndConditions?: boolean
+  legalUpdatedAt?: boolean
   maintenanceMode?: boolean
   maintenanceMessage?: boolean
   latestAppVersion?: boolean
@@ -659,8 +746,11 @@ export type AppSettingsSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
 export type AppSettingsSelectScalar = {
   id?: boolean
   dailyBonusAmount?: boolean
-  hasBanner?: boolean
-  bannerImageUrl?: boolean
+  referralSignupBonus?: boolean
+  referralInviterBonus?: boolean
+  privacyPolicy?: boolean
+  termsAndConditions?: boolean
+  legalUpdatedAt?: boolean
   maintenanceMode?: boolean
   maintenanceMessage?: boolean
   latestAppVersion?: boolean
@@ -675,7 +765,7 @@ export type AppSettingsSelectScalar = {
   updatedAt?: boolean
 }
 
-export type AppSettingsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "dailyBonusAmount" | "hasBanner" | "bannerImageUrl" | "maintenanceMode" | "maintenanceMessage" | "latestAppVersion" | "minSupportedVersion" | "updateUrl" | "updateMessage" | "supportEmail" | "supportPhone" | "supportWhatsapp" | "supportFacebook" | "supportHours" | "updatedAt", ExtArgs["result"]["appSettings"]>
+export type AppSettingsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "dailyBonusAmount" | "referralSignupBonus" | "referralInviterBonus" | "privacyPolicy" | "termsAndConditions" | "legalUpdatedAt" | "maintenanceMode" | "maintenanceMessage" | "latestAppVersion" | "minSupportedVersion" | "updateUrl" | "updateMessage" | "supportEmail" | "supportPhone" | "supportWhatsapp" | "supportFacebook" | "supportHours" | "updatedAt", ExtArgs["result"]["appSettings"]>
 
 export type $AppSettingsPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "AppSettings"
@@ -683,8 +773,11 @@ export type $AppSettingsPayload<ExtArgs extends runtime.Types.Extensions.Interna
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
     dailyBonusAmount: number
-    hasBanner: boolean
-    bannerImageUrl: string
+    referralSignupBonus: number
+    referralInviterBonus: number
+    privacyPolicy: string
+    termsAndConditions: string
+    legalUpdatedAt: Date | null
     maintenanceMode: boolean
     maintenanceMessage: string
     latestAppVersion: string
@@ -1122,8 +1215,11 @@ export interface Prisma__AppSettingsClient<T, Null = never, ExtArgs extends runt
 export interface AppSettingsFieldRefs {
   readonly id: Prisma.FieldRef<"AppSettings", 'Int'>
   readonly dailyBonusAmount: Prisma.FieldRef<"AppSettings", 'Int'>
-  readonly hasBanner: Prisma.FieldRef<"AppSettings", 'Boolean'>
-  readonly bannerImageUrl: Prisma.FieldRef<"AppSettings", 'String'>
+  readonly referralSignupBonus: Prisma.FieldRef<"AppSettings", 'Int'>
+  readonly referralInviterBonus: Prisma.FieldRef<"AppSettings", 'Int'>
+  readonly privacyPolicy: Prisma.FieldRef<"AppSettings", 'String'>
+  readonly termsAndConditions: Prisma.FieldRef<"AppSettings", 'String'>
+  readonly legalUpdatedAt: Prisma.FieldRef<"AppSettings", 'DateTime'>
   readonly maintenanceMode: Prisma.FieldRef<"AppSettings", 'Boolean'>
   readonly maintenanceMessage: Prisma.FieldRef<"AppSettings", 'String'>
   readonly latestAppVersion: Prisma.FieldRef<"AppSettings", 'String'>

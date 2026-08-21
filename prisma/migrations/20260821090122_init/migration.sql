@@ -5,7 +5,7 @@ CREATE TYPE "SportType" AS ENUM ('CRICKET', 'FOOTBALL');
 CREATE TYPE "MatchStatus" AS ENUM ('UPCOMING', 'LIVE', 'COMPLETED', 'CANCELLED');
 
 -- CreateEnum
-CREATE TYPE "CoinTransactionType" AS ENUM ('DAILY_BONUS', 'CONTEST_ENTRY', 'CONTEST_PRIZE', 'CONTEST_REFUND', 'ADMIN_BONUS', 'ADMIN_FINE', 'PROMO_CODE');
+CREATE TYPE "CoinTransactionType" AS ENUM ('DAILY_BONUS', 'CONTEST_ENTRY', 'CONTEST_PRIZE', 'CONTEST_REFUND', 'ADMIN_BONUS', 'ADMIN_FINE', 'PROMO_CODE', 'REFERRAL_BONUS');
 
 -- CreateEnum
 CREATE TYPE "NotificationType" AS ENUM ('COIN_BONUS', 'COIN_FINE', 'BAN', 'GENERIC');
@@ -34,6 +34,10 @@ CREATE TABLE "users" (
     "bannedReason" TEXT,
     "bannedAt" TIMESTAMP(3),
     "referredByCode" TEXT,
+    "referralCode" TEXT NOT NULL,
+    "referredById" TEXT,
+    "referralRewardPaid" BOOLEAN NOT NULL DEFAULT false,
+    "isVerified" BOOLEAN NOT NULL DEFAULT false,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -72,8 +76,11 @@ CREATE TABLE "notifications" (
 CREATE TABLE "app_settings" (
     "id" INTEGER NOT NULL DEFAULT 1,
     "dailyBonusAmount" INTEGER NOT NULL DEFAULT 100,
-    "hasBanner" BOOLEAN NOT NULL DEFAULT false,
-    "bannerImageUrl" TEXT NOT NULL DEFAULT '',
+    "referralSignupBonus" INTEGER NOT NULL DEFAULT 100,
+    "referralInviterBonus" INTEGER NOT NULL DEFAULT 100,
+    "privacyPolicy" TEXT NOT NULL DEFAULT '',
+    "termsAndConditions" TEXT NOT NULL DEFAULT '',
+    "legalUpdatedAt" TIMESTAMP(3),
     "maintenanceMode" BOOLEAN NOT NULL DEFAULT false,
     "maintenanceMessage" TEXT NOT NULL DEFAULT 'We''re doing some maintenance. Please check back shortly.',
     "latestAppVersion" TEXT NOT NULL DEFAULT '1.0.0',
@@ -88,6 +95,20 @@ CREATE TABLE "app_settings" (
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "app_settings_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "banners" (
+    "id" TEXT NOT NULL,
+    "imageUrl" TEXT NOT NULL,
+    "linkUrl" TEXT NOT NULL DEFAULT '',
+    "title" TEXT NOT NULL DEFAULT '',
+    "sortOrder" INTEGER NOT NULL DEFAULT 0,
+    "isActive" BOOLEAN NOT NULL DEFAULT true,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "banners_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -167,7 +188,7 @@ CREATE TABLE "match_players" (
     "id" TEXT NOT NULL,
     "matchId" TEXT NOT NULL,
     "playerId" TEXT NOT NULL,
-    "isPlaying" BOOLEAN NOT NULL DEFAULT true,
+    "isPlaying" BOOLEAN NOT NULL DEFAULT false,
     "points" DOUBLE PRECISION NOT NULL DEFAULT 0,
     "runs" INTEGER NOT NULL DEFAULT 0,
     "ballsFaced" INTEGER NOT NULL DEFAULT 0,
@@ -298,6 +319,12 @@ CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
 CREATE UNIQUE INDEX "users_phone_key" ON "users"("phone");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "users_referralCode_key" ON "users"("referralCode");
+
+-- CreateIndex
+CREATE INDEX "banners_isActive_sortOrder_idx" ON "banners"("isActive", "sortOrder");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "active_sessions_deviceId_key" ON "active_sessions"("deviceId");
 
 -- CreateIndex
@@ -326,6 +353,9 @@ CREATE UNIQUE INDEX "promo_codes_code_key" ON "promo_codes"("code");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "promo_code_claims_promoCodeId_userId_key" ON "promo_code_claims"("promoCodeId", "userId");
+
+-- AddForeignKey
+ALTER TABLE "users" ADD CONSTRAINT "users_referredById_fkey" FOREIGN KEY ("referredById") REFERENCES "users"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "coin_transactions" ADD CONSTRAINT "coin_transactions_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;

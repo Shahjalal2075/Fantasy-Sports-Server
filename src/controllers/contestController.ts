@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { CoinTransactionType } from "../generated/prisma/client";
 import prisma from "../config/prisma";
+import { payInviterIfDue } from "../services/referralService";
 import { createContestSchema, joinContestSchema } from "../utils/validators";
 import { debitCoins, creditCoins, InsufficientCoinsError } from "../services/walletService";
 
@@ -166,6 +167,11 @@ export async function joinContest(req: Request, res: Response) {
         include: { userTeam: true },
       });
     });
+    // Paid entry only, first time only — this is the second leg of the
+    // referral reward. Deliberately outside the join transaction: if it
+    // fails, the user's entry still stands.
+    await payInviterIfDue(userId, contest.entryCost);
+
     return res.status(201).json({ entry });
   } catch (err: any) {
     if (err instanceof InsufficientCoinsError) {
@@ -191,7 +197,8 @@ export async function getLeaderboard(req: Request, res: Response) {
     where: { contestId },
     include: {
       userTeam: { select: { id: true, teamName: true, totalPoints: true } },
-      user: { select: { id: true, name: true } },
+      // isVerified drives the blue tick beside a name on the leaderboard.
+      user: { select: { id: true, name: true, username: true, isVerified: true } },
     },
     orderBy: { userTeam: { totalPoints: "desc" } },
   });
@@ -200,6 +207,7 @@ export async function getLeaderboard(req: Request, res: Response) {
     rank: index + 1,
     userId: entry.user.id,
     userName: entry.user.name,
+    isVerified: entry.user.isVerified,
     teamName: entry.userTeam.teamName,
     userTeamId: entry.userTeam.id,
     points: entry.userTeam.totalPoints,

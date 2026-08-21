@@ -33,6 +33,7 @@ enum CoinTransactionType {
   ADMIN_BONUS
   ADMIN_FINE
   PROMO_CODE
+  REFERRAL_BONUS
 }
 
 enum NotificationType {
@@ -68,9 +69,20 @@ model User {
   isBanned         Boolean   @default(false)
   bannedReason     String?
   bannedAt         DateTime?
-  // The referral code THEY entered at signup (not their own code to
-  // share). No reward logic is wired up yet — this just records it.
+  // The referral code THEY entered at signup (kept as typed, for audit).
   referredByCode   String?
+  // Their OWN code to share — generated at signup, never changes.
+  referralCode     String    @unique
+  // Resolved from referredByCode at signup. Self-relation, so a user's
+  // invitees are reachable as `referrals`.
+  referredById     String?
+  referredBy       User?     @relation("UserReferrals", fields: [referredById], references: [id], onDelete: SetNull)
+  referrals        User[]    @relation("UserReferrals")
+  // The inviter's reward is paid only once, and only after this user
+  // joins their first PAID contest — this flag is what makes it once.
+  referralRewardPaid Boolean @default(false)
+  // Blue tick, set by an admin.
+  isVerified       Boolean   @default(false)
   createdAt        DateTime  @default(now())
   updatedAt        DateTime  @updatedAt
 
@@ -121,10 +133,22 @@ model AppSettings {
   id               Int    @id @default(1)
   dailyBonusAmount Int    @default(100)
 
-  // Home-screen banner, editable from the admin panel.
-  // hasBanner=false -> the app falls back to its bundled artwork.
-  hasBanner      Boolean @default(false)
-  bannerImageUrl String  @default("")
+  // Referral rewards. The invitee is credited the moment they sign up
+  // with a valid code; the inviter is credited only once that invitee
+  // joins their first paid contest, which is what stops someone farming
+  // coins with throwaway accounts.
+  referralSignupBonus  Int @default(100)
+  referralInviterBonus Int @default(100)
+
+  // Legal copy, written from the admin panel and rendered in the app.
+  // Stored as text with light markdown (## headings, - bullets) so it can
+  // be updated without shipping a new build.
+  privacyPolicy      String @default("")
+  termsAndConditions String @default("")
+  legalUpdatedAt     DateTime?
+
+  // Banners now live in their own table (see Banner) so there can be
+  // several, each with its own tap-through link.
 
   // Maintenance mode. When on, the app shows a blocking modal on launch
   // and nobody gets past the first screen.
@@ -152,6 +176,29 @@ model AppSettings {
   updatedAt DateTime @updatedAt @default(now())
 
   @@map("app_settings")
+}
+
+// A home-screen banner. Several can be active at once, in which case the
+// app cycles through them as a slider.
+model Banner {
+  id       String @id @default(uuid())
+  imageUrl String
+  // Optional tap-through target. Blank means the banner is decorative
+  // and taps do nothing.
+  linkUrl  String @default("")
+  // Shown to admins so a banner can be identified in the list; never
+  // displayed in the app.
+  title    String @default("")
+  // Lower numbers appear first in the slider.
+  sortOrder Int    @default(0)
+  // Lets a banner be parked without deleting it (and losing the image).
+  isActive Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([isActive, sortOrder])
+  @@map("banners")
 }
 
 // One row per device that has the app open. Upserted on each heartbeat,
@@ -273,7 +320,10 @@ model MatchPlayer {
   match     Match   @relation(fields: [matchId], references: [id], onDelete: Cascade)
   playerId  String
   player    Player  @relation(fields: [playerId], references: [id], onDelete: Cascade)
-  isPlaying Boolean @default(true) // Playing XI: in/out
+  // Defaults to FALSE: adding a player to a match only means they're in
+  // the squad. An admin flips this on once the real playing XI is
+  // announced, so the app can show who's confirmed.
+  isPlaying Boolean @default(false)
   points    Float   @default(0)    // computed from raw stats + PointSystem
 
   // ---- Batting ----

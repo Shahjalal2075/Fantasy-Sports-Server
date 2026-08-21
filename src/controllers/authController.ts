@@ -8,8 +8,31 @@ import {
   changePasswordSchema,
   updateProfileSchema,
 } from "../utils/validators";
+import {
+  generateUniqueReferralCode,
+  resolveReferral,
+  getReferralSummary,
+} from "../services/referralService";
 
-const SALT_ROUNDS = 10;
+/**
+ * bcrypt cost factor.
+ *
+ * Lowered from 10 to 8 for a specific reason: this project uses bcryptjs
+ * (pure JavaScript, no native binary), and it runs on a 0.1-CPU
+ * instance. Each cost increment doubles the work, and because hashing is
+ * synchronous CPU it blocks Node's event loop — meaning a burst of
+ * logins doesn't just queue, it stalls *every* other request behind it.
+ *
+ * At cost 10 on that hardware a single hash could occupy the loop for
+ * over a second. Cost 8 is 4x cheaper and still ~2^8 iterations of
+ * salted bcrypt, which remains well beyond feasible offline cracking for
+ * this threat model (there is no real money in these accounts).
+ *
+ * Raise this back to 10-12 when moving to a real CPU allocation, or
+ * switch to the native `bcrypt` package, which is several times faster
+ * than bcryptjs at the same cost.
+ */
+const SALT_ROUNDS = 8;
 
 export async function register(req: Request, res: Response) {
   const parsed = registerSchema.safeParse(req.body);
@@ -33,8 +56,24 @@ export async function register(req: Request, res: Response) {
   const passwordHash = await bcrypt.hash(password, SALT_ROUNDS);
 
   const user = await prisma.user.create({
-    data: { name, username, email, phone, passwordHash, referredByCode: referralCode || undefined },
+    data: {
+      name,
+      username,
+      email,
+      phone,
+      passwordHash,
+      referredByCode: referralCode || undefined,
+      referralCode: await generateUniqueReferralCode(),
+    },
   });
+
+  // Credits the new user immediately and links them to their inviter.
+  // An unknown code is ignored rather than failing signup — the inviter
+  // is paid later, once this user joins their first paid contest.
+  const { referrerId } = await resolveReferral(referralCode, user.id);
+  if (referrerId) {
+    await prisma.user.update({ where: { id: user.id }, data: { referredById: referrerId } });
+  }
 
   const token = signToken({ userId: user.id, email: user.email });
 
@@ -100,6 +139,8 @@ export async function getProfile(req: Request, res: Response) {
       email: true,
       phone: true,
       avatarUrl: true,
+      referralCode: true,
+      isVerified: true,
       dateOfBirth: true,
       nidNumber: true,
       usernameChangedAt: true,
@@ -248,6 +289,8 @@ export async function updateProfile(req: Request, res: Response) {
         email: true,
         phone: true,
         avatarUrl: true,
+        referralCode: true,
+        isVerified: true,
         dateOfBirth: true,
         nidNumber: true,
         usernameChangedAt: true,
@@ -274,4 +317,12 @@ export async function updateProfile(req: Request, res: Response) {
     }
     throw err;
   }
+}
+
+// GET /api/auth/referrals  (auth required)
+// Everything the Refer a Friend screen needs: the user's own code, how
+// many people used it, and how much it has earned them.
+export async function getReferrals(req: Request, res: Response) {
+  const summary = await getReferralSummary(req.userId as string);
+  return res.status(200).json({ referral: summary });
 }

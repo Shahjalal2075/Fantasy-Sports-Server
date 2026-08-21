@@ -401,6 +401,8 @@ export const ModelName = {
   CoinTransaction: 'CoinTransaction',
   Notification: 'Notification',
   AppSettings: 'AppSettings',
+  ActiveSession: 'ActiveSession',
+  VisitorStat: 'VisitorStat',
   Team: 'Team',
   Player: 'Player',
   Match: 'Match',
@@ -427,7 +429,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "coinTransaction" | "notification" | "appSettings" | "team" | "player" | "match" | "matchPlayer" | "userTeam" | "userTeamPlayer" | "contest" | "contestEntry" | "pointSystem" | "promoCode" | "promoCodeClaim"
+    modelProps: "user" | "coinTransaction" | "notification" | "appSettings" | "activeSession" | "visitorStat" | "team" | "player" | "match" | "matchPlayer" | "userTeam" | "userTeamPlayer" | "contest" | "contestEntry" | "pointSystem" | "promoCode" | "promoCodeClaim"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -724,6 +726,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.AppSettingsCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.AppSettingsCountAggregateOutputType> | number
+        }
+      }
+    }
+    ActiveSession: {
+      payload: Prisma.$ActiveSessionPayload<ExtArgs>
+      fields: Prisma.ActiveSessionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ActiveSessionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActiveSessionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ActiveSessionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActiveSessionPayload>
+        }
+        findFirst: {
+          args: Prisma.ActiveSessionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActiveSessionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ActiveSessionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActiveSessionPayload>
+        }
+        findMany: {
+          args: Prisma.ActiveSessionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActiveSessionPayload>[]
+        }
+        create: {
+          args: Prisma.ActiveSessionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActiveSessionPayload>
+        }
+        createMany: {
+          args: Prisma.ActiveSessionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ActiveSessionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActiveSessionPayload>[]
+        }
+        delete: {
+          args: Prisma.ActiveSessionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActiveSessionPayload>
+        }
+        update: {
+          args: Prisma.ActiveSessionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActiveSessionPayload>
+        }
+        deleteMany: {
+          args: Prisma.ActiveSessionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ActiveSessionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ActiveSessionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActiveSessionPayload>[]
+        }
+        upsert: {
+          args: Prisma.ActiveSessionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActiveSessionPayload>
+        }
+        aggregate: {
+          args: Prisma.ActiveSessionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateActiveSession>
+        }
+        groupBy: {
+          args: Prisma.ActiveSessionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ActiveSessionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ActiveSessionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ActiveSessionCountAggregateOutputType> | number
+        }
+      }
+    }
+    VisitorStat: {
+      payload: Prisma.$VisitorStatPayload<ExtArgs>
+      fields: Prisma.VisitorStatFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.VisitorStatFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VisitorStatPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.VisitorStatFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VisitorStatPayload>
+        }
+        findFirst: {
+          args: Prisma.VisitorStatFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VisitorStatPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.VisitorStatFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VisitorStatPayload>
+        }
+        findMany: {
+          args: Prisma.VisitorStatFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VisitorStatPayload>[]
+        }
+        create: {
+          args: Prisma.VisitorStatCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VisitorStatPayload>
+        }
+        createMany: {
+          args: Prisma.VisitorStatCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.VisitorStatCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VisitorStatPayload>[]
+        }
+        delete: {
+          args: Prisma.VisitorStatDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VisitorStatPayload>
+        }
+        update: {
+          args: Prisma.VisitorStatUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VisitorStatPayload>
+        }
+        deleteMany: {
+          args: Prisma.VisitorStatDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.VisitorStatUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.VisitorStatUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VisitorStatPayload>[]
+        }
+        upsert: {
+          args: Prisma.VisitorStatUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VisitorStatPayload>
+        }
+        aggregate: {
+          args: Prisma.VisitorStatAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateVisitorStat>
+        }
+        groupBy: {
+          args: Prisma.VisitorStatGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.VisitorStatGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.VisitorStatCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.VisitorStatCountAggregateOutputType> | number
         }
       }
     }
@@ -1588,6 +1738,10 @@ export const UserScalarFieldEnum = {
   phone: 'phone',
   passwordHash: 'passwordHash',
   avatarUrl: 'avatarUrl',
+  dateOfBirth: 'dateOfBirth',
+  nidNumber: 'nidNumber',
+  usernameChangedAt: 'usernameChangedAt',
+  avatarChangedAt: 'avatarChangedAt',
   totalPoints: 'totalPoints',
   isAdmin: 'isAdmin',
   coins: 'coins',
@@ -1633,10 +1787,48 @@ export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[k
 
 export const AppSettingsScalarFieldEnum = {
   id: 'id',
-  dailyBonusAmount: 'dailyBonusAmount'
+  dailyBonusAmount: 'dailyBonusAmount',
+  hasBanner: 'hasBanner',
+  bannerImageUrl: 'bannerImageUrl',
+  maintenanceMode: 'maintenanceMode',
+  maintenanceMessage: 'maintenanceMessage',
+  latestAppVersion: 'latestAppVersion',
+  minSupportedVersion: 'minSupportedVersion',
+  updateUrl: 'updateUrl',
+  updateMessage: 'updateMessage',
+  supportEmail: 'supportEmail',
+  supportPhone: 'supportPhone',
+  supportWhatsapp: 'supportWhatsapp',
+  supportFacebook: 'supportFacebook',
+  supportHours: 'supportHours',
+  updatedAt: 'updatedAt'
 } as const
 
 export type AppSettingsScalarFieldEnum = (typeof AppSettingsScalarFieldEnum)[keyof typeof AppSettingsScalarFieldEnum]
+
+
+export const ActiveSessionScalarFieldEnum = {
+  id: 'id',
+  deviceId: 'deviceId',
+  userId: 'userId',
+  platform: 'platform',
+  appVersion: 'appVersion',
+  lastSeenAt: 'lastSeenAt',
+  createdAt: 'createdAt'
+} as const
+
+export type ActiveSessionScalarFieldEnum = (typeof ActiveSessionScalarFieldEnum)[keyof typeof ActiveSessionScalarFieldEnum]
+
+
+export const VisitorStatScalarFieldEnum = {
+  id: 'id',
+  bucketStart: 'bucketStart',
+  peakConcurrent: 'peakConcurrent',
+  uniqueDevices: 'uniqueDevices',
+  updatedAt: 'updatedAt'
+} as const
+
+export type VisitorStatScalarFieldEnum = (typeof VisitorStatScalarFieldEnum)[keyof typeof VisitorStatScalarFieldEnum]
 
 
 export const TeamScalarFieldEnum = {
@@ -1679,6 +1871,7 @@ export const MatchScalarFieldEnum = {
   startTime: 'startTime',
   status: 'status',
   lockTime: 'lockTime',
+  pointsCalculatedAt: 'pointsCalculatedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -1873,6 +2066,20 @@ export type ListStringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaMod
 
 
 /**
+ * Reference to a field of type 'DateTime'
+ */
+export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
+    
+
+
+/**
+ * Reference to a field of type 'DateTime[]'
+ */
+export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
+    
+
+
+/**
  * Reference to a field of type 'Int'
  */
 export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
@@ -1890,20 +2097,6 @@ export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel,
  * Reference to a field of type 'Boolean'
  */
 export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
-    
-
-
-/**
- * Reference to a field of type 'DateTime'
- */
-export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
-    
-
-
-/**
- * Reference to a field of type 'DateTime[]'
- */
-export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
     
 
 
@@ -2159,6 +2352,8 @@ export type GlobalOmitConfig = {
   coinTransaction?: Prisma.CoinTransactionOmit
   notification?: Prisma.NotificationOmit
   appSettings?: Prisma.AppSettingsOmit
+  activeSession?: Prisma.ActiveSessionOmit
+  visitorStat?: Prisma.VisitorStatOmit
   team?: Prisma.TeamOmit
   player?: Prisma.PlayerOmit
   match?: Prisma.MatchOmit

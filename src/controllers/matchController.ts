@@ -171,5 +171,13 @@ export async function recalculatePoints(req: Request, res: Response) {
   // Step 2: MatchPlayer.points -> UserTeam.totalPoints + ContestEntry.rank
   const result = await recalculateMatchPoints(matchId);
 
-  return res.status(200).json({ message: "Points recalculated", playersScored, ...result });
+  // Stamp when the numbers actually moved. The app surfaces this as the
+  // leaderboard's "Last Updated", which previously just showed whenever
+  // the user happened to open the screen.
+  const pointsCalculatedAt = new Date();
+  await prisma.match.update({ where: { id: matchId }, data: { pointsCalculatedAt } });
+
+  return res
+    .status(200)
+    .json({ message: "Points recalculated", playersScored, pointsCalculatedAt, ...result });
 }

@@ -245,9 +245,39 @@ export const banUserSchema = z.object({
   reason: z.string().min(1).max(300).optional(),
 });
 
-export const updateSettingsSchema = z.object({
-  dailyBonusAmount: z.number().int().min(0).max(100000),
-});
+// Dotted numeric version like "1.4.2" — the server compares these part
+// by part, so anything else would silently sort wrong.
+const versionString = z
+  .string()
+  .regex(/^\d+(\.\d+)*$/, "Version must look like 1.4.2");
+
+// Every field is optional so the admin panel can PATCH one section (say,
+// just maintenance mode) without resending the whole settings object.
+export const updateSettingsSchema = z
+  .object({
+    dailyBonusAmount: z.number().int().min(0).max(100000).optional(),
+
+    hasBanner: z.boolean().optional(),
+    bannerImageUrl: z.string().url().or(z.literal("")).optional(),
+
+    maintenanceMode: z.boolean().optional(),
+    maintenanceMessage: z.string().max(500).optional(),
+
+    latestAppVersion: versionString.optional(),
+    minSupportedVersion: versionString.optional(),
+    updateUrl: z.string().url().or(z.literal("")).optional(),
+    updateMessage: z.string().max(500).optional(),
+
+    supportEmail: z.string().email().or(z.literal("")).optional(),
+    supportPhone: z.string().max(30).optional(),
+    supportWhatsapp: z.string().max(30).optional(),
+    supportFacebook: z.string().url().or(z.literal("")).optional(),
+    supportHours: z.string().max(120).optional(),
+  })
+  .refine((data) => !(data.hasBanner === true && data.bannerImageUrl === ""), {
+    message: "Add a banner image URL before turning the banner on",
+    path: ["bannerImageUrl"],
+  });
 
 export const createPromoCodeSchema = z.object({
   code: z
@@ -263,3 +293,36 @@ export const createPromoCodeSchema = z.object({
 export const updatePromoCodeSchema = z.object({
   isActive: z.boolean().optional(),
 });
+
+// Changing your own password. The current password is required so a
+// stolen but still-valid token can't be used to lock the real owner out.
+export const changePasswordSchema = z
+  .object({
+    currentPassword: z.string().min(1, "Enter your current password"),
+    newPassword: z.string().min(6, "New password must be at least 6 characters"),
+  })
+  .refine((data) => data.currentPassword !== data.newPassword, {
+    message: "New password must be different from your current one",
+    path: ["newPassword"],
+  });
+
+// Editing your own profile. Email and phone are deliberately absent:
+// they're identity anchors used for login and support, so they can only
+// be changed by an admin, not self-served.
+export const updateProfileSchema = z.object({
+  name: z.string().min(2, "Name must be at least 2 characters").max(50),
+  username: z
+    .string()
+    .min(3, "Username must be at least 3 characters")
+    .max(20)
+    .regex(/^[a-zA-Z0-9_.]+$/, "Username can only use letters, numbers, dot and underscore"),
+  // Required once a user edits their profile, but stored as a plain date
+  // string so a timezone shift can't move someone's birthday by a day.
+  dateOfBirth: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, "Date of birth must be in YYYY-MM-DD format"),
+  nidNumber: z.string().max(30).optional().or(z.literal("")),
+  avatarUrl: z.string().url("Enter a valid image URL").optional().or(z.literal("")),
+});
+
+export type UpdateProfileInput = z.infer<typeof updateProfileSchema>;

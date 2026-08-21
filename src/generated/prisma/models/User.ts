@@ -44,6 +44,10 @@ export type UserMinAggregateOutputType = {
   phone: string | null
   passwordHash: string | null
   avatarUrl: string | null
+  dateOfBirth: Date | null
+  nidNumber: string | null
+  usernameChangedAt: Date | null
+  avatarChangedAt: Date | null
   totalPoints: number | null
   isAdmin: boolean | null
   coins: number | null
@@ -64,6 +68,10 @@ export type UserMaxAggregateOutputType = {
   phone: string | null
   passwordHash: string | null
   avatarUrl: string | null
+  dateOfBirth: Date | null
+  nidNumber: string | null
+  usernameChangedAt: Date | null
+  avatarChangedAt: Date | null
   totalPoints: number | null
   isAdmin: boolean | null
   coins: number | null
@@ -84,6 +92,10 @@ export type UserCountAggregateOutputType = {
   phone: number
   passwordHash: number
   avatarUrl: number
+  dateOfBirth: number
+  nidNumber: number
+  usernameChangedAt: number
+  avatarChangedAt: number
   totalPoints: number
   isAdmin: number
   coins: number
@@ -116,6 +128,10 @@ export type UserMinAggregateInputType = {
   phone?: true
   passwordHash?: true
   avatarUrl?: true
+  dateOfBirth?: true
+  nidNumber?: true
+  usernameChangedAt?: true
+  avatarChangedAt?: true
   totalPoints?: true
   isAdmin?: true
   coins?: true
@@ -136,6 +152,10 @@ export type UserMaxAggregateInputType = {
   phone?: true
   passwordHash?: true
   avatarUrl?: true
+  dateOfBirth?: true
+  nidNumber?: true
+  usernameChangedAt?: true
+  avatarChangedAt?: true
   totalPoints?: true
   isAdmin?: true
   coins?: true
@@ -156,6 +176,10 @@ export type UserCountAggregateInputType = {
   phone?: true
   passwordHash?: true
   avatarUrl?: true
+  dateOfBirth?: true
+  nidNumber?: true
+  usernameChangedAt?: true
+  avatarChangedAt?: true
   totalPoints?: true
   isAdmin?: true
   coins?: true
@@ -263,6 +287,10 @@ export type UserGroupByOutputType = {
   phone: string | null
   passwordHash: string
   avatarUrl: string | null
+  dateOfBirth: Date | null
+  nidNumber: string | null
+  usernameChangedAt: Date | null
+  avatarChangedAt: Date | null
   totalPoints: number
   isAdmin: boolean
   coins: number
@@ -306,6 +334,10 @@ export type UserWhereInput = {
   phone?: Prisma.StringNullableFilter<"User"> | string | null
   passwordHash?: Prisma.StringFilter<"User"> | string
   avatarUrl?: Prisma.StringNullableFilter<"User"> | string | null
+  dateOfBirth?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  nidNumber?: Prisma.StringNullableFilter<"User"> | string | null
+  usernameChangedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  avatarChangedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   totalPoints?: Prisma.IntFilter<"User"> | number
   isAdmin?: Prisma.BoolFilter<"User"> | boolean
   coins?: Prisma.IntFilter<"User"> | number
@@ -321,6 +353,7 @@ export type UserWhereInput = {
   coinLedger?: Prisma.CoinTransactionListRelationFilter
   notifications?: Prisma.NotificationListRelationFilter
   promoCodeClaims?: Prisma.PromoCodeClaimListRelationFilter
+  activeSessions?: Prisma.ActiveSessionListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -331,6 +364,10 @@ export type UserOrderByWithRelationInput = {
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
   avatarUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  dateOfBirth?: Prisma.SortOrderInput | Prisma.SortOrder
+  nidNumber?: Prisma.SortOrderInput | Prisma.SortOrder
+  usernameChangedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  avatarChangedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   totalPoints?: Prisma.SortOrder
   isAdmin?: Prisma.SortOrder
   coins?: Prisma.SortOrder
@@ -346,6 +383,7 @@ export type UserOrderByWithRelationInput = {
   coinLedger?: Prisma.CoinTransactionOrderByRelationAggregateInput
   notifications?: Prisma.NotificationOrderByRelationAggregateInput
   promoCodeClaims?: Prisma.PromoCodeClaimOrderByRelationAggregateInput
+  activeSessions?: Prisma.ActiveSessionOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -359,6 +397,10 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   name?: Prisma.StringFilter<"User"> | string
   passwordHash?: Prisma.StringFilter<"User"> | string
   avatarUrl?: Prisma.StringNullableFilter<"User"> | string | null
+  dateOfBirth?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  nidNumber?: Prisma.StringNullableFilter<"User"> | string | null
+  usernameChangedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  avatarChangedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   totalPoints?: Prisma.IntFilter<"User"> | number
   isAdmin?: Prisma.BoolFilter<"User"> | boolean
   coins?: Prisma.IntFilter<"User"> | number
@@ -374,6 +416,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   coinLedger?: Prisma.CoinTransactionListRelationFilter
   notifications?: Prisma.NotificationListRelationFilter
   promoCodeClaims?: Prisma.PromoCodeClaimListRelationFilter
+  activeSessions?: Prisma.ActiveSessionListRelationFilter
 }, "id" | "username" | "email" | "phone">
 
 export type UserOrderByWithAggregationInput = {
@@ -384,6 +427,10 @@ export type UserOrderByWithAggregationInput = {
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
   avatarUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  dateOfBirth?: Prisma.SortOrderInput | Prisma.SortOrder
+  nidNumber?: Prisma.SortOrderInput | Prisma.SortOrder
+  usernameChangedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  avatarChangedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   totalPoints?: Prisma.SortOrder
   isAdmin?: Prisma.SortOrder
   coins?: Prisma.SortOrder
@@ -412,6 +459,10 @@ export type UserScalarWhereWithAggregatesInput = {
   phone?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   passwordHash?: Prisma.StringWithAggregatesFilter<"User"> | string
   avatarUrl?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  dateOfBirth?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
+  nidNumber?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  usernameChangedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
+  avatarChangedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
   totalPoints?: Prisma.IntWithAggregatesFilter<"User"> | number
   isAdmin?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
   coins?: Prisma.IntWithAggregatesFilter<"User"> | number
@@ -432,6 +483,10 @@ export type UserCreateInput = {
   phone?: string | null
   passwordHash: string
   avatarUrl?: string | null
+  dateOfBirth?: Date | string | null
+  nidNumber?: string | null
+  usernameChangedAt?: Date | string | null
+  avatarChangedAt?: Date | string | null
   totalPoints?: number
   isAdmin?: boolean
   coins?: number
@@ -447,6 +502,7 @@ export type UserCreateInput = {
   coinLedger?: Prisma.CoinTransactionCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   promoCodeClaims?: Prisma.PromoCodeClaimCreateNestedManyWithoutUserInput
+  activeSessions?: Prisma.ActiveSessionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -457,6 +513,10 @@ export type UserUncheckedCreateInput = {
   phone?: string | null
   passwordHash: string
   avatarUrl?: string | null
+  dateOfBirth?: Date | string | null
+  nidNumber?: string | null
+  usernameChangedAt?: Date | string | null
+  avatarChangedAt?: Date | string | null
   totalPoints?: number
   isAdmin?: boolean
   coins?: number
@@ -472,6 +532,7 @@ export type UserUncheckedCreateInput = {
   coinLedger?: Prisma.CoinTransactionUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   promoCodeClaims?: Prisma.PromoCodeClaimUncheckedCreateNestedManyWithoutUserInput
+  activeSessions?: Prisma.ActiveSessionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -482,6 +543,10 @@ export type UserUpdateInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  nidNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  usernameChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatarChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   isAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   coins?: Prisma.IntFieldUpdateOperationsInput | number
@@ -497,6 +562,7 @@ export type UserUpdateInput = {
   coinLedger?: Prisma.CoinTransactionUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   promoCodeClaims?: Prisma.PromoCodeClaimUpdateManyWithoutUserNestedInput
+  activeSessions?: Prisma.ActiveSessionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -507,6 +573,10 @@ export type UserUncheckedUpdateInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  nidNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  usernameChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatarChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   isAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   coins?: Prisma.IntFieldUpdateOperationsInput | number
@@ -522,6 +592,7 @@ export type UserUncheckedUpdateInput = {
   coinLedger?: Prisma.CoinTransactionUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   promoCodeClaims?: Prisma.PromoCodeClaimUncheckedUpdateManyWithoutUserNestedInput
+  activeSessions?: Prisma.ActiveSessionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -532,6 +603,10 @@ export type UserCreateManyInput = {
   phone?: string | null
   passwordHash: string
   avatarUrl?: string | null
+  dateOfBirth?: Date | string | null
+  nidNumber?: string | null
+  usernameChangedAt?: Date | string | null
+  avatarChangedAt?: Date | string | null
   totalPoints?: number
   isAdmin?: boolean
   coins?: number
@@ -552,6 +627,10 @@ export type UserUpdateManyMutationInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  nidNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  usernameChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatarChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   isAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   coins?: Prisma.IntFieldUpdateOperationsInput | number
@@ -572,6 +651,10 @@ export type UserUncheckedUpdateManyInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  nidNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  usernameChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatarChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   isAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   coins?: Prisma.IntFieldUpdateOperationsInput | number
@@ -592,6 +675,10 @@ export type UserCountOrderByAggregateInput = {
   phone?: Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
   avatarUrl?: Prisma.SortOrder
+  dateOfBirth?: Prisma.SortOrder
+  nidNumber?: Prisma.SortOrder
+  usernameChangedAt?: Prisma.SortOrder
+  avatarChangedAt?: Prisma.SortOrder
   totalPoints?: Prisma.SortOrder
   isAdmin?: Prisma.SortOrder
   coins?: Prisma.SortOrder
@@ -617,6 +704,10 @@ export type UserMaxOrderByAggregateInput = {
   phone?: Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
   avatarUrl?: Prisma.SortOrder
+  dateOfBirth?: Prisma.SortOrder
+  nidNumber?: Prisma.SortOrder
+  usernameChangedAt?: Prisma.SortOrder
+  avatarChangedAt?: Prisma.SortOrder
   totalPoints?: Prisma.SortOrder
   isAdmin?: Prisma.SortOrder
   coins?: Prisma.SortOrder
@@ -637,6 +728,10 @@ export type UserMinOrderByAggregateInput = {
   phone?: Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
   avatarUrl?: Prisma.SortOrder
+  dateOfBirth?: Prisma.SortOrder
+  nidNumber?: Prisma.SortOrder
+  usernameChangedAt?: Prisma.SortOrder
+  avatarChangedAt?: Prisma.SortOrder
   totalPoints?: Prisma.SortOrder
   isAdmin?: Prisma.SortOrder
   coins?: Prisma.SortOrder
@@ -659,12 +754,21 @@ export type UserScalarRelationFilter = {
   isNot?: Prisma.UserWhereInput
 }
 
+export type UserNullableScalarRelationFilter = {
+  is?: Prisma.UserWhereInput | null
+  isNot?: Prisma.UserWhereInput | null
+}
+
 export type StringFieldUpdateOperationsInput = {
   set?: string
 }
 
 export type NullableStringFieldUpdateOperationsInput = {
   set?: string | null
+}
+
+export type NullableDateTimeFieldUpdateOperationsInput = {
+  set?: Date | string | null
 }
 
 export type IntFieldUpdateOperationsInput = {
@@ -677,10 +781,6 @@ export type IntFieldUpdateOperationsInput = {
 
 export type BoolFieldUpdateOperationsInput = {
   set?: boolean
-}
-
-export type NullableDateTimeFieldUpdateOperationsInput = {
-  set?: Date | string | null
 }
 
 export type DateTimeFieldUpdateOperationsInput = {
@@ -713,6 +813,22 @@ export type UserUpdateOneRequiredWithoutNotificationsNestedInput = {
   upsert?: Prisma.UserUpsertWithoutNotificationsInput
   connect?: Prisma.UserWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutNotificationsInput, Prisma.UserUpdateWithoutNotificationsInput>, Prisma.UserUncheckedUpdateWithoutNotificationsInput>
+}
+
+export type UserCreateNestedOneWithoutActiveSessionsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutActiveSessionsInput, Prisma.UserUncheckedCreateWithoutActiveSessionsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutActiveSessionsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutActiveSessionsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutActiveSessionsInput, Prisma.UserUncheckedCreateWithoutActiveSessionsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutActiveSessionsInput
+  upsert?: Prisma.UserUpsertWithoutActiveSessionsInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutActiveSessionsInput, Prisma.UserUpdateWithoutActiveSessionsInput>, Prisma.UserUncheckedUpdateWithoutActiveSessionsInput>
 }
 
 export type UserCreateNestedOneWithoutUserTeamsInput = {
@@ -765,6 +881,10 @@ export type UserCreateWithoutCoinLedgerInput = {
   phone?: string | null
   passwordHash: string
   avatarUrl?: string | null
+  dateOfBirth?: Date | string | null
+  nidNumber?: string | null
+  usernameChangedAt?: Date | string | null
+  avatarChangedAt?: Date | string | null
   totalPoints?: number
   isAdmin?: boolean
   coins?: number
@@ -779,6 +899,7 @@ export type UserCreateWithoutCoinLedgerInput = {
   entries?: Prisma.ContestEntryCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   promoCodeClaims?: Prisma.PromoCodeClaimCreateNestedManyWithoutUserInput
+  activeSessions?: Prisma.ActiveSessionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCoinLedgerInput = {
@@ -789,6 +910,10 @@ export type UserUncheckedCreateWithoutCoinLedgerInput = {
   phone?: string | null
   passwordHash: string
   avatarUrl?: string | null
+  dateOfBirth?: Date | string | null
+  nidNumber?: string | null
+  usernameChangedAt?: Date | string | null
+  avatarChangedAt?: Date | string | null
   totalPoints?: number
   isAdmin?: boolean
   coins?: number
@@ -803,6 +928,7 @@ export type UserUncheckedCreateWithoutCoinLedgerInput = {
   entries?: Prisma.ContestEntryUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   promoCodeClaims?: Prisma.PromoCodeClaimUncheckedCreateNestedManyWithoutUserInput
+  activeSessions?: Prisma.ActiveSessionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCoinLedgerInput = {
@@ -829,6 +955,10 @@ export type UserUpdateWithoutCoinLedgerInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  nidNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  usernameChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatarChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   isAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   coins?: Prisma.IntFieldUpdateOperationsInput | number
@@ -843,6 +973,7 @@ export type UserUpdateWithoutCoinLedgerInput = {
   entries?: Prisma.ContestEntryUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   promoCodeClaims?: Prisma.PromoCodeClaimUpdateManyWithoutUserNestedInput
+  activeSessions?: Prisma.ActiveSessionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCoinLedgerInput = {
@@ -853,6 +984,10 @@ export type UserUncheckedUpdateWithoutCoinLedgerInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  nidNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  usernameChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatarChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   isAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   coins?: Prisma.IntFieldUpdateOperationsInput | number
@@ -867,6 +1002,7 @@ export type UserUncheckedUpdateWithoutCoinLedgerInput = {
   entries?: Prisma.ContestEntryUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   promoCodeClaims?: Prisma.PromoCodeClaimUncheckedUpdateManyWithoutUserNestedInput
+  activeSessions?: Prisma.ActiveSessionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutNotificationsInput = {
@@ -877,6 +1013,10 @@ export type UserCreateWithoutNotificationsInput = {
   phone?: string | null
   passwordHash: string
   avatarUrl?: string | null
+  dateOfBirth?: Date | string | null
+  nidNumber?: string | null
+  usernameChangedAt?: Date | string | null
+  avatarChangedAt?: Date | string | null
   totalPoints?: number
   isAdmin?: boolean
   coins?: number
@@ -891,6 +1031,7 @@ export type UserCreateWithoutNotificationsInput = {
   entries?: Prisma.ContestEntryCreateNestedManyWithoutUserInput
   coinLedger?: Prisma.CoinTransactionCreateNestedManyWithoutUserInput
   promoCodeClaims?: Prisma.PromoCodeClaimCreateNestedManyWithoutUserInput
+  activeSessions?: Prisma.ActiveSessionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -901,6 +1042,10 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   phone?: string | null
   passwordHash: string
   avatarUrl?: string | null
+  dateOfBirth?: Date | string | null
+  nidNumber?: string | null
+  usernameChangedAt?: Date | string | null
+  avatarChangedAt?: Date | string | null
   totalPoints?: number
   isAdmin?: boolean
   coins?: number
@@ -915,6 +1060,7 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   entries?: Prisma.ContestEntryUncheckedCreateNestedManyWithoutUserInput
   coinLedger?: Prisma.CoinTransactionUncheckedCreateNestedManyWithoutUserInput
   promoCodeClaims?: Prisma.PromoCodeClaimUncheckedCreateNestedManyWithoutUserInput
+  activeSessions?: Prisma.ActiveSessionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -941,6 +1087,10 @@ export type UserUpdateWithoutNotificationsInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  nidNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  usernameChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatarChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   isAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   coins?: Prisma.IntFieldUpdateOperationsInput | number
@@ -955,6 +1105,7 @@ export type UserUpdateWithoutNotificationsInput = {
   entries?: Prisma.ContestEntryUpdateManyWithoutUserNestedInput
   coinLedger?: Prisma.CoinTransactionUpdateManyWithoutUserNestedInput
   promoCodeClaims?: Prisma.PromoCodeClaimUpdateManyWithoutUserNestedInput
+  activeSessions?: Prisma.ActiveSessionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -965,6 +1116,10 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  nidNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  usernameChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatarChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   isAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   coins?: Prisma.IntFieldUpdateOperationsInput | number
@@ -979,6 +1134,139 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   entries?: Prisma.ContestEntryUncheckedUpdateManyWithoutUserNestedInput
   coinLedger?: Prisma.CoinTransactionUncheckedUpdateManyWithoutUserNestedInput
   promoCodeClaims?: Prisma.PromoCodeClaimUncheckedUpdateManyWithoutUserNestedInput
+  activeSessions?: Prisma.ActiveSessionUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutActiveSessionsInput = {
+  id?: string
+  name: string
+  username: string
+  email: string
+  phone?: string | null
+  passwordHash: string
+  avatarUrl?: string | null
+  dateOfBirth?: Date | string | null
+  nidNumber?: string | null
+  usernameChangedAt?: Date | string | null
+  avatarChangedAt?: Date | string | null
+  totalPoints?: number
+  isAdmin?: boolean
+  coins?: number
+  lastDailyBonusAt?: Date | string | null
+  isBanned?: boolean
+  bannedReason?: string | null
+  bannedAt?: Date | string | null
+  referredByCode?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  userTeams?: Prisma.UserTeamCreateNestedManyWithoutUserInput
+  entries?: Prisma.ContestEntryCreateNestedManyWithoutUserInput
+  coinLedger?: Prisma.CoinTransactionCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  promoCodeClaims?: Prisma.PromoCodeClaimCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutActiveSessionsInput = {
+  id?: string
+  name: string
+  username: string
+  email: string
+  phone?: string | null
+  passwordHash: string
+  avatarUrl?: string | null
+  dateOfBirth?: Date | string | null
+  nidNumber?: string | null
+  usernameChangedAt?: Date | string | null
+  avatarChangedAt?: Date | string | null
+  totalPoints?: number
+  isAdmin?: boolean
+  coins?: number
+  lastDailyBonusAt?: Date | string | null
+  isBanned?: boolean
+  bannedReason?: string | null
+  bannedAt?: Date | string | null
+  referredByCode?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  userTeams?: Prisma.UserTeamUncheckedCreateNestedManyWithoutUserInput
+  entries?: Prisma.ContestEntryUncheckedCreateNestedManyWithoutUserInput
+  coinLedger?: Prisma.CoinTransactionUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  promoCodeClaims?: Prisma.PromoCodeClaimUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutActiveSessionsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutActiveSessionsInput, Prisma.UserUncheckedCreateWithoutActiveSessionsInput>
+}
+
+export type UserUpsertWithoutActiveSessionsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutActiveSessionsInput, Prisma.UserUncheckedUpdateWithoutActiveSessionsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutActiveSessionsInput, Prisma.UserUncheckedCreateWithoutActiveSessionsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutActiveSessionsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutActiveSessionsInput, Prisma.UserUncheckedUpdateWithoutActiveSessionsInput>
+}
+
+export type UserUpdateWithoutActiveSessionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  nidNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  usernameChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatarChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  isAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  coins?: Prisma.IntFieldUpdateOperationsInput | number
+  lastDailyBonusAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  bannedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bannedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  referredByCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userTeams?: Prisma.UserTeamUpdateManyWithoutUserNestedInput
+  entries?: Prisma.ContestEntryUpdateManyWithoutUserNestedInput
+  coinLedger?: Prisma.CoinTransactionUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  promoCodeClaims?: Prisma.PromoCodeClaimUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutActiveSessionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  nidNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  usernameChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatarChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  isAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  coins?: Prisma.IntFieldUpdateOperationsInput | number
+  lastDailyBonusAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  bannedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bannedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  referredByCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userTeams?: Prisma.UserTeamUncheckedUpdateManyWithoutUserNestedInput
+  entries?: Prisma.ContestEntryUncheckedUpdateManyWithoutUserNestedInput
+  coinLedger?: Prisma.CoinTransactionUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  promoCodeClaims?: Prisma.PromoCodeClaimUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutUserTeamsInput = {
@@ -989,6 +1277,10 @@ export type UserCreateWithoutUserTeamsInput = {
   phone?: string | null
   passwordHash: string
   avatarUrl?: string | null
+  dateOfBirth?: Date | string | null
+  nidNumber?: string | null
+  usernameChangedAt?: Date | string | null
+  avatarChangedAt?: Date | string | null
   totalPoints?: number
   isAdmin?: boolean
   coins?: number
@@ -1003,6 +1295,7 @@ export type UserCreateWithoutUserTeamsInput = {
   coinLedger?: Prisma.CoinTransactionCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   promoCodeClaims?: Prisma.PromoCodeClaimCreateNestedManyWithoutUserInput
+  activeSessions?: Prisma.ActiveSessionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutUserTeamsInput = {
@@ -1013,6 +1306,10 @@ export type UserUncheckedCreateWithoutUserTeamsInput = {
   phone?: string | null
   passwordHash: string
   avatarUrl?: string | null
+  dateOfBirth?: Date | string | null
+  nidNumber?: string | null
+  usernameChangedAt?: Date | string | null
+  avatarChangedAt?: Date | string | null
   totalPoints?: number
   isAdmin?: boolean
   coins?: number
@@ -1027,6 +1324,7 @@ export type UserUncheckedCreateWithoutUserTeamsInput = {
   coinLedger?: Prisma.CoinTransactionUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   promoCodeClaims?: Prisma.PromoCodeClaimUncheckedCreateNestedManyWithoutUserInput
+  activeSessions?: Prisma.ActiveSessionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutUserTeamsInput = {
@@ -1053,6 +1351,10 @@ export type UserUpdateWithoutUserTeamsInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  nidNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  usernameChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatarChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   isAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   coins?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1067,6 +1369,7 @@ export type UserUpdateWithoutUserTeamsInput = {
   coinLedger?: Prisma.CoinTransactionUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   promoCodeClaims?: Prisma.PromoCodeClaimUpdateManyWithoutUserNestedInput
+  activeSessions?: Prisma.ActiveSessionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutUserTeamsInput = {
@@ -1077,6 +1380,10 @@ export type UserUncheckedUpdateWithoutUserTeamsInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  nidNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  usernameChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatarChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   isAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   coins?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1091,6 +1398,7 @@ export type UserUncheckedUpdateWithoutUserTeamsInput = {
   coinLedger?: Prisma.CoinTransactionUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   promoCodeClaims?: Prisma.PromoCodeClaimUncheckedUpdateManyWithoutUserNestedInput
+  activeSessions?: Prisma.ActiveSessionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutEntriesInput = {
@@ -1101,6 +1409,10 @@ export type UserCreateWithoutEntriesInput = {
   phone?: string | null
   passwordHash: string
   avatarUrl?: string | null
+  dateOfBirth?: Date | string | null
+  nidNumber?: string | null
+  usernameChangedAt?: Date | string | null
+  avatarChangedAt?: Date | string | null
   totalPoints?: number
   isAdmin?: boolean
   coins?: number
@@ -1115,6 +1427,7 @@ export type UserCreateWithoutEntriesInput = {
   coinLedger?: Prisma.CoinTransactionCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   promoCodeClaims?: Prisma.PromoCodeClaimCreateNestedManyWithoutUserInput
+  activeSessions?: Prisma.ActiveSessionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutEntriesInput = {
@@ -1125,6 +1438,10 @@ export type UserUncheckedCreateWithoutEntriesInput = {
   phone?: string | null
   passwordHash: string
   avatarUrl?: string | null
+  dateOfBirth?: Date | string | null
+  nidNumber?: string | null
+  usernameChangedAt?: Date | string | null
+  avatarChangedAt?: Date | string | null
   totalPoints?: number
   isAdmin?: boolean
   coins?: number
@@ -1139,6 +1456,7 @@ export type UserUncheckedCreateWithoutEntriesInput = {
   coinLedger?: Prisma.CoinTransactionUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   promoCodeClaims?: Prisma.PromoCodeClaimUncheckedCreateNestedManyWithoutUserInput
+  activeSessions?: Prisma.ActiveSessionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutEntriesInput = {
@@ -1165,6 +1483,10 @@ export type UserUpdateWithoutEntriesInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  nidNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  usernameChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatarChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   isAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   coins?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1179,6 +1501,7 @@ export type UserUpdateWithoutEntriesInput = {
   coinLedger?: Prisma.CoinTransactionUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   promoCodeClaims?: Prisma.PromoCodeClaimUpdateManyWithoutUserNestedInput
+  activeSessions?: Prisma.ActiveSessionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutEntriesInput = {
@@ -1189,6 +1512,10 @@ export type UserUncheckedUpdateWithoutEntriesInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  nidNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  usernameChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatarChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   isAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   coins?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1203,6 +1530,7 @@ export type UserUncheckedUpdateWithoutEntriesInput = {
   coinLedger?: Prisma.CoinTransactionUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   promoCodeClaims?: Prisma.PromoCodeClaimUncheckedUpdateManyWithoutUserNestedInput
+  activeSessions?: Prisma.ActiveSessionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutPromoCodeClaimsInput = {
@@ -1213,6 +1541,10 @@ export type UserCreateWithoutPromoCodeClaimsInput = {
   phone?: string | null
   passwordHash: string
   avatarUrl?: string | null
+  dateOfBirth?: Date | string | null
+  nidNumber?: string | null
+  usernameChangedAt?: Date | string | null
+  avatarChangedAt?: Date | string | null
   totalPoints?: number
   isAdmin?: boolean
   coins?: number
@@ -1227,6 +1559,7 @@ export type UserCreateWithoutPromoCodeClaimsInput = {
   entries?: Prisma.ContestEntryCreateNestedManyWithoutUserInput
   coinLedger?: Prisma.CoinTransactionCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  activeSessions?: Prisma.ActiveSessionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutPromoCodeClaimsInput = {
@@ -1237,6 +1570,10 @@ export type UserUncheckedCreateWithoutPromoCodeClaimsInput = {
   phone?: string | null
   passwordHash: string
   avatarUrl?: string | null
+  dateOfBirth?: Date | string | null
+  nidNumber?: string | null
+  usernameChangedAt?: Date | string | null
+  avatarChangedAt?: Date | string | null
   totalPoints?: number
   isAdmin?: boolean
   coins?: number
@@ -1251,6 +1588,7 @@ export type UserUncheckedCreateWithoutPromoCodeClaimsInput = {
   entries?: Prisma.ContestEntryUncheckedCreateNestedManyWithoutUserInput
   coinLedger?: Prisma.CoinTransactionUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  activeSessions?: Prisma.ActiveSessionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutPromoCodeClaimsInput = {
@@ -1277,6 +1615,10 @@ export type UserUpdateWithoutPromoCodeClaimsInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  nidNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  usernameChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatarChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   isAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   coins?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1291,6 +1633,7 @@ export type UserUpdateWithoutPromoCodeClaimsInput = {
   entries?: Prisma.ContestEntryUpdateManyWithoutUserNestedInput
   coinLedger?: Prisma.CoinTransactionUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  activeSessions?: Prisma.ActiveSessionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPromoCodeClaimsInput = {
@@ -1301,6 +1644,10 @@ export type UserUncheckedUpdateWithoutPromoCodeClaimsInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  nidNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  usernameChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatarChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   isAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   coins?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1315,6 +1662,7 @@ export type UserUncheckedUpdateWithoutPromoCodeClaimsInput = {
   entries?: Prisma.ContestEntryUncheckedUpdateManyWithoutUserNestedInput
   coinLedger?: Prisma.CoinTransactionUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  activeSessions?: Prisma.ActiveSessionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 
@@ -1328,6 +1676,7 @@ export type UserCountOutputType = {
   coinLedger: number
   notifications: number
   promoCodeClaims: number
+  activeSessions: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1336,6 +1685,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   coinLedger?: boolean | UserCountOutputTypeCountCoinLedgerArgs
   notifications?: boolean | UserCountOutputTypeCountNotificationsArgs
   promoCodeClaims?: boolean | UserCountOutputTypeCountPromoCodeClaimsArgs
+  activeSessions?: boolean | UserCountOutputTypeCountActiveSessionsArgs
 }
 
 /**
@@ -1383,6 +1733,13 @@ export type UserCountOutputTypeCountPromoCodeClaimsArgs<ExtArgs extends runtime.
   where?: Prisma.PromoCodeClaimWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountActiveSessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ActiveSessionWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1392,6 +1749,10 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   phone?: boolean
   passwordHash?: boolean
   avatarUrl?: boolean
+  dateOfBirth?: boolean
+  nidNumber?: boolean
+  usernameChangedAt?: boolean
+  avatarChangedAt?: boolean
   totalPoints?: boolean
   isAdmin?: boolean
   coins?: boolean
@@ -1407,6 +1768,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   coinLedger?: boolean | Prisma.User$coinLedgerArgs<ExtArgs>
   notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>
   promoCodeClaims?: boolean | Prisma.User$promoCodeClaimsArgs<ExtArgs>
+  activeSessions?: boolean | Prisma.User$activeSessionsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -1418,6 +1780,10 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   phone?: boolean
   passwordHash?: boolean
   avatarUrl?: boolean
+  dateOfBirth?: boolean
+  nidNumber?: boolean
+  usernameChangedAt?: boolean
+  avatarChangedAt?: boolean
   totalPoints?: boolean
   isAdmin?: boolean
   coins?: boolean
@@ -1438,6 +1804,10 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   phone?: boolean
   passwordHash?: boolean
   avatarUrl?: boolean
+  dateOfBirth?: boolean
+  nidNumber?: boolean
+  usernameChangedAt?: boolean
+  avatarChangedAt?: boolean
   totalPoints?: boolean
   isAdmin?: boolean
   coins?: boolean
@@ -1458,6 +1828,10 @@ export type UserSelectScalar = {
   phone?: boolean
   passwordHash?: boolean
   avatarUrl?: boolean
+  dateOfBirth?: boolean
+  nidNumber?: boolean
+  usernameChangedAt?: boolean
+  avatarChangedAt?: boolean
   totalPoints?: boolean
   isAdmin?: boolean
   coins?: boolean
@@ -1470,13 +1844,14 @@ export type UserSelectScalar = {
   updatedAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "username" | "email" | "phone" | "passwordHash" | "avatarUrl" | "totalPoints" | "isAdmin" | "coins" | "lastDailyBonusAt" | "isBanned" | "bannedReason" | "bannedAt" | "referredByCode" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "username" | "email" | "phone" | "passwordHash" | "avatarUrl" | "dateOfBirth" | "nidNumber" | "usernameChangedAt" | "avatarChangedAt" | "totalPoints" | "isAdmin" | "coins" | "lastDailyBonusAt" | "isBanned" | "bannedReason" | "bannedAt" | "referredByCode" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   userTeams?: boolean | Prisma.User$userTeamsArgs<ExtArgs>
   entries?: boolean | Prisma.User$entriesArgs<ExtArgs>
   coinLedger?: boolean | Prisma.User$coinLedgerArgs<ExtArgs>
   notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>
   promoCodeClaims?: boolean | Prisma.User$promoCodeClaimsArgs<ExtArgs>
+  activeSessions?: boolean | Prisma.User$activeSessionsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -1490,6 +1865,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     coinLedger: Prisma.$CoinTransactionPayload<ExtArgs>[]
     notifications: Prisma.$NotificationPayload<ExtArgs>[]
     promoCodeClaims: Prisma.$PromoCodeClaimPayload<ExtArgs>[]
+    activeSessions: Prisma.$ActiveSessionPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1499,6 +1875,10 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     phone: string | null
     passwordHash: string
     avatarUrl: string | null
+    dateOfBirth: Date | null
+    nidNumber: string | null
+    usernameChangedAt: Date | null
+    avatarChangedAt: Date | null
     totalPoints: number
     isAdmin: boolean
     coins: number
@@ -1908,6 +2288,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   coinLedger<T extends Prisma.User$coinLedgerArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$coinLedgerArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CoinTransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   notifications<T extends Prisma.User$notificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   promoCodeClaims<T extends Prisma.User$promoCodeClaimsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$promoCodeClaimsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PromoCodeClaimPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  activeSessions<T extends Prisma.User$activeSessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$activeSessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ActiveSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1944,6 +2325,10 @@ export interface UserFieldRefs {
   readonly phone: Prisma.FieldRef<"User", 'String'>
   readonly passwordHash: Prisma.FieldRef<"User", 'String'>
   readonly avatarUrl: Prisma.FieldRef<"User", 'String'>
+  readonly dateOfBirth: Prisma.FieldRef<"User", 'DateTime'>
+  readonly nidNumber: Prisma.FieldRef<"User", 'String'>
+  readonly usernameChangedAt: Prisma.FieldRef<"User", 'DateTime'>
+  readonly avatarChangedAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly totalPoints: Prisma.FieldRef<"User", 'Int'>
   readonly isAdmin: Prisma.FieldRef<"User", 'Boolean'>
   readonly coins: Prisma.FieldRef<"User", 'Int'>
@@ -2464,6 +2849,30 @@ export type User$promoCodeClaimsArgs<ExtArgs extends runtime.Types.Extensions.In
   take?: number
   skip?: number
   distinct?: Prisma.PromoCodeClaimScalarFieldEnum | Prisma.PromoCodeClaimScalarFieldEnum[]
+}
+
+/**
+ * User.activeSessions
+ */
+export type User$activeSessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ActiveSession
+   */
+  select?: Prisma.ActiveSessionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ActiveSession
+   */
+  omit?: Prisma.ActiveSessionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ActiveSessionInclude<ExtArgs> | null
+  where?: Prisma.ActiveSessionWhereInput
+  orderBy?: Prisma.ActiveSessionOrderByWithRelationInput | Prisma.ActiveSessionOrderByWithRelationInput[]
+  cursor?: Prisma.ActiveSessionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ActiveSessionScalarFieldEnum | Prisma.ActiveSessionScalarFieldEnum[]
 }
 
 /**

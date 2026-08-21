@@ -55,6 +55,8 @@ export const ModelName = {
   CoinTransaction: 'CoinTransaction',
   Notification: 'Notification',
   AppSettings: 'AppSettings',
+  ActiveSession: 'ActiveSession',
+  VisitorStat: 'VisitorStat',
   Team: 'Team',
   Player: 'Player',
   Match: 'Match',
@@ -92,6 +94,10 @@ export const UserScalarFieldEnum = {
   phone: 'phone',
   passwordHash: 'passwordHash',
   avatarUrl: 'avatarUrl',
+  dateOfBirth: 'dateOfBirth',
+  nidNumber: 'nidNumber',
+  usernameChangedAt: 'usernameChangedAt',
+  avatarChangedAt: 'avatarChangedAt',
   totalPoints: 'totalPoints',
   isAdmin: 'isAdmin',
   coins: 'coins',
@@ -137,10 +143,48 @@ export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[k
 
 export const AppSettingsScalarFieldEnum = {
   id: 'id',
-  dailyBonusAmount: 'dailyBonusAmount'
+  dailyBonusAmount: 'dailyBonusAmount',
+  hasBanner: 'hasBanner',
+  bannerImageUrl: 'bannerImageUrl',
+  maintenanceMode: 'maintenanceMode',
+  maintenanceMessage: 'maintenanceMessage',
+  latestAppVersion: 'latestAppVersion',
+  minSupportedVersion: 'minSupportedVersion',
+  updateUrl: 'updateUrl',
+  updateMessage: 'updateMessage',
+  supportEmail: 'supportEmail',
+  supportPhone: 'supportPhone',
+  supportWhatsapp: 'supportWhatsapp',
+  supportFacebook: 'supportFacebook',
+  supportHours: 'supportHours',
+  updatedAt: 'updatedAt'
 } as const
 
 export type AppSettingsScalarFieldEnum = (typeof AppSettingsScalarFieldEnum)[keyof typeof AppSettingsScalarFieldEnum]
+
+
+export const ActiveSessionScalarFieldEnum = {
+  id: 'id',
+  deviceId: 'deviceId',
+  userId: 'userId',
+  platform: 'platform',
+  appVersion: 'appVersion',
+  lastSeenAt: 'lastSeenAt',
+  createdAt: 'createdAt'
+} as const
+
+export type ActiveSessionScalarFieldEnum = (typeof ActiveSessionScalarFieldEnum)[keyof typeof ActiveSessionScalarFieldEnum]
+
+
+export const VisitorStatScalarFieldEnum = {
+  id: 'id',
+  bucketStart: 'bucketStart',
+  peakConcurrent: 'peakConcurrent',
+  uniqueDevices: 'uniqueDevices',
+  updatedAt: 'updatedAt'
+} as const
+
+export type VisitorStatScalarFieldEnum = (typeof VisitorStatScalarFieldEnum)[keyof typeof VisitorStatScalarFieldEnum]
 
 
 export const TeamScalarFieldEnum = {
@@ -183,6 +227,7 @@ export const MatchScalarFieldEnum = {
   startTime: 'startTime',
   status: 'status',
   lockTime: 'lockTime',
+  pointsCalculatedAt: 'pointsCalculatedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

@@ -8,6 +8,7 @@ import {
   unbanUser,
   getSettings,
   updateSettings,
+  getVisitorAnalytics,
   listCoinAdjustments,
 } from "../controllers/adminController";
 import { requireAuth, requireAdmin } from "../middleware/auth";
@@ -24,6 +25,7 @@ router.post("/users/:id/ban", banUser);
 router.post("/users/:id/unban", unbanUser);
 router.get("/settings", getSettings);
 router.patch("/settings", updateSettings);
+router.get("/analytics/visitors", getVisitorAnalytics);
 router.get("/coin-adjustments", listCoinAdjustments);
 
 export default router;

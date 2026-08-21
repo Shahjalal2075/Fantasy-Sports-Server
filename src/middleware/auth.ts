@@ -36,6 +36,29 @@ export async function requireAuth(req: Request, res: Response, next: NextFunctio
   }
 }
 
+/**
+ * Attaches req.userId when a valid token is present, but never rejects.
+ * Used by endpoints that serve logged-out visitors too (app config,
+ * heartbeat) where knowing who the user is is a bonus, not a gate.
+ */
+export async function optionalAuth(req: Request, _res: Response, next: NextFunction) {
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith("Bearer ")) return next();
+
+  try {
+    const payload = verifyToken(authHeader.split(" ")[1]);
+    const user = await prisma.user.findUnique({
+      where: { id: payload.userId },
+      select: { isBanned: true },
+    });
+    // A banned user still counts as traffic; just don't credit them.
+    if (user && !user.isBanned) req.userId = payload.userId;
+  } catch {
+    // An expired or malformed token is simply treated as logged out.
+  }
+  next();
+}
+
 // Must run AFTER requireAuth (relies on req.userId being set already).
 // Blocks the request unless the logged-in user has isAdmin = true.
 export async function requireAdmin(req: Request, res: Response, next: NextFunction) {

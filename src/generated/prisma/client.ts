@@ -62,6 +62,16 @@ export type Notification = Prisma.NotificationModel
  */
 export type AppSettings = Prisma.AppSettingsModel
 /**
+ * Model ActiveSession
+ * 
+ */
+export type ActiveSession = Prisma.ActiveSessionModel
+/**
+ * Model VisitorStat
+ * 
+ */
+export type VisitorStat = Prisma.VisitorStatModel
+/**
  * Model Team
  * 
  */

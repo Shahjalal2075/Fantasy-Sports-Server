@@ -50,6 +50,15 @@ model User {
   phone            String?   @unique
   passwordHash     String
   avatarUrl        String?
+  // Personal details captured on the app's Edit Profile screen. Visible
+  // to admins only — the app never displays them back to the user.
+  dateOfBirth      DateTime?
+  nidNumber        String?
+  // Timestamps backing the change cooldowns: username once per 60 days,
+  // avatar once per 7. Null means "never changed", so the first change
+  // is always allowed.
+  usernameChangedAt DateTime?
+  avatarChangedAt   DateTime?
   totalPoints      Int       @default(0)
   isAdmin          Boolean   @default(false)
   // Virtual, non-purchasable, non-withdrawable in-app currency. Never
@@ -70,6 +79,7 @@ model User {
   coinLedger    CoinTransaction[]
   notifications Notification[]
   promoCodeClaims PromoCodeClaim[]
+  activeSessions  ActiveSession[]
 
   @@map("users")
 }
@@ -108,10 +118,74 @@ model Notification {
 
 // Single-row app-wide settings (currently just the daily bonus amount).
 model AppSettings {
-  id                Int    @id @default(1)
-  dailyBonusAmount  Int    @default(100)
+  id               Int    @id @default(1)
+  dailyBonusAmount Int    @default(100)
+
+  // Home-screen banner, editable from the admin panel.
+  // hasBanner=false -> the app falls back to its bundled artwork.
+  hasBanner      Boolean @default(false)
+  bannerImageUrl String  @default("")
+
+  // Maintenance mode. When on, the app shows a blocking modal on launch
+  // and nobody gets past the first screen.
+  maintenanceMode    Boolean @default(false)
+  maintenanceMessage String  @default("We're doing some maintenance. Please check back shortly.")
+
+  // Forced / suggested updates. The app sends its own version to
+  // /api/app-config and the server decides which of the two it gets:
+  //   version < minSupportedVersion -> blocking "must update" modal
+  //   version < latestAppVersion    -> dismissible "update available"
+  // Versions are dotted numeric strings ("1.4.2"), compared part by part.
+  latestAppVersion    String @default("1.0.0")
+  minSupportedVersion String @default("1.0.0")
+  updateUrl           String @default("")
+  updateMessage       String @default("A new version of Strong XI is available.")
+
+  // Support details shown on the app's Contact Us screen. Kept here so
+  // they can be changed without shipping a new build.
+  supportEmail     String @default("")
+  supportPhone     String @default("")
+  supportWhatsapp  String @default("")
+  supportFacebook  String @default("")
+  supportHours     String @default("")
+
+  updatedAt DateTime @updatedAt @default(now())
 
   @@map("app_settings")
+}
+
+// One row per device that has the app open. Upserted on each heartbeat,
+// so "who's online right now" is just a count of rows whose lastSeenAt
+// falls inside the liveness window — no cron job, no websockets.
+model ActiveSession {
+  id         String   @id @default(uuid())
+  // Stable per install; lets us count logged-out visitors too.
+  deviceId   String   @unique
+  userId     String?
+  user       User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  platform   String   @default("")
+  appVersion String   @default("")
+  lastSeenAt DateTime @default(now())
+  createdAt  DateTime @default(now())
+
+  @@index([lastSeenAt])
+  @@map("active_sessions")
+}
+
+// Hourly rollup powering the admin traffic graph. Written by the same
+// heartbeat that touches ActiveSession, so history accumulates on its
+// own rather than needing a scheduled job.
+model VisitorStat {
+  id             String   @id @default(uuid())
+  // Start of the hour this bucket covers, in UTC.
+  bucketStart    DateTime @unique
+  // Highest simultaneous device count seen during the hour.
+  peakConcurrent Int      @default(0)
+  // Distinct devices seen at any point during the hour.
+  uniqueDevices  Int      @default(0)
+  updatedAt      DateTime @updatedAt
+
+  @@map("visitor_stats")
 }
 
 // A reusable Team (e.g. "India", "Bangladesh", "Manchester United").
@@ -174,6 +248,10 @@ model Match {
   status         MatchStatus @default(UPCOMING)
   // Lock time = when team selection closes (usually = startTime)
   lockTime       DateTime
+  // Set every time an admin runs "Calculate points". The app shows it as
+  // the leaderboard's "Last Updated" stamp, so users see when the numbers
+  // last actually moved rather than when they opened the screen.
+  pointsCalculatedAt DateTime?
   createdAt      DateTime    @default(now())
   updatedAt      DateTime    @updatedAt
 

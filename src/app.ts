@@ -1,6 +1,7 @@
 import "dotenv/config";
 import express from "express";
 import cors from "cors";
+import appConfigRoutes from "./routes/appConfigRoutes";
 import authRoutes from "./routes/authRoutes";
 import matchRoutes from "./routes/matchRoutes";
 import playerRoutes from "./routes/playerRoutes";
@@ -37,6 +38,7 @@ app.get("/health", (_req, res) => {
 });
 
 // Routes
+app.use("/api/app-config", appConfigRoutes); // public: maintenance, forced update, banner, heartbeat
 app.use("/api/auth", authRoutes);
 app.use("/api/matches", matchRoutes);
 app.use("/api/players", playerRoutes);          // player CATALOG admin CRUD

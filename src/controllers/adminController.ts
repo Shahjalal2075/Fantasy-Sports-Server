@@ -3,6 +3,8 @@ import prisma from "../config/prisma";
 import { NotificationType } from "../generated/prisma/client";
 import { coinAdjustmentSchema, banUserSchema, updateSettingsSchema } from "../utils/validators";
 import { adminGiveBonus, adminGiveFine } from "../services/walletService";
+import { getLiveCount, getLiveSessions, getVisitorHistory, LIVE_WINDOW_MS } from "../services/presenceService";
+import { compareVersions } from "./appConfigController";
 
 // GET /api/admin/coin-adjustments  (admin only)
 // Audit log of every ADMIN_BONUS / ADMIN_FINE ever given, across all users.
@@ -37,6 +39,11 @@ export async function listUsers(req: Request, res: Response) {
       username: true,
       email: true,
       phone: true,
+      avatarUrl: true,
+      // Admin-only fields — the app collects these but never shows them.
+      dateOfBirth: true,
+      nidNumber: true,
+      usernameChangedAt: true,
       coins: true,
       isAdmin: true,
       isBanned: true,
@@ -227,11 +234,51 @@ export async function updateSettings(req: Request, res: Response) {
     return res.status(400).json({ error: parsed.error.issues[0].message });
   }
 
-  const settings = await prisma.appSettings.upsert({
+  // Guard the pairing that would lock every user out: a minimum higher
+  // than the latest release means nobody can ever satisfy it.
+  const current = await prisma.appSettings.upsert({ where: { id: 1 }, update: {}, create: { id: 1 } });
+  const latest = parsed.data.latestAppVersion ?? current.latestAppVersion;
+  const minimum = parsed.data.minSupportedVersion ?? current.minSupportedVersion;
+
+  if (compareVersions(minimum, latest) > 0) {
+    return res.status(400).json({
+      error: "Minimum supported version can't be newer than the latest released version",
+    });
+  }
+
+  const settings = await prisma.appSettings.update({
     where: { id: 1 },
-    update: parsed.data,
-    create: { id: 1, ...parsed.data },
+    data: parsed.data,
   });
 
   return res.status(200).json({ settings });
+}
+
+// GET /api/admin/analytics/visitors?hours=24  (admin only)
+// Powers the live-traffic screen: who's online right now, plus an hourly
+// series for the graph.
+export async function getVisitorAnalytics(req: Request, res: Response) {
+  const hours = Math.min(Math.max(parseInt(String(req.query.hours ?? "24"), 10) || 24, 1), 24 * 14);
+
+  const [liveCount, sessions, history] = await Promise.all([
+    getLiveCount(),
+    getLiveSessions(),
+    getVisitorHistory(hours),
+  ]);
+
+  return res.status(200).json({
+    liveCount,
+    liveWindowSeconds: LIVE_WINDOW_MS / 1000,
+    sessions: sessions.map((session) => ({
+      id: session.id,
+      deviceId: session.deviceId,
+      platform: session.platform,
+      appVersion: session.appVersion,
+      lastSeenAt: session.lastSeenAt,
+      userId: session.user?.id ?? null,
+      userName: session.user?.name ?? null,
+      username: session.user?.username ?? null,
+    })),
+    history,
+  });
 }

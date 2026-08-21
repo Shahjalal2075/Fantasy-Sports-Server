@@ -36,7 +36,6 @@ export type MatchMinAggregateOutputType = {
   status: $Enums.MatchStatus | null
   lockTime: Date | null
   pointsCalculatedAt: Date | null
-  lockReminderSentAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -53,7 +52,6 @@ export type MatchMaxAggregateOutputType = {
   status: $Enums.MatchStatus | null
   lockTime: Date | null
   pointsCalculatedAt: Date | null
-  lockReminderSentAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -70,7 +68,6 @@ export type MatchCountAggregateOutputType = {
   status: number
   lockTime: number
   pointsCalculatedAt: number
-  lockReminderSentAt: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -89,7 +86,6 @@ export type MatchMinAggregateInputType = {
   status?: true
   lockTime?: true
   pointsCalculatedAt?: true
-  lockReminderSentAt?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -106,7 +102,6 @@ export type MatchMaxAggregateInputType = {
   status?: true
   lockTime?: true
   pointsCalculatedAt?: true
-  lockReminderSentAt?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -123,7 +118,6 @@ export type MatchCountAggregateInputType = {
   status?: true
   lockTime?: true
   pointsCalculatedAt?: true
-  lockReminderSentAt?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -213,7 +207,6 @@ export type MatchGroupByOutputType = {
   status: $Enums.MatchStatus
   lockTime: Date
   pointsCalculatedAt: Date | null
-  lockReminderSentAt: Date | null
   createdAt: Date
   updatedAt: Date
   _count: MatchCountAggregateOutputType | null
@@ -251,7 +244,6 @@ export type MatchWhereInput = {
   status?: Prisma.EnumMatchStatusFilter<"Match"> | $Enums.MatchStatus
   lockTime?: Prisma.DateTimeFilter<"Match"> | Date | string
   pointsCalculatedAt?: Prisma.DateTimeNullableFilter<"Match"> | Date | string | null
-  lockReminderSentAt?: Prisma.DateTimeNullableFilter<"Match"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Match"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Match"> | Date | string
   teamA?: Prisma.XOR<Prisma.TeamScalarRelationFilter, Prisma.TeamWhereInput>
@@ -273,7 +265,6 @@ export type MatchOrderByWithRelationInput = {
   status?: Prisma.SortOrder
   lockTime?: Prisma.SortOrder
   pointsCalculatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  lockReminderSentAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   teamA?: Prisma.TeamOrderByWithRelationInput
@@ -298,7 +289,6 @@ export type MatchWhereUniqueInput = Prisma.AtLeast<{
   status?: Prisma.EnumMatchStatusFilter<"Match"> | $Enums.MatchStatus
   lockTime?: Prisma.DateTimeFilter<"Match"> | Date | string
   pointsCalculatedAt?: Prisma.DateTimeNullableFilter<"Match"> | Date | string | null
-  lockReminderSentAt?: Prisma.DateTimeNullableFilter<"Match"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Match"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Match"> | Date | string
   teamA?: Prisma.XOR<Prisma.TeamScalarRelationFilter, Prisma.TeamWhereInput>
@@ -320,7 +310,6 @@ export type MatchOrderByWithAggregationInput = {
   status?: Prisma.SortOrder
   lockTime?: Prisma.SortOrder
   pointsCalculatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  lockReminderSentAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.MatchCountOrderByAggregateInput
@@ -343,7 +332,6 @@ export type MatchScalarWhereWithAggregatesInput = {
   status?: Prisma.EnumMatchStatusWithAggregatesFilter<"Match"> | $Enums.MatchStatus
   lockTime?: Prisma.DateTimeWithAggregatesFilter<"Match"> | Date | string
   pointsCalculatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Match"> | Date | string | null
-  lockReminderSentAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Match"> | Date | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Match"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Match"> | Date | string
 }
@@ -358,7 +346,6 @@ export type MatchCreateInput = {
   status?: $Enums.MatchStatus
   lockTime: Date | string
   pointsCalculatedAt?: Date | string | null
-  lockReminderSentAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   teamA: Prisma.TeamCreateNestedOneWithoutMatchesAsTeamAInput
@@ -380,7 +367,6 @@ export type MatchUncheckedCreateInput = {
   status?: $Enums.MatchStatus
   lockTime: Date | string
   pointsCalculatedAt?: Date | string | null
-  lockReminderSentAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   matchPlayers?: Prisma.MatchPlayerUncheckedCreateNestedManyWithoutMatchInput
@@ -398,7 +384,6 @@ export type MatchUpdateInput = {
   status?: Prisma.EnumMatchStatusFieldUpdateOperationsInput | $Enums.MatchStatus
   lockTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   pointsCalculatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  lockReminderSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   teamA?: Prisma.TeamUpdateOneRequiredWithoutMatchesAsTeamANestedInput
@@ -420,7 +405,6 @@ export type MatchUncheckedUpdateInput = {
   status?: Prisma.EnumMatchStatusFieldUpdateOperationsInput | $Enums.MatchStatus
   lockTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   pointsCalculatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  lockReminderSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   matchPlayers?: Prisma.MatchPlayerUncheckedUpdateManyWithoutMatchNestedInput
@@ -440,7 +424,6 @@ export type MatchCreateManyInput = {
   status?: $Enums.MatchStatus
   lockTime: Date | string
   pointsCalculatedAt?: Date | string | null
-  lockReminderSentAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -455,7 +438,6 @@ export type MatchUpdateManyMutationInput = {
   status?: Prisma.EnumMatchStatusFieldUpdateOperationsInput | $Enums.MatchStatus
   lockTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   pointsCalculatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  lockReminderSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -472,7 +454,6 @@ export type MatchUncheckedUpdateManyInput = {
   status?: Prisma.EnumMatchStatusFieldUpdateOperationsInput | $Enums.MatchStatus
   lockTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   pointsCalculatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  lockReminderSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -499,7 +480,6 @@ export type MatchCountOrderByAggregateInput = {
   status?: Prisma.SortOrder
   lockTime?: Prisma.SortOrder
   pointsCalculatedAt?: Prisma.SortOrder
-  lockReminderSentAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -516,7 +496,6 @@ export type MatchMaxOrderByAggregateInput = {
   status?: Prisma.SortOrder
   lockTime?: Prisma.SortOrder
   pointsCalculatedAt?: Prisma.SortOrder
-  lockReminderSentAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -533,7 +512,6 @@ export type MatchMinOrderByAggregateInput = {
   status?: Prisma.SortOrder
   lockTime?: Prisma.SortOrder
   pointsCalculatedAt?: Prisma.SortOrder
-  lockReminderSentAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -683,7 +661,6 @@ export type MatchCreateWithoutTeamAInput = {
   status?: $Enums.MatchStatus
   lockTime: Date | string
   pointsCalculatedAt?: Date | string | null
-  lockReminderSentAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   teamB: Prisma.TeamCreateNestedOneWithoutMatchesAsTeamBInput
@@ -703,7 +680,6 @@ export type MatchUncheckedCreateWithoutTeamAInput = {
   status?: $Enums.MatchStatus
   lockTime: Date | string
   pointsCalculatedAt?: Date | string | null
-  lockReminderSentAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   matchPlayers?: Prisma.MatchPlayerUncheckedCreateNestedManyWithoutMatchInput
@@ -731,7 +707,6 @@ export type MatchCreateWithoutTeamBInput = {
   status?: $Enums.MatchStatus
   lockTime: Date | string
   pointsCalculatedAt?: Date | string | null
-  lockReminderSentAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   teamA: Prisma.TeamCreateNestedOneWithoutMatchesAsTeamAInput
@@ -751,7 +726,6 @@ export type MatchUncheckedCreateWithoutTeamBInput = {
   status?: $Enums.MatchStatus
   lockTime: Date | string
   pointsCalculatedAt?: Date | string | null
-  lockReminderSentAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   matchPlayers?: Prisma.MatchPlayerUncheckedCreateNestedManyWithoutMatchInput
@@ -800,7 +774,6 @@ export type MatchScalarWhereInput = {
   status?: Prisma.EnumMatchStatusFilter<"Match"> | $Enums.MatchStatus
   lockTime?: Prisma.DateTimeFilter<"Match"> | Date | string
   pointsCalculatedAt?: Prisma.DateTimeNullableFilter<"Match"> | Date | string | null
-  lockReminderSentAt?: Prisma.DateTimeNullableFilter<"Match"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Match"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Match"> | Date | string
 }
@@ -831,7 +804,6 @@ export type MatchCreateWithoutMatchPlayersInput = {
   status?: $Enums.MatchStatus
   lockTime: Date | string
   pointsCalculatedAt?: Date | string | null
-  lockReminderSentAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   teamA: Prisma.TeamCreateNestedOneWithoutMatchesAsTeamAInput
@@ -852,7 +824,6 @@ export type MatchUncheckedCreateWithoutMatchPlayersInput = {
   status?: $Enums.MatchStatus
   lockTime: Date | string
   pointsCalculatedAt?: Date | string | null
-  lockReminderSentAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   userTeams?: Prisma.UserTeamUncheckedCreateNestedManyWithoutMatchInput
@@ -885,7 +856,6 @@ export type MatchUpdateWithoutMatchPlayersInput = {
   status?: Prisma.EnumMatchStatusFieldUpdateOperationsInput | $Enums.MatchStatus
   lockTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   pointsCalculatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  lockReminderSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   teamA?: Prisma.TeamUpdateOneRequiredWithoutMatchesAsTeamANestedInput
@@ -906,7 +876,6 @@ export type MatchUncheckedUpdateWithoutMatchPlayersInput = {
   status?: Prisma.EnumMatchStatusFieldUpdateOperationsInput | $Enums.MatchStatus
   lockTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   pointsCalculatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  lockReminderSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   userTeams?: Prisma.UserTeamUncheckedUpdateManyWithoutMatchNestedInput
@@ -923,7 +892,6 @@ export type MatchCreateWithoutUserTeamsInput = {
   status?: $Enums.MatchStatus
   lockTime: Date | string
   pointsCalculatedAt?: Date | string | null
-  lockReminderSentAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   teamA: Prisma.TeamCreateNestedOneWithoutMatchesAsTeamAInput
@@ -944,7 +912,6 @@ export type MatchUncheckedCreateWithoutUserTeamsInput = {
   status?: $Enums.MatchStatus
   lockTime: Date | string
   pointsCalculatedAt?: Date | string | null
-  lockReminderSentAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   matchPlayers?: Prisma.MatchPlayerUncheckedCreateNestedManyWithoutMatchInput
@@ -977,7 +944,6 @@ export type MatchUpdateWithoutUserTeamsInput = {
   status?: Prisma.EnumMatchStatusFieldUpdateOperationsInput | $Enums.MatchStatus
   lockTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   pointsCalculatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  lockReminderSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   teamA?: Prisma.TeamUpdateOneRequiredWithoutMatchesAsTeamANestedInput
@@ -998,7 +964,6 @@ export type MatchUncheckedUpdateWithoutUserTeamsInput = {
   status?: Prisma.EnumMatchStatusFieldUpdateOperationsInput | $Enums.MatchStatus
   lockTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   pointsCalculatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  lockReminderSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   matchPlayers?: Prisma.MatchPlayerUncheckedUpdateManyWithoutMatchNestedInput
@@ -1015,7 +980,6 @@ export type MatchCreateWithoutContestsInput = {
   status?: $Enums.MatchStatus
   lockTime: Date | string
   pointsCalculatedAt?: Date | string | null
-  lockReminderSentAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   teamA: Prisma.TeamCreateNestedOneWithoutMatchesAsTeamAInput
@@ -1036,7 +1000,6 @@ export type MatchUncheckedCreateWithoutContestsInput = {
   status?: $Enums.MatchStatus
   lockTime: Date | string
   pointsCalculatedAt?: Date | string | null
-  lockReminderSentAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   matchPlayers?: Prisma.MatchPlayerUncheckedCreateNestedManyWithoutMatchInput
@@ -1069,7 +1032,6 @@ export type MatchUpdateWithoutContestsInput = {
   status?: Prisma.EnumMatchStatusFieldUpdateOperationsInput | $Enums.MatchStatus
   lockTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   pointsCalculatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  lockReminderSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   teamA?: Prisma.TeamUpdateOneRequiredWithoutMatchesAsTeamANestedInput
@@ -1090,7 +1052,6 @@ export type MatchUncheckedUpdateWithoutContestsInput = {
   status?: Prisma.EnumMatchStatusFieldUpdateOperationsInput | $Enums.MatchStatus
   lockTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   pointsCalculatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  lockReminderSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   matchPlayers?: Prisma.MatchPlayerUncheckedUpdateManyWithoutMatchNestedInput
@@ -1108,7 +1069,6 @@ export type MatchCreateManyTeamAInput = {
   status?: $Enums.MatchStatus
   lockTime: Date | string
   pointsCalculatedAt?: Date | string | null
-  lockReminderSentAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -1124,7 +1084,6 @@ export type MatchCreateManyTeamBInput = {
   status?: $Enums.MatchStatus
   lockTime: Date | string
   pointsCalculatedAt?: Date | string | null
-  lockReminderSentAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -1139,7 +1098,6 @@ export type MatchUpdateWithoutTeamAInput = {
   status?: Prisma.EnumMatchStatusFieldUpdateOperationsInput | $Enums.MatchStatus
   lockTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   pointsCalculatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  lockReminderSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   teamB?: Prisma.TeamUpdateOneRequiredWithoutMatchesAsTeamBNestedInput
@@ -1159,7 +1117,6 @@ export type MatchUncheckedUpdateWithoutTeamAInput = {
   status?: Prisma.EnumMatchStatusFieldUpdateOperationsInput | $Enums.MatchStatus
   lockTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   pointsCalculatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  lockReminderSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   matchPlayers?: Prisma.MatchPlayerUncheckedUpdateManyWithoutMatchNestedInput
@@ -1178,7 +1135,6 @@ export type MatchUncheckedUpdateManyWithoutTeamAInput = {
   status?: Prisma.EnumMatchStatusFieldUpdateOperationsInput | $Enums.MatchStatus
   lockTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   pointsCalculatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  lockReminderSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1193,7 +1149,6 @@ export type MatchUpdateWithoutTeamBInput = {
   status?: Prisma.EnumMatchStatusFieldUpdateOperationsInput | $Enums.MatchStatus
   lockTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   pointsCalculatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  lockReminderSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   teamA?: Prisma.TeamUpdateOneRequiredWithoutMatchesAsTeamANestedInput
@@ -1213,7 +1168,6 @@ export type MatchUncheckedUpdateWithoutTeamBInput = {
   status?: Prisma.EnumMatchStatusFieldUpdateOperationsInput | $Enums.MatchStatus
   lockTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   pointsCalculatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  lockReminderSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   matchPlayers?: Prisma.MatchPlayerUncheckedUpdateManyWithoutMatchNestedInput
@@ -1232,7 +1186,6 @@ export type MatchUncheckedUpdateManyWithoutTeamBInput = {
   status?: Prisma.EnumMatchStatusFieldUpdateOperationsInput | $Enums.MatchStatus
   lockTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   pointsCalculatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  lockReminderSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1298,7 +1251,6 @@ export type MatchSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   status?: boolean
   lockTime?: boolean
   pointsCalculatedAt?: boolean
-  lockReminderSentAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   teamA?: boolean | Prisma.TeamDefaultArgs<ExtArgs>
@@ -1321,7 +1273,6 @@ export type MatchSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   status?: boolean
   lockTime?: boolean
   pointsCalculatedAt?: boolean
-  lockReminderSentAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   teamA?: boolean | Prisma.TeamDefaultArgs<ExtArgs>
@@ -1340,7 +1291,6 @@ export type MatchSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   status?: boolean
   lockTime?: boolean
   pointsCalculatedAt?: boolean
-  lockReminderSentAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   teamA?: boolean | Prisma.TeamDefaultArgs<ExtArgs>
@@ -1359,12 +1309,11 @@ export type MatchSelectScalar = {
   status?: boolean
   lockTime?: boolean
   pointsCalculatedAt?: boolean
-  lockReminderSentAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type MatchOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "sport" | "teamAId" | "teamBId" | "tournamentName" | "format" | "venue" | "startTime" | "status" | "lockTime" | "pointsCalculatedAt" | "lockReminderSentAt" | "createdAt" | "updatedAt", ExtArgs["result"]["match"]>
+export type MatchOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "sport" | "teamAId" | "teamBId" | "tournamentName" | "format" | "venue" | "startTime" | "status" | "lockTime" | "pointsCalculatedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["match"]>
 export type MatchInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   teamA?: boolean | Prisma.TeamDefaultArgs<ExtArgs>
   teamB?: boolean | Prisma.TeamDefaultArgs<ExtArgs>
@@ -1403,7 +1352,6 @@ export type $MatchPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     status: $Enums.MatchStatus
     lockTime: Date
     pointsCalculatedAt: Date | null
-    lockReminderSentAt: Date | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["match"]>
@@ -1845,7 +1793,6 @@ export interface MatchFieldRefs {
   readonly status: Prisma.FieldRef<"Match", 'MatchStatus'>
   readonly lockTime: Prisma.FieldRef<"Match", 'DateTime'>
   readonly pointsCalculatedAt: Prisma.FieldRef<"Match", 'DateTime'>
-  readonly lockReminderSentAt: Prisma.FieldRef<"Match", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"Match", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Match", 'DateTime'>
 }

@@ -32,7 +32,6 @@ export type AppSettingsAvgAggregateOutputType = {
   giftRequestMinCoins: number | null
   giftRequestExpiryDays: number | null
   giftRequestCooldownHours: number | null
-  matchLockReminderMinutes: number | null
   referralSignupBonus: number | null
   referralInviterBonus: number | null
 }
@@ -43,7 +42,6 @@ export type AppSettingsSumAggregateOutputType = {
   giftRequestMinCoins: number | null
   giftRequestExpiryDays: number | null
   giftRequestCooldownHours: number | null
-  matchLockReminderMinutes: number | null
   referralSignupBonus: number | null
   referralInviterBonus: number | null
 }
@@ -56,12 +54,6 @@ export type AppSettingsMinAggregateOutputType = {
   giftRequestExpiryDays: number | null
   giftRequestCooldownHours: number | null
   giftRequestNote: string | null
-  pushEnabled: boolean | null
-  pushOnCoinBonus: boolean | null
-  pushOnGiftUpdate: boolean | null
-  pushOnPrizeDistributed: boolean | null
-  pushOnMatchLock: boolean | null
-  matchLockReminderMinutes: number | null
   depositMessage: string | null
   depositButtonText: string | null
   depositButtonLogo: string | null
@@ -93,12 +85,6 @@ export type AppSettingsMaxAggregateOutputType = {
   giftRequestExpiryDays: number | null
   giftRequestCooldownHours: number | null
   giftRequestNote: string | null
-  pushEnabled: boolean | null
-  pushOnCoinBonus: boolean | null
-  pushOnGiftUpdate: boolean | null
-  pushOnPrizeDistributed: boolean | null
-  pushOnMatchLock: boolean | null
-  matchLockReminderMinutes: number | null
   depositMessage: string | null
   depositButtonText: string | null
   depositButtonLogo: string | null
@@ -130,12 +116,6 @@ export type AppSettingsCountAggregateOutputType = {
   giftRequestExpiryDays: number
   giftRequestCooldownHours: number
   giftRequestNote: number
-  pushEnabled: number
-  pushOnCoinBonus: number
-  pushOnGiftUpdate: number
-  pushOnPrizeDistributed: number
-  pushOnMatchLock: number
-  matchLockReminderMinutes: number
   depositMessage: number
   depositButtonText: number
   depositButtonLogo: number
@@ -167,7 +147,6 @@ export type AppSettingsAvgAggregateInputType = {
   giftRequestMinCoins?: true
   giftRequestExpiryDays?: true
   giftRequestCooldownHours?: true
-  matchLockReminderMinutes?: true
   referralSignupBonus?: true
   referralInviterBonus?: true
 }
@@ -178,7 +157,6 @@ export type AppSettingsSumAggregateInputType = {
   giftRequestMinCoins?: true
   giftRequestExpiryDays?: true
   giftRequestCooldownHours?: true
-  matchLockReminderMinutes?: true
   referralSignupBonus?: true
   referralInviterBonus?: true
 }
@@ -191,12 +169,6 @@ export type AppSettingsMinAggregateInputType = {
   giftRequestExpiryDays?: true
   giftRequestCooldownHours?: true
   giftRequestNote?: true
-  pushEnabled?: true
-  pushOnCoinBonus?: true
-  pushOnGiftUpdate?: true
-  pushOnPrizeDistributed?: true
-  pushOnMatchLock?: true
-  matchLockReminderMinutes?: true
   depositMessage?: true
   depositButtonText?: true
   depositButtonLogo?: true
@@ -228,12 +200,6 @@ export type AppSettingsMaxAggregateInputType = {
   giftRequestExpiryDays?: true
   giftRequestCooldownHours?: true
   giftRequestNote?: true
-  pushEnabled?: true
-  pushOnCoinBonus?: true
-  pushOnGiftUpdate?: true
-  pushOnPrizeDistributed?: true
-  pushOnMatchLock?: true
-  matchLockReminderMinutes?: true
   depositMessage?: true
   depositButtonText?: true
   depositButtonLogo?: true
@@ -265,12 +231,6 @@ export type AppSettingsCountAggregateInputType = {
   giftRequestExpiryDays?: true
   giftRequestCooldownHours?: true
   giftRequestNote?: true
-  pushEnabled?: true
-  pushOnCoinBonus?: true
-  pushOnGiftUpdate?: true
-  pushOnPrizeDistributed?: true
-  pushOnMatchLock?: true
-  matchLockReminderMinutes?: true
   depositMessage?: true
   depositButtonText?: true
   depositButtonLogo?: true
@@ -389,12 +349,6 @@ export type AppSettingsGroupByOutputType = {
   giftRequestExpiryDays: number
   giftRequestCooldownHours: number
   giftRequestNote: string
-  pushEnabled: boolean
-  pushOnCoinBonus: boolean
-  pushOnGiftUpdate: boolean
-  pushOnPrizeDistributed: boolean
-  pushOnMatchLock: boolean
-  matchLockReminderMinutes: number
   depositMessage: string
   depositButtonText: string
   depositButtonLogo: string
@@ -449,12 +403,6 @@ export type AppSettingsWhereInput = {
   giftRequestExpiryDays?: Prisma.IntFilter<"AppSettings"> | number
   giftRequestCooldownHours?: Prisma.IntFilter<"AppSettings"> | number
   giftRequestNote?: Prisma.StringFilter<"AppSettings"> | string
-  pushEnabled?: Prisma.BoolFilter<"AppSettings"> | boolean
-  pushOnCoinBonus?: Prisma.BoolFilter<"AppSettings"> | boolean
-  pushOnGiftUpdate?: Prisma.BoolFilter<"AppSettings"> | boolean
-  pushOnPrizeDistributed?: Prisma.BoolFilter<"AppSettings"> | boolean
-  pushOnMatchLock?: Prisma.BoolFilter<"AppSettings"> | boolean
-  matchLockReminderMinutes?: Prisma.IntFilter<"AppSettings"> | number
   depositMessage?: Prisma.StringFilter<"AppSettings"> | string
   depositButtonText?: Prisma.StringFilter<"AppSettings"> | string
   depositButtonLogo?: Prisma.StringFilter<"AppSettings"> | string
@@ -486,12 +434,6 @@ export type AppSettingsOrderByWithRelationInput = {
   giftRequestExpiryDays?: Prisma.SortOrder
   giftRequestCooldownHours?: Prisma.SortOrder
   giftRequestNote?: Prisma.SortOrder
-  pushEnabled?: Prisma.SortOrder
-  pushOnCoinBonus?: Prisma.SortOrder
-  pushOnGiftUpdate?: Prisma.SortOrder
-  pushOnPrizeDistributed?: Prisma.SortOrder
-  pushOnMatchLock?: Prisma.SortOrder
-  matchLockReminderMinutes?: Prisma.SortOrder
   depositMessage?: Prisma.SortOrder
   depositButtonText?: Prisma.SortOrder
   depositButtonLogo?: Prisma.SortOrder
@@ -526,12 +468,6 @@ export type AppSettingsWhereUniqueInput = Prisma.AtLeast<{
   giftRequestExpiryDays?: Prisma.IntFilter<"AppSettings"> | number
   giftRequestCooldownHours?: Prisma.IntFilter<"AppSettings"> | number
   giftRequestNote?: Prisma.StringFilter<"AppSettings"> | string
-  pushEnabled?: Prisma.BoolFilter<"AppSettings"> | boolean
-  pushOnCoinBonus?: Prisma.BoolFilter<"AppSettings"> | boolean
-  pushOnGiftUpdate?: Prisma.BoolFilter<"AppSettings"> | boolean
-  pushOnPrizeDistributed?: Prisma.BoolFilter<"AppSettings"> | boolean
-  pushOnMatchLock?: Prisma.BoolFilter<"AppSettings"> | boolean
-  matchLockReminderMinutes?: Prisma.IntFilter<"AppSettings"> | number
   depositMessage?: Prisma.StringFilter<"AppSettings"> | string
   depositButtonText?: Prisma.StringFilter<"AppSettings"> | string
   depositButtonLogo?: Prisma.StringFilter<"AppSettings"> | string
@@ -563,12 +499,6 @@ export type AppSettingsOrderByWithAggregationInput = {
   giftRequestExpiryDays?: Prisma.SortOrder
   giftRequestCooldownHours?: Prisma.SortOrder
   giftRequestNote?: Prisma.SortOrder
-  pushEnabled?: Prisma.SortOrder
-  pushOnCoinBonus?: Prisma.SortOrder
-  pushOnGiftUpdate?: Prisma.SortOrder
-  pushOnPrizeDistributed?: Prisma.SortOrder
-  pushOnMatchLock?: Prisma.SortOrder
-  matchLockReminderMinutes?: Prisma.SortOrder
   depositMessage?: Prisma.SortOrder
   depositButtonText?: Prisma.SortOrder
   depositButtonLogo?: Prisma.SortOrder
@@ -608,12 +538,6 @@ export type AppSettingsScalarWhereWithAggregatesInput = {
   giftRequestExpiryDays?: Prisma.IntWithAggregatesFilter<"AppSettings"> | number
   giftRequestCooldownHours?: Prisma.IntWithAggregatesFilter<"AppSettings"> | number
   giftRequestNote?: Prisma.StringWithAggregatesFilter<"AppSettings"> | string
-  pushEnabled?: Prisma.BoolWithAggregatesFilter<"AppSettings"> | boolean
-  pushOnCoinBonus?: Prisma.BoolWithAggregatesFilter<"AppSettings"> | boolean
-  pushOnGiftUpdate?: Prisma.BoolWithAggregatesFilter<"AppSettings"> | boolean
-  pushOnPrizeDistributed?: Prisma.BoolWithAggregatesFilter<"AppSettings"> | boolean
-  pushOnMatchLock?: Prisma.BoolWithAggregatesFilter<"AppSettings"> | boolean
-  matchLockReminderMinutes?: Prisma.IntWithAggregatesFilter<"AppSettings"> | number
   depositMessage?: Prisma.StringWithAggregatesFilter<"AppSettings"> | string
   depositButtonText?: Prisma.StringWithAggregatesFilter<"AppSettings"> | string
   depositButtonLogo?: Prisma.StringWithAggregatesFilter<"AppSettings"> | string
@@ -645,12 +569,6 @@ export type AppSettingsCreateInput = {
   giftRequestExpiryDays?: number
   giftRequestCooldownHours?: number
   giftRequestNote?: string
-  pushEnabled?: boolean
-  pushOnCoinBonus?: boolean
-  pushOnGiftUpdate?: boolean
-  pushOnPrizeDistributed?: boolean
-  pushOnMatchLock?: boolean
-  matchLockReminderMinutes?: number
   depositMessage?: string
   depositButtonText?: string
   depositButtonLogo?: string
@@ -682,12 +600,6 @@ export type AppSettingsUncheckedCreateInput = {
   giftRequestExpiryDays?: number
   giftRequestCooldownHours?: number
   giftRequestNote?: string
-  pushEnabled?: boolean
-  pushOnCoinBonus?: boolean
-  pushOnGiftUpdate?: boolean
-  pushOnPrizeDistributed?: boolean
-  pushOnMatchLock?: boolean
-  matchLockReminderMinutes?: number
   depositMessage?: string
   depositButtonText?: string
   depositButtonLogo?: string
@@ -719,12 +631,6 @@ export type AppSettingsUpdateInput = {
   giftRequestExpiryDays?: Prisma.IntFieldUpdateOperationsInput | number
   giftRequestCooldownHours?: Prisma.IntFieldUpdateOperationsInput | number
   giftRequestNote?: Prisma.StringFieldUpdateOperationsInput | string
-  pushEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  pushOnCoinBonus?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  pushOnGiftUpdate?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  pushOnPrizeDistributed?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  pushOnMatchLock?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  matchLockReminderMinutes?: Prisma.IntFieldUpdateOperationsInput | number
   depositMessage?: Prisma.StringFieldUpdateOperationsInput | string
   depositButtonText?: Prisma.StringFieldUpdateOperationsInput | string
   depositButtonLogo?: Prisma.StringFieldUpdateOperationsInput | string
@@ -756,12 +662,6 @@ export type AppSettingsUncheckedUpdateInput = {
   giftRequestExpiryDays?: Prisma.IntFieldUpdateOperationsInput | number
   giftRequestCooldownHours?: Prisma.IntFieldUpdateOperationsInput | number
   giftRequestNote?: Prisma.StringFieldUpdateOperationsInput | string
-  pushEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  pushOnCoinBonus?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  pushOnGiftUpdate?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  pushOnPrizeDistributed?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  pushOnMatchLock?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  matchLockReminderMinutes?: Prisma.IntFieldUpdateOperationsInput | number
   depositMessage?: Prisma.StringFieldUpdateOperationsInput | string
   depositButtonText?: Prisma.StringFieldUpdateOperationsInput | string
   depositButtonLogo?: Prisma.StringFieldUpdateOperationsInput | string
@@ -793,12 +693,6 @@ export type AppSettingsCreateManyInput = {
   giftRequestExpiryDays?: number
   giftRequestCooldownHours?: number
   giftRequestNote?: string
-  pushEnabled?: boolean
-  pushOnCoinBonus?: boolean
-  pushOnGiftUpdate?: boolean
-  pushOnPrizeDistributed?: boolean
-  pushOnMatchLock?: boolean
-  matchLockReminderMinutes?: number
   depositMessage?: string
   depositButtonText?: string
   depositButtonLogo?: string
@@ -830,12 +724,6 @@ export type AppSettingsUpdateManyMutationInput = {
   giftRequestExpiryDays?: Prisma.IntFieldUpdateOperationsInput | number
   giftRequestCooldownHours?: Prisma.IntFieldUpdateOperationsInput | number
   giftRequestNote?: Prisma.StringFieldUpdateOperationsInput | string
-  pushEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  pushOnCoinBonus?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  pushOnGiftUpdate?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  pushOnPrizeDistributed?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  pushOnMatchLock?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  matchLockReminderMinutes?: Prisma.IntFieldUpdateOperationsInput | number
   depositMessage?: Prisma.StringFieldUpdateOperationsInput | string
   depositButtonText?: Prisma.StringFieldUpdateOperationsInput | string
   depositButtonLogo?: Prisma.StringFieldUpdateOperationsInput | string
@@ -867,12 +755,6 @@ export type AppSettingsUncheckedUpdateManyInput = {
   giftRequestExpiryDays?: Prisma.IntFieldUpdateOperationsInput | number
   giftRequestCooldownHours?: Prisma.IntFieldUpdateOperationsInput | number
   giftRequestNote?: Prisma.StringFieldUpdateOperationsInput | string
-  pushEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  pushOnCoinBonus?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  pushOnGiftUpdate?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  pushOnPrizeDistributed?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  pushOnMatchLock?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  matchLockReminderMinutes?: Prisma.IntFieldUpdateOperationsInput | number
   depositMessage?: Prisma.StringFieldUpdateOperationsInput | string
   depositButtonText?: Prisma.StringFieldUpdateOperationsInput | string
   depositButtonLogo?: Prisma.StringFieldUpdateOperationsInput | string
@@ -904,12 +786,6 @@ export type AppSettingsCountOrderByAggregateInput = {
   giftRequestExpiryDays?: Prisma.SortOrder
   giftRequestCooldownHours?: Prisma.SortOrder
   giftRequestNote?: Prisma.SortOrder
-  pushEnabled?: Prisma.SortOrder
-  pushOnCoinBonus?: Prisma.SortOrder
-  pushOnGiftUpdate?: Prisma.SortOrder
-  pushOnPrizeDistributed?: Prisma.SortOrder
-  pushOnMatchLock?: Prisma.SortOrder
-  matchLockReminderMinutes?: Prisma.SortOrder
   depositMessage?: Prisma.SortOrder
   depositButtonText?: Prisma.SortOrder
   depositButtonLogo?: Prisma.SortOrder
@@ -939,7 +815,6 @@ export type AppSettingsAvgOrderByAggregateInput = {
   giftRequestMinCoins?: Prisma.SortOrder
   giftRequestExpiryDays?: Prisma.SortOrder
   giftRequestCooldownHours?: Prisma.SortOrder
-  matchLockReminderMinutes?: Prisma.SortOrder
   referralSignupBonus?: Prisma.SortOrder
   referralInviterBonus?: Prisma.SortOrder
 }
@@ -952,12 +827,6 @@ export type AppSettingsMaxOrderByAggregateInput = {
   giftRequestExpiryDays?: Prisma.SortOrder
   giftRequestCooldownHours?: Prisma.SortOrder
   giftRequestNote?: Prisma.SortOrder
-  pushEnabled?: Prisma.SortOrder
-  pushOnCoinBonus?: Prisma.SortOrder
-  pushOnGiftUpdate?: Prisma.SortOrder
-  pushOnPrizeDistributed?: Prisma.SortOrder
-  pushOnMatchLock?: Prisma.SortOrder
-  matchLockReminderMinutes?: Prisma.SortOrder
   depositMessage?: Prisma.SortOrder
   depositButtonText?: Prisma.SortOrder
   depositButtonLogo?: Prisma.SortOrder
@@ -989,12 +858,6 @@ export type AppSettingsMinOrderByAggregateInput = {
   giftRequestExpiryDays?: Prisma.SortOrder
   giftRequestCooldownHours?: Prisma.SortOrder
   giftRequestNote?: Prisma.SortOrder
-  pushEnabled?: Prisma.SortOrder
-  pushOnCoinBonus?: Prisma.SortOrder
-  pushOnGiftUpdate?: Prisma.SortOrder
-  pushOnPrizeDistributed?: Prisma.SortOrder
-  pushOnMatchLock?: Prisma.SortOrder
-  matchLockReminderMinutes?: Prisma.SortOrder
   depositMessage?: Prisma.SortOrder
   depositButtonText?: Prisma.SortOrder
   depositButtonLogo?: Prisma.SortOrder
@@ -1024,7 +887,6 @@ export type AppSettingsSumOrderByAggregateInput = {
   giftRequestMinCoins?: Prisma.SortOrder
   giftRequestExpiryDays?: Prisma.SortOrder
   giftRequestCooldownHours?: Prisma.SortOrder
-  matchLockReminderMinutes?: Prisma.SortOrder
   referralSignupBonus?: Prisma.SortOrder
   referralInviterBonus?: Prisma.SortOrder
 }
@@ -1039,12 +901,6 @@ export type AppSettingsSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   giftRequestExpiryDays?: boolean
   giftRequestCooldownHours?: boolean
   giftRequestNote?: boolean
-  pushEnabled?: boolean
-  pushOnCoinBonus?: boolean
-  pushOnGiftUpdate?: boolean
-  pushOnPrizeDistributed?: boolean
-  pushOnMatchLock?: boolean
-  matchLockReminderMinutes?: boolean
   depositMessage?: boolean
   depositButtonText?: boolean
   depositButtonLogo?: boolean
@@ -1076,12 +932,6 @@ export type AppSettingsSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   giftRequestExpiryDays?: boolean
   giftRequestCooldownHours?: boolean
   giftRequestNote?: boolean
-  pushEnabled?: boolean
-  pushOnCoinBonus?: boolean
-  pushOnGiftUpdate?: boolean
-  pushOnPrizeDistributed?: boolean
-  pushOnMatchLock?: boolean
-  matchLockReminderMinutes?: boolean
   depositMessage?: boolean
   depositButtonText?: boolean
   depositButtonLogo?: boolean
@@ -1113,12 +963,6 @@ export type AppSettingsSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   giftRequestExpiryDays?: boolean
   giftRequestCooldownHours?: boolean
   giftRequestNote?: boolean
-  pushEnabled?: boolean
-  pushOnCoinBonus?: boolean
-  pushOnGiftUpdate?: boolean
-  pushOnPrizeDistributed?: boolean
-  pushOnMatchLock?: boolean
-  matchLockReminderMinutes?: boolean
   depositMessage?: boolean
   depositButtonText?: boolean
   depositButtonLogo?: boolean
@@ -1150,12 +994,6 @@ export type AppSettingsSelectScalar = {
   giftRequestExpiryDays?: boolean
   giftRequestCooldownHours?: boolean
   giftRequestNote?: boolean
-  pushEnabled?: boolean
-  pushOnCoinBonus?: boolean
-  pushOnGiftUpdate?: boolean
-  pushOnPrizeDistributed?: boolean
-  pushOnMatchLock?: boolean
-  matchLockReminderMinutes?: boolean
   depositMessage?: boolean
   depositButtonText?: boolean
   depositButtonLogo?: boolean
@@ -1179,7 +1017,7 @@ export type AppSettingsSelectScalar = {
   updatedAt?: boolean
 }
 
-export type AppSettingsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "dailyBonusAmount" | "giftRequestsEnabled" | "giftRequestMinCoins" | "giftRequestExpiryDays" | "giftRequestCooldownHours" | "giftRequestNote" | "pushEnabled" | "pushOnCoinBonus" | "pushOnGiftUpdate" | "pushOnPrizeDistributed" | "pushOnMatchLock" | "matchLockReminderMinutes" | "depositMessage" | "depositButtonText" | "depositButtonLogo" | "depositButtonUrl" | "referralSignupBonus" | "referralInviterBonus" | "privacyPolicy" | "termsAndConditions" | "legalUpdatedAt" | "maintenanceMode" | "maintenanceMessage" | "latestAppVersion" | "minSupportedVersion" | "updateUrl" | "updateMessage" | "supportEmail" | "supportPhone" | "supportWhatsapp" | "supportFacebook" | "supportHours" | "updatedAt", ExtArgs["result"]["appSettings"]>
+export type AppSettingsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "dailyBonusAmount" | "giftRequestsEnabled" | "giftRequestMinCoins" | "giftRequestExpiryDays" | "giftRequestCooldownHours" | "giftRequestNote" | "depositMessage" | "depositButtonText" | "depositButtonLogo" | "depositButtonUrl" | "referralSignupBonus" | "referralInviterBonus" | "privacyPolicy" | "termsAndConditions" | "legalUpdatedAt" | "maintenanceMode" | "maintenanceMessage" | "latestAppVersion" | "minSupportedVersion" | "updateUrl" | "updateMessage" | "supportEmail" | "supportPhone" | "supportWhatsapp" | "supportFacebook" | "supportHours" | "updatedAt", ExtArgs["result"]["appSettings"]>
 
 export type $AppSettingsPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "AppSettings"
@@ -1192,12 +1030,6 @@ export type $AppSettingsPayload<ExtArgs extends runtime.Types.Extensions.Interna
     giftRequestExpiryDays: number
     giftRequestCooldownHours: number
     giftRequestNote: string
-    pushEnabled: boolean
-    pushOnCoinBonus: boolean
-    pushOnGiftUpdate: boolean
-    pushOnPrizeDistributed: boolean
-    pushOnMatchLock: boolean
-    matchLockReminderMinutes: number
     depositMessage: string
     depositButtonText: string
     depositButtonLogo: string
@@ -1649,12 +1481,6 @@ export interface AppSettingsFieldRefs {
   readonly giftRequestExpiryDays: Prisma.FieldRef<"AppSettings", 'Int'>
   readonly giftRequestCooldownHours: Prisma.FieldRef<"AppSettings", 'Int'>
   readonly giftRequestNote: Prisma.FieldRef<"AppSettings", 'String'>
-  readonly pushEnabled: Prisma.FieldRef<"AppSettings", 'Boolean'>
-  readonly pushOnCoinBonus: Prisma.FieldRef<"AppSettings", 'Boolean'>
-  readonly pushOnGiftUpdate: Prisma.FieldRef<"AppSettings", 'Boolean'>
-  readonly pushOnPrizeDistributed: Prisma.FieldRef<"AppSettings", 'Boolean'>
-  readonly pushOnMatchLock: Prisma.FieldRef<"AppSettings", 'Boolean'>
-  readonly matchLockReminderMinutes: Prisma.FieldRef<"AppSettings", 'Int'>
   readonly depositMessage: Prisma.FieldRef<"AppSettings", 'String'>
   readonly depositButtonText: Prisma.FieldRef<"AppSettings", 'String'>
   readonly depositButtonLogo: Prisma.FieldRef<"AppSettings", 'String'>

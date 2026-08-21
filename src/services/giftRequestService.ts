@@ -1,6 +1,5 @@
 import prisma from "../config/prisma";
 import { creditCoins, debitCoins } from "./walletService";
-import { pushToUser, isPushEnabled } from "./pushService";
 
 async function loadSettings() {
   return prisma.appSettings.upsert({ where: { id: 1 }, create: { id: 1 }, update: {} });
@@ -194,14 +193,6 @@ export async function approveGiftRequest(
     });
   });
 
-  if (await isPushEnabled("giftUpdate")) {
-    pushToUser(request.userId, {
-      title: "Your gift is on the way!",
-      body: `Approved — tracking ID ${trackingId.trim()}.`,
-      linkTo: "GiftRequest",
-    }).catch((err) => console.error("Gift approve push failed:", err));
-  }
-
   return { ok: true };
 }
 
@@ -249,14 +240,6 @@ export async function cancelGiftRequest(
       },
     });
   });
-
-  if (await isPushEnabled("giftUpdate")) {
-    pushToUser(request.userId, {
-      title: "Coins returned",
-      body: `${request.coinAmount.toLocaleString()} coins are back in your balance.`,
-      linkTo: "GiftRequest",
-    }).catch((err) => console.error("Gift cancel push failed:", err));
-  }
 
   return { ok: true };
 }

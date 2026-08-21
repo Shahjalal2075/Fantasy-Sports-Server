@@ -29,11 +29,6 @@ import {
   createContactMethod,
   updateContactMethod,
 } from "../controllers/contactMethodController";
-import {
-  listCampaigns,
-  createCampaign,
-  cancelCampaign,
-} from "../controllers/pushController";
 import { requireAuth, requireAdmin } from "../middleware/auth";
 
 const router = Router();
@@ -64,11 +59,6 @@ router.post("/gift-requests/:id/approve", approveGiftRequestHandler);
 router.post("/gift-requests/:id/cancel", cancelGiftRequestHandler);
 
 // Contact methods offered on the gift request form
-// Push notifications
-router.get("/push-campaigns", listCampaigns);
-router.post("/push-campaigns", createCampaign);
-router.delete("/push-campaigns/:id", cancelCampaign);
-
 router.get("/contact-methods", listContactMethods);
 router.post("/contact-methods", createContactMethod);
 router.patch("/contact-methods/:id", updateContactMethod);

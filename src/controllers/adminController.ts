@@ -4,7 +4,6 @@ import { NotificationType } from "../generated/prisma/client";
 import { coinAdjustmentSchema, banUserSchema, updateSettingsSchema } from "../utils/validators";
 import { adminGiveBonus, adminGiveFine } from "../services/walletService";
 import { getLiveCount, getLiveSessions, getVisitorHistory, LIVE_WINDOW_MS } from "../services/presenceService";
-import { pushToUser, isPushEnabled } from "../services/pushService";
 import bcrypt from "bcryptjs";
 import { adminResetPasswordSchema } from "../utils/validators";
 import { compareVersions, invalidateSettingsCache } from "./appConfigController";

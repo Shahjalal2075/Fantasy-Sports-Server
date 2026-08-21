@@ -61,16 +61,6 @@ export const OtpPurpose = {
 export type OtpPurpose = (typeof OtpPurpose)[keyof typeof OtpPurpose]
 
 
-export const PushCampaignStatus = {
-  SCHEDULED: 'SCHEDULED',
-  SENT: 'SENT',
-  FAILED: 'FAILED',
-  CANCELLED: 'CANCELLED'
-} as const
-
-export type PushCampaignStatus = (typeof PushCampaignStatus)[keyof typeof PushCampaignStatus]
-
-
 export const GiftRequestStatus = {
   PENDING: 'PENDING',
   APPROVED: 'APPROVED',

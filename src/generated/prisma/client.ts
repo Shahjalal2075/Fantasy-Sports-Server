@@ -67,16 +67,6 @@ export type AppSettings = Prisma.AppSettingsModel
  */
 export type GiftRequest = Prisma.GiftRequestModel
 /**
- * Model PushToken
- * 
- */
-export type PushToken = Prisma.PushTokenModel
-/**
- * Model PushCampaign
- * 
- */
-export type PushCampaign = Prisma.PushCampaignModel
-/**
  * Model OtpCode
  * 
  */

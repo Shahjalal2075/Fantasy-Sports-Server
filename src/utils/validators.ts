@@ -280,13 +280,6 @@ export const updateSettingsSchema = z
   .object({
     dailyBonusAmount: z.number().int().min(0).max(100000).optional(),
 
-    pushEnabled: z.boolean().optional(),
-    pushOnCoinBonus: z.boolean().optional(),
-    pushOnGiftUpdate: z.boolean().optional(),
-    pushOnPrizeDistributed: z.boolean().optional(),
-    pushOnMatchLock: z.boolean().optional(),
-    matchLockReminderMinutes: z.number().int().min(5).max(720).optional(),
-
     giftRequestsEnabled: z.boolean().optional(),
     giftRequestCooldownHours: z.number().int().min(0).max(720).optional(),
     giftRequestMinCoins: z.number().int().min(0).max(1000000).optional(),

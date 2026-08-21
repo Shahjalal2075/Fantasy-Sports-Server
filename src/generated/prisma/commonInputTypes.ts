@@ -253,23 +253,6 @@ export type EnumGiftRequestStatusWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumGiftRequestStatusFilter<$PrismaModel>
 }
 
-export type EnumPushCampaignStatusFilter<$PrismaModel = never> = {
-  equals?: $Enums.PushCampaignStatus | Prisma.EnumPushCampaignStatusFieldRefInput<$PrismaModel>
-  in?: $Enums.PushCampaignStatus[] | Prisma.ListEnumPushCampaignStatusFieldRefInput<$PrismaModel>
-  notIn?: $Enums.PushCampaignStatus[] | Prisma.ListEnumPushCampaignStatusFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumPushCampaignStatusFilter<$PrismaModel> | $Enums.PushCampaignStatus
-}
-
-export type EnumPushCampaignStatusWithAggregatesFilter<$PrismaModel = never> = {
-  equals?: $Enums.PushCampaignStatus | Prisma.EnumPushCampaignStatusFieldRefInput<$PrismaModel>
-  in?: $Enums.PushCampaignStatus[] | Prisma.ListEnumPushCampaignStatusFieldRefInput<$PrismaModel>
-  notIn?: $Enums.PushCampaignStatus[] | Prisma.ListEnumPushCampaignStatusFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumPushCampaignStatusWithAggregatesFilter<$PrismaModel> | $Enums.PushCampaignStatus
-  _count?: Prisma.NestedIntFilter<$PrismaModel>
-  _min?: Prisma.NestedEnumPushCampaignStatusFilter<$PrismaModel>
-  _max?: Prisma.NestedEnumPushCampaignStatusFilter<$PrismaModel>
-}
-
 export type EnumOtpPurposeFilter<$PrismaModel = never> = {
   equals?: $Enums.OtpPurpose | Prisma.EnumOtpPurposeFieldRefInput<$PrismaModel>
   in?: $Enums.OtpPurpose[] | Prisma.ListEnumOtpPurposeFieldRefInput<$PrismaModel>
@@ -666,23 +649,6 @@ export type NestedEnumGiftRequestStatusWithAggregatesFilter<$PrismaModel = never
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumGiftRequestStatusFilter<$PrismaModel>
   _max?: Prisma.NestedEnumGiftRequestStatusFilter<$PrismaModel>
-}
-
-export type NestedEnumPushCampaignStatusFilter<$PrismaModel = never> = {
-  equals?: $Enums.PushCampaignStatus | Prisma.EnumPushCampaignStatusFieldRefInput<$PrismaModel>
-  in?: $Enums.PushCampaignStatus[] | Prisma.ListEnumPushCampaignStatusFieldRefInput<$PrismaModel>
-  notIn?: $Enums.PushCampaignStatus[] | Prisma.ListEnumPushCampaignStatusFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumPushCampaignStatusFilter<$PrismaModel> | $Enums.PushCampaignStatus
-}
-
-export type NestedEnumPushCampaignStatusWithAggregatesFilter<$PrismaModel = never> = {
-  equals?: $Enums.PushCampaignStatus | Prisma.EnumPushCampaignStatusFieldRefInput<$PrismaModel>
-  in?: $Enums.PushCampaignStatus[] | Prisma.ListEnumPushCampaignStatusFieldRefInput<$PrismaModel>
-  notIn?: $Enums.PushCampaignStatus[] | Prisma.ListEnumPushCampaignStatusFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumPushCampaignStatusWithAggregatesFilter<$PrismaModel> | $Enums.PushCampaignStatus
-  _count?: Prisma.NestedIntFilter<$PrismaModel>
-  _min?: Prisma.NestedEnumPushCampaignStatusFilter<$PrismaModel>
-  _max?: Prisma.NestedEnumPushCampaignStatusFilter<$PrismaModel>
 }
 
 export type NestedEnumOtpPurposeFilter<$PrismaModel = never> = {

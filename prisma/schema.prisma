@@ -98,7 +98,6 @@ model User {
   promoCodeClaims PromoCodeClaim[]
   activeSessions  ActiveSession[]
   giftRequests    GiftRequest[]
-  pushTokens      PushToken[]
 
   @@map("users")
 }
@@ -149,16 +148,6 @@ model AppSettings {
   giftRequestCooldownHours Int  @default(24)
   // Shown on the app's request screen so users know what to expect.
   giftRequestNote       String  @default("Our team reviews every request. If yours isn't selected, your coins are returned in full.")
-
-  // Push notifications. The master switch plus per-event toggles, so an
-  // admin can silence one kind of push without disabling all of them.
-  pushEnabled            Boolean @default(true)
-  pushOnCoinBonus        Boolean @default(true)
-  pushOnGiftUpdate       Boolean @default(true)
-  pushOnPrizeDistributed Boolean @default(true)
-  pushOnMatchLock        Boolean @default(true)
-  // How long before lockTime the match reminder fires.
-  matchLockReminderMinutes Int   @default(30)
 
   // Deposit isn't supported — coins can't be bought. This is the copy
   // and call-to-action shown when someone taps Deposit anyway, editable
@@ -254,52 +243,6 @@ model GiftRequest {
   @@index([status, createdAt])
   @@index([userId, createdAt])
   @@map("gift_requests")
-}
-
-// One row per device that has push enabled. Tokens are issued by Expo's
-// push service and are unique per install; a device that reinstalls gets
-// a new one, so old rows are deactivated when Expo reports them invalid.
-model PushToken {
-  id       String  @id @default(uuid())
-  token    String  @unique
-  userId   String?
-  user     User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  // "android" / "ios". iOS tokens simply never get registered while push
-  // is Android-only, so no filtering is needed when sending.
-  platform String  @default("android")
-  deviceId String  @default("")
-  isActive Boolean @default(true)
-
-  lastUsedAt DateTime @default(now())
-  createdAt  DateTime @default(now())
-
-  @@index([isActive])
-  @@map("push_tokens")
-}
-
-// An admin-composed push, either sent immediately or scheduled. Kept as
-// a row rather than fired and forgotten so the admin panel can show a
-// history and so a scheduled send survives a server restart.
-model PushCampaign {
-  id      String @id @default(uuid())
-  title   String
-  body    String
-  // Optional deep link target, e.g. "Home" or "MyContest".
-  linkTo  String @default("")
-
-  status       PushCampaignStatus @default(SCHEDULED)
-  // Null means "send now".
-  scheduledFor DateTime?
-  sentAt       DateTime?
-  sentCount    Int @default(0)
-  failedCount  Int @default(0)
-  error        String @default("")
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([status, scheduledFor])
-  @@map("push_campaigns")
 }
 
 // Short-lived email codes for signup verification and password reset.
@@ -460,8 +403,6 @@ model Match {
   // the leaderboard's "Last Updated" stamp, so users see when the numbers
   // last actually moved rather than when they opened the screen.
   pointsCalculatedAt DateTime?
-  // Guards the automatic "match locks soon" push against double-sending.
-  lockReminderSentAt DateTime?
   createdAt      DateTime    @default(now())
   updatedAt      DateTime    @updatedAt
 
@@ -587,13 +528,6 @@ model Contest {
 enum OtpPurpose {
   EMAIL_VERIFICATION
   PASSWORD_RESET
-}
-
-enum PushCampaignStatus {
-  SCHEDULED
-  SENT
-  FAILED
-  CANCELLED
 }
 
 enum GiftRequestStatus {

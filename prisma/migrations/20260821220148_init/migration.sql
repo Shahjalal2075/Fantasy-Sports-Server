@@ -14,9 +14,6 @@ CREATE TYPE "NotificationType" AS ENUM ('COIN_BONUS', 'COIN_FINE', 'BAN', 'GENER
 CREATE TYPE "OtpPurpose" AS ENUM ('EMAIL_VERIFICATION', 'PASSWORD_RESET');
 
 -- CreateEnum
-CREATE TYPE "PushCampaignStatus" AS ENUM ('SCHEDULED', 'SENT', 'FAILED', 'CANCELLED');
-
--- CreateEnum
 CREATE TYPE "GiftRequestStatus" AS ENUM ('PENDING', 'APPROVED', 'CANCELLED');
 
 -- CreateEnum
@@ -91,12 +88,6 @@ CREATE TABLE "app_settings" (
     "giftRequestExpiryDays" INTEGER NOT NULL DEFAULT 10,
     "giftRequestCooldownHours" INTEGER NOT NULL DEFAULT 24,
     "giftRequestNote" TEXT NOT NULL DEFAULT 'Our team reviews every request. If yours isn''t selected, your coins are returned in full.',
-    "pushEnabled" BOOLEAN NOT NULL DEFAULT true,
-    "pushOnCoinBonus" BOOLEAN NOT NULL DEFAULT true,
-    "pushOnGiftUpdate" BOOLEAN NOT NULL DEFAULT true,
-    "pushOnPrizeDistributed" BOOLEAN NOT NULL DEFAULT true,
-    "pushOnMatchLock" BOOLEAN NOT NULL DEFAULT true,
-    "matchLockReminderMinutes" INTEGER NOT NULL DEFAULT 30,
     "depositMessage" TEXT NOT NULL DEFAULT 'Sorry, this app does not support deposit. If you have any query, contact our support.',
     "depositButtonText" TEXT NOT NULL DEFAULT 'Contact Support',
     "depositButtonLogo" TEXT NOT NULL DEFAULT '',
@@ -141,38 +132,6 @@ CREATE TABLE "gift_requests" (
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "gift_requests_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "push_tokens" (
-    "id" TEXT NOT NULL,
-    "token" TEXT NOT NULL,
-    "userId" TEXT,
-    "platform" TEXT NOT NULL DEFAULT 'android',
-    "deviceId" TEXT NOT NULL DEFAULT '',
-    "isActive" BOOLEAN NOT NULL DEFAULT true,
-    "lastUsedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-
-    CONSTRAINT "push_tokens_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "push_campaigns" (
-    "id" TEXT NOT NULL,
-    "title" TEXT NOT NULL,
-    "body" TEXT NOT NULL,
-    "linkTo" TEXT NOT NULL DEFAULT '',
-    "status" "PushCampaignStatus" NOT NULL DEFAULT 'SCHEDULED',
-    "scheduledFor" TIMESTAMP(3),
-    "sentAt" TIMESTAMP(3),
-    "sentCount" INTEGER NOT NULL DEFAULT 0,
-    "failedCount" INTEGER NOT NULL DEFAULT 0,
-    "error" TEXT NOT NULL DEFAULT '',
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
-
-    CONSTRAINT "push_campaigns_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -282,7 +241,6 @@ CREATE TABLE "matches" (
     "status" "MatchStatus" NOT NULL DEFAULT 'UPCOMING',
     "lockTime" TIMESTAMP(3) NOT NULL,
     "pointsCalculatedAt" TIMESTAMP(3),
-    "lockReminderSentAt" TIMESTAMP(3),
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -434,15 +392,6 @@ CREATE INDEX "gift_requests_status_createdAt_idx" ON "gift_requests"("status", "
 CREATE INDEX "gift_requests_userId_createdAt_idx" ON "gift_requests"("userId", "createdAt");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "push_tokens_token_key" ON "push_tokens"("token");
-
--- CreateIndex
-CREATE INDEX "push_tokens_isActive_idx" ON "push_tokens"("isActive");
-
--- CreateIndex
-CREATE INDEX "push_campaigns_status_scheduledFor_idx" ON "push_campaigns"("status", "scheduledFor");
-
--- CreateIndex
 CREATE INDEX "otp_codes_email_purpose_idx" ON "otp_codes"("email", "purpose");
 
 -- CreateIndex
@@ -495,9 +444,6 @@ ALTER TABLE "gift_requests" ADD CONSTRAINT "gift_requests_userId_fkey" FOREIGN K
 
 -- AddForeignKey
 ALTER TABLE "gift_requests" ADD CONSTRAINT "gift_requests_contactMethodId_fkey" FOREIGN KEY ("contactMethodId") REFERENCES "contact_methods"("id") ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "push_tokens" ADD CONSTRAINT "push_tokens_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "active_sessions" ADD CONSTRAINT "active_sessions_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE SET NULL ON UPDATE CASCADE;

@@ -409,6 +409,7 @@ export const ModelName = {
   Team: 'Team',
   Player: 'Player',
   Match: 'Match',
+  MatchInnings: 'MatchInnings',
   MatchPlayer: 'MatchPlayer',
   UserTeam: 'UserTeam',
   UserTeamPlayer: 'UserTeamPlayer',
@@ -432,7 +433,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "coinTransaction" | "notification" | "appSettings" | "giftRequest" | "contactMethod" | "banner" | "activeSession" | "visitorStat" | "team" | "player" | "match" | "matchPlayer" | "userTeam" | "userTeamPlayer" | "contest" | "contestEntry" | "pointSystem" | "promoCode" | "promoCodeClaim"
+    modelProps: "user" | "coinTransaction" | "notification" | "appSettings" | "giftRequest" | "contactMethod" | "banner" | "activeSession" | "visitorStat" | "team" | "player" | "match" | "matchInnings" | "matchPlayer" | "userTeam" | "userTeamPlayer" | "contest" | "contestEntry" | "pointSystem" | "promoCode" | "promoCodeClaim"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1324,6 +1325,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    MatchInnings: {
+      payload: Prisma.$MatchInningsPayload<ExtArgs>
+      fields: Prisma.MatchInningsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.MatchInningsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MatchInningsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.MatchInningsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MatchInningsPayload>
+        }
+        findFirst: {
+          args: Prisma.MatchInningsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MatchInningsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.MatchInningsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MatchInningsPayload>
+        }
+        findMany: {
+          args: Prisma.MatchInningsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MatchInningsPayload>[]
+        }
+        create: {
+          args: Prisma.MatchInningsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MatchInningsPayload>
+        }
+        createMany: {
+          args: Prisma.MatchInningsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.MatchInningsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MatchInningsPayload>[]
+        }
+        delete: {
+          args: Prisma.MatchInningsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MatchInningsPayload>
+        }
+        update: {
+          args: Prisma.MatchInningsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MatchInningsPayload>
+        }
+        deleteMany: {
+          args: Prisma.MatchInningsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.MatchInningsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.MatchInningsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MatchInningsPayload>[]
+        }
+        upsert: {
+          args: Prisma.MatchInningsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MatchInningsPayload>
+        }
+        aggregate: {
+          args: Prisma.MatchInningsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateMatchInnings>
+        }
+        groupBy: {
+          args: Prisma.MatchInningsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MatchInningsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.MatchInningsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MatchInningsCountAggregateOutputType> | number
+        }
+      }
+    }
     MatchPlayer: {
       payload: Prisma.$MatchPlayerPayload<ExtArgs>
       fields: Prisma.MatchPlayerFieldRefs
@@ -2169,6 +2244,22 @@ export const MatchScalarFieldEnum = {
 export type MatchScalarFieldEnum = (typeof MatchScalarFieldEnum)[keyof typeof MatchScalarFieldEnum]
 
 
+export const MatchInningsScalarFieldEnum = {
+  id: 'id',
+  matchId: 'matchId',
+  teamId: 'teamId',
+  inningsNumber: 'inningsNumber',
+  runs: 'runs',
+  wickets: 'wickets',
+  balls: 'balls',
+  isDeclared: 'isDeclared',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type MatchInningsScalarFieldEnum = (typeof MatchInningsScalarFieldEnum)[keyof typeof MatchInningsScalarFieldEnum]
+
+
 export const MatchPlayerScalarFieldEnum = {
   id: 'id',
   matchId: 'matchId',
@@ -2664,6 +2755,7 @@ export type GlobalOmitConfig = {
   team?: Prisma.TeamOmit
   player?: Prisma.PlayerOmit
   match?: Prisma.MatchOmit
+  matchInnings?: Prisma.MatchInningsOmit
   matchPlayer?: Prisma.MatchPlayerOmit
   userTeam?: Prisma.UserTeamOmit
   userTeamPlayer?: Prisma.UserTeamPlayerOmit

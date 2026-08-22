@@ -15,6 +15,7 @@ import {
   updateMatchPlayer,
   removeMatchPlayer,
 } from "../controllers/matchPlayerController";
+import { listInnings, saveInnings } from "../controllers/inningsController";
 import { requireAuth, requireAdmin } from "../middleware/auth";
 
 const router = Router();
@@ -23,6 +24,9 @@ const router = Router();
 router.get("/", listMatches);
 router.get("/:id", getMatchById);
 router.get("/:matchId/players", listMatchPlayers);
+// Team scoreboard totals. Public to read — the app shows them above the
+// contest leaderboard.
+router.get("/:matchId/innings", listInnings);
 
 // Admin only — manage matches
 router.post("/", requireAuth, requireAdmin, createMatch);
@@ -33,6 +37,7 @@ router.post("/:id/sync-live-score", requireAuth, requireAdmin, syncLiveScore);
 
 // Admin only — add/manage players within a match (from the team catalogs)
 router.get("/:matchId/available-players", requireAuth, requireAdmin, listAvailablePlayers);
+router.put("/:matchId/innings", requireAuth, requireAdmin, saveInnings);
 router.post("/:matchId/players", requireAuth, requireAdmin, addMatchPlayer);
 router.patch("/:matchId/players/:matchPlayerId", requireAuth, requireAdmin, updateMatchPlayer);
 router.delete("/:matchId/players/:matchPlayerId", requireAuth, requireAdmin, removeMatchPlayer);

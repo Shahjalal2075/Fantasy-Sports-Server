@@ -63,6 +63,7 @@ export const ModelName = {
   Team: 'Team',
   Player: 'Player',
   Match: 'Match',
+  MatchInnings: 'MatchInnings',
   MatchPlayer: 'MatchPlayer',
   UserTeam: 'UserTeam',
   UserTeamPlayer: 'UserTeamPlayer',
@@ -301,6 +302,22 @@ export const MatchScalarFieldEnum = {
 } as const
 
 export type MatchScalarFieldEnum = (typeof MatchScalarFieldEnum)[keyof typeof MatchScalarFieldEnum]
+
+
+export const MatchInningsScalarFieldEnum = {
+  id: 'id',
+  matchId: 'matchId',
+  teamId: 'teamId',
+  inningsNumber: 'inningsNumber',
+  runs: 'runs',
+  wickets: 'wickets',
+  balls: 'balls',
+  isDeclared: 'isDeclared',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type MatchInningsScalarFieldEnum = (typeof MatchInningsScalarFieldEnum)[keyof typeof MatchInningsScalarFieldEnum]
 
 
 export const MatchPlayerScalarFieldEnum = {

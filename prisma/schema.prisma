@@ -339,6 +339,7 @@ model Team {
   players        Player[]
   matchesAsTeamA Match[]  @relation("MatchTeamA")
   matchesAsTeamB Match[]  @relation("MatchTeamB")
+  innings        MatchInnings[]
 
   @@map("teams")
 }
@@ -389,6 +390,7 @@ model Match {
   updatedAt      DateTime    @updatedAt
 
   matchPlayers MatchPlayer[]
+  innings      MatchInnings[]
   userTeams    UserTeam[]
   contests     Contest[]
 
@@ -399,6 +401,41 @@ model Match {
 // This is what gets added via "Add Player" inside a match (picked from the
 // two teams' catalogs), and what the manual "Sync Live Score" scorecard
 // form fills in. Points are computed from these raw stats using the
+// A team's total for one innings — the scoreboard line the app shows
+// above the leaderboard ("BAN 164/5 (20.0)").
+//
+// Stored per innings rather than per match because Test cricket has up
+// to four: each side bats twice. Limited-overs matches simply use
+// innings 1 and 2.
+model MatchInnings {
+  id      String @id @default(uuid())
+  matchId String
+  match   Match  @relation(fields: [matchId], references: [id], onDelete: Cascade)
+  // Which side batted. Must be one of the match's two teams.
+  teamId  String
+  team    Team   @relation(fields: [teamId], references: [id], onDelete: Cascade)
+
+  // 1-2 for limited overs, 1-4 for Test.
+  inningsNumber Int
+
+  runs    Int @default(0)
+  wickets Int @default(0)
+  // Stored as balls so partial overs are exact — 19.4 overs is 118
+  // balls, which a decimal "19.4" can't represent without rounding bugs.
+  balls   Int @default(0)
+
+  // Test innings often end early by choice rather than by wickets.
+  isDeclared Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // One row per innings number per match.
+  @@unique([matchId, inningsNumber])
+  @@index([matchId])
+  @@map("match_innings")
+}
+
 // PointSystem configured for the match's (sport, format).
 model MatchPlayer {
   id        String  @id @default(uuid())

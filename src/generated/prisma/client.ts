@@ -102,6 +102,11 @@ export type Player = Prisma.PlayerModel
  */
 export type Match = Prisma.MatchModel
 /**
+ * Model MatchInnings
+ * 
+ */
+export type MatchInnings = Prisma.MatchInningsModel
+/**
  * Model MatchPlayer
  * 
  */

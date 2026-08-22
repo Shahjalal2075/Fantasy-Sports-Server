@@ -56,7 +56,6 @@ export const ModelName = {
   Notification: 'Notification',
   AppSettings: 'AppSettings',
   GiftRequest: 'GiftRequest',
-  OtpCode: 'OtpCode',
   ContactMethod: 'ContactMethod',
   Banner: 'Banner',
   ActiveSession: 'ActiveSession',
@@ -113,8 +112,8 @@ export const UserScalarFieldEnum = {
   referralCode: 'referralCode',
   referredById: 'referredById',
   referralRewardPaid: 'referralRewardPaid',
+  referralSignupBonusPaid: 'referralSignupBonusPaid',
   isVerified: 'isVerified',
-  emailVerified: 'emailVerified',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -203,20 +202,6 @@ export const GiftRequestScalarFieldEnum = {
 } as const
 
 export type GiftRequestScalarFieldEnum = (typeof GiftRequestScalarFieldEnum)[keyof typeof GiftRequestScalarFieldEnum]
-
-
-export const OtpCodeScalarFieldEnum = {
-  id: 'id',
-  email: 'email',
-  codeHash: 'codeHash',
-  purpose: 'purpose',
-  expiresAt: 'expiresAt',
-  attempts: 'attempts',
-  consumedAt: 'consumedAt',
-  createdAt: 'createdAt'
-} as const
-
-export type OtpCodeScalarFieldEnum = (typeof OtpCodeScalarFieldEnum)[keyof typeof OtpCodeScalarFieldEnum]
 
 
 export const ContactMethodScalarFieldEnum = {

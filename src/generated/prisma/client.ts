@@ -67,11 +67,6 @@ export type AppSettings = Prisma.AppSettingsModel
  */
 export type GiftRequest = Prisma.GiftRequestModel
 /**
- * Model OtpCode
- * 
- */
-export type OtpCode = Prisma.OtpCodeModel
-/**
  * Model ContactMethod
  * 
  */

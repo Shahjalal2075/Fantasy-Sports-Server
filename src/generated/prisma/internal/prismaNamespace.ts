@@ -402,7 +402,6 @@ export const ModelName = {
   Notification: 'Notification',
   AppSettings: 'AppSettings',
   GiftRequest: 'GiftRequest',
-  OtpCode: 'OtpCode',
   ContactMethod: 'ContactMethod',
   Banner: 'Banner',
   ActiveSession: 'ActiveSession',
@@ -433,7 +432,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "coinTransaction" | "notification" | "appSettings" | "giftRequest" | "otpCode" | "contactMethod" | "banner" | "activeSession" | "visitorStat" | "team" | "player" | "match" | "matchPlayer" | "userTeam" | "userTeamPlayer" | "contest" | "contestEntry" | "pointSystem" | "promoCode" | "promoCodeClaim"
+    modelProps: "user" | "coinTransaction" | "notification" | "appSettings" | "giftRequest" | "contactMethod" | "banner" | "activeSession" | "visitorStat" | "team" | "player" | "match" | "matchPlayer" | "userTeam" | "userTeamPlayer" | "contest" | "contestEntry" | "pointSystem" | "promoCode" | "promoCodeClaim"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -804,80 +803,6 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.GiftRequestCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.GiftRequestCountAggregateOutputType> | number
-        }
-      }
-    }
-    OtpCode: {
-      payload: Prisma.$OtpCodePayload<ExtArgs>
-      fields: Prisma.OtpCodeFieldRefs
-      operations: {
-        findUnique: {
-          args: Prisma.OtpCodeFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$OtpCodePayload> | null
-        }
-        findUniqueOrThrow: {
-          args: Prisma.OtpCodeFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$OtpCodePayload>
-        }
-        findFirst: {
-          args: Prisma.OtpCodeFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$OtpCodePayload> | null
-        }
-        findFirstOrThrow: {
-          args: Prisma.OtpCodeFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$OtpCodePayload>
-        }
-        findMany: {
-          args: Prisma.OtpCodeFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$OtpCodePayload>[]
-        }
-        create: {
-          args: Prisma.OtpCodeCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$OtpCodePayload>
-        }
-        createMany: {
-          args: Prisma.OtpCodeCreateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        createManyAndReturn: {
-          args: Prisma.OtpCodeCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$OtpCodePayload>[]
-        }
-        delete: {
-          args: Prisma.OtpCodeDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$OtpCodePayload>
-        }
-        update: {
-          args: Prisma.OtpCodeUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$OtpCodePayload>
-        }
-        deleteMany: {
-          args: Prisma.OtpCodeDeleteManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateMany: {
-          args: Prisma.OtpCodeUpdateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateManyAndReturn: {
-          args: Prisma.OtpCodeUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$OtpCodePayload>[]
-        }
-        upsert: {
-          args: Prisma.OtpCodeUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$OtpCodePayload>
-        }
-        aggregate: {
-          args: Prisma.OtpCodeAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateOtpCode>
-        }
-        groupBy: {
-          args: Prisma.OtpCodeGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.OtpCodeGroupByOutputType>[]
-        }
-        count: {
-          args: Prisma.OtpCodeCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.OtpCodeCountAggregateOutputType> | number
         }
       }
     }
@@ -2053,8 +1978,8 @@ export const UserScalarFieldEnum = {
   referralCode: 'referralCode',
   referredById: 'referredById',
   referralRewardPaid: 'referralRewardPaid',
+  referralSignupBonusPaid: 'referralSignupBonusPaid',
   isVerified: 'isVerified',
-  emailVerified: 'emailVerified',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -2143,20 +2068,6 @@ export const GiftRequestScalarFieldEnum = {
 } as const
 
 export type GiftRequestScalarFieldEnum = (typeof GiftRequestScalarFieldEnum)[keyof typeof GiftRequestScalarFieldEnum]
-
-
-export const OtpCodeScalarFieldEnum = {
-  id: 'id',
-  email: 'email',
-  codeHash: 'codeHash',
-  purpose: 'purpose',
-  expiresAt: 'expiresAt',
-  attempts: 'attempts',
-  consumedAt: 'consumedAt',
-  createdAt: 'createdAt'
-} as const
-
-export type OtpCodeScalarFieldEnum = (typeof OtpCodeScalarFieldEnum)[keyof typeof OtpCodeScalarFieldEnum]
 
 
 export const ContactMethodScalarFieldEnum = {
@@ -2522,20 +2433,6 @@ export type ListEnumGiftRequestStatusFieldRefInput<$PrismaModel> = FieldRefInput
 
 
 /**
- * Reference to a field of type 'OtpPurpose'
- */
-export type EnumOtpPurposeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OtpPurpose'>
-    
-
-
-/**
- * Reference to a field of type 'OtpPurpose[]'
- */
-export type ListEnumOtpPurposeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OtpPurpose[]'>
-    
-
-
-/**
  * Reference to a field of type 'SportType'
  */
 export type EnumSportTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SportType'>
@@ -2760,7 +2657,6 @@ export type GlobalOmitConfig = {
   notification?: Prisma.NotificationOmit
   appSettings?: Prisma.AppSettingsOmit
   giftRequest?: Prisma.GiftRequestOmit
-  otpCode?: Prisma.OtpCodeOmit
   contactMethod?: Prisma.ContactMethodOmit
   banner?: Prisma.BannerOmit
   activeSession?: Prisma.ActiveSessionOmit

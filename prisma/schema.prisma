@@ -80,14 +80,13 @@ model User {
   referredById     String?
   referredBy       User?     @relation("UserReferrals", fields: [referredById], references: [id], onDelete: SetNull)
   referrals        User[]    @relation("UserReferrals")
-  // The inviter's reward is paid only once, and only after this user
-  // joins their first PAID contest — this flag is what makes it once.
+  // The inviter's reward is paid only once: after this user is verified
+  // AND has joined their first paid contest.
   referralRewardPaid Boolean @default(false)
+  // The invitee's own joining bonus, paid when an admin verifies them.
+  referralSignupBonusPaid Boolean @default(false)
   // Blue tick, set by an admin.
   isVerified       Boolean   @default(false)
-  // Set once the signup email OTP is confirmed. Unverified accounts
-  // exist but can't log in.
-  emailVerified    Boolean   @default(false)
   createdAt        DateTime  @default(now())
   updatedAt        DateTime  @updatedAt
 
@@ -243,23 +242,6 @@ model GiftRequest {
   @@index([status, createdAt])
   @@index([userId, createdAt])
   @@map("gift_requests")
-}
-
-// Short-lived email codes for signup verification and password reset.
-// Only a hash is stored, so a database leak doesn't hand out live codes.
-model OtpCode {
-  id        String     @id @default(uuid())
-  email     String
-  codeHash  String
-  purpose   OtpPurpose
-  expiresAt DateTime
-  // Wrong guesses; the code is burned after too many.
-  attempts  Int        @default(0)
-  consumedAt DateTime?
-  createdAt DateTime   @default(now())
-
-  @@index([email, purpose])
-  @@map("otp_codes")
 }
 
 // A way for the admin to reach a user about their gift — WhatsApp,
@@ -523,11 +505,6 @@ model Contest {
   entries ContestEntry[]
 
   @@map("contests")
-}
-
-enum OtpPurpose {
-  EMAIL_VERIFICATION
-  PASSWORD_RESET
 }
 
 enum GiftRequestStatus {

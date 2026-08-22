@@ -53,14 +53,6 @@ export const NotificationType = {
 export type NotificationType = (typeof NotificationType)[keyof typeof NotificationType]
 
 
-export const OtpPurpose = {
-  EMAIL_VERIFICATION: 'EMAIL_VERIFICATION',
-  PASSWORD_RESET: 'PASSWORD_RESET'
-} as const
-
-export type OtpPurpose = (typeof OtpPurpose)[keyof typeof OtpPurpose]
-
-
 export const GiftRequestStatus = {
   PENDING: 'PENDING',
   APPROVED: 'APPROVED',

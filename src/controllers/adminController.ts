@@ -6,6 +6,7 @@ import { adminGiveBonus, adminGiveFine } from "../services/walletService";
 import { getLiveCount, getLiveSessions, getVisitorHistory, LIVE_WINDOW_MS } from "../services/presenceService";
 import bcrypt from "bcryptjs";
 import { adminResetPasswordSchema } from "../utils/validators";
+import { paySignupBonusIfDue } from "../services/referralService";
 import { compareVersions, invalidateSettingsCache } from "./appConfigController";
 
 // GET /api/admin/coin-adjustments  (admin only)
@@ -78,7 +79,22 @@ export async function listUsers(req: Request, res: Response) {
     totalContestsJoined: u._count.entries,
   }));
 
-  return res.status(200).json({ users: result });
+  // Which NIDs appear on more than one account. Done as a single
+  // grouping rather than a per-user lookup, so the list stays one query.
+  const duplicateNids = await prisma.user.groupBy({
+    by: ["nidNumber"],
+    where: { nidNumber: { not: null } },
+    _count: { nidNumber: true },
+    having: { nidNumber: { _count: { gt: 1 } } },
+  });
+  const duplicateSet = new Set(duplicateNids.map((row) => row.nidNumber));
+
+  return res.status(200).json({
+    users: result.map((user: any) => ({
+      ...user,
+      hasDuplicateNid: !!user.nidNumber && duplicateSet.has(user.nidNumber),
+    })),
+  });
 }
 
 // GET /api/admin/users/:id  (admin only) — full detail for one user
@@ -112,6 +128,25 @@ export async function getUserDetail(req: Request, res: Response) {
     return res.status(404).json({ error: "User not found" });
   }
 
+  // Other accounts claiming the same NID. One person registering twice
+  // is the obvious way to farm the referral bonus, so the admin needs to
+  // see this before verifying — verification is what releases the coins.
+  const nidDuplicates = user.nidNumber
+    ? await prisma.user.findMany({
+        where: { nidNumber: user.nidNumber, id: { not: userId } },
+        select: {
+          id: true,
+          name: true,
+          username: true,
+          isVerified: true,
+          isBanned: true,
+          createdAt: true,
+        },
+        orderBy: { createdAt: "asc" },
+        take: 20,
+      })
+    : [];
+
   const [entries, transactions] = await Promise.all([
     prisma.contestEntry.findMany({
       where: { userId },
@@ -131,6 +166,7 @@ export async function getUserDetail(req: Request, res: Response) {
 
   return res.status(200).json({
     user,
+    nidDuplicates,
     stats: {
       totalMatchesPlayed: distinctMatches.size,
       totalContestsJoined: entries.length,
@@ -328,9 +364,22 @@ export async function setUserVerified(req: Request, res: Response) {
     return res.status(400).json({ error: "isVerified must be true or false" });
   }
 
-  const user = await prisma.user.findUnique({ where: { id: userId }, select: { id: true, name: true } });
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    select: { id: true, name: true, dateOfBirth: true, nidNumber: true },
+  });
   if (!user) {
     return res.status(404).json({ error: "User not found" });
+  }
+
+  // Verification is an identity check, so there has to be something to
+  // check. Without these the admin would be approving a blank profile —
+  // and verification is what unlocks the referral bonuses.
+  if (isVerified && (!user.dateOfBirth || !user.nidNumber)) {
+    return res.status(400).json({
+      error:
+        "This user hasn't provided their date of birth and NID number yet. Ask them to complete Edit Profile first.",
+    });
   }
 
   const updated = await prisma.user.update({
@@ -352,12 +401,18 @@ export async function setUserVerified(req: Request, res: Response) {
     },
   });
 
+  // Verification is what unlocks the referral joining bonus, so pay it
+  // now. Idempotent, so unverify/re-verify can't pay twice.
+  if (isVerified) {
+    await paySignupBonusIfDue(userId);
+  }
+
   return res.status(200).json({ user: updated });
 }
 
 // POST /api/admin/users/:id/reset-password  (admin only)
-// A support escape hatch for users who can't complete the email flow —
-// no OTP needed, because the admin is the authority here.
+// The only password recovery path: users are told to contact support,
+// and an admin sets a new password here.
 export async function adminResetUserPassword(req: Request, res: Response) {
   const { id: userId } = req.params as { id: string };
 
@@ -377,9 +432,6 @@ export async function adminResetUserPassword(req: Request, res: Response) {
       // Cost 8 matches the auth controller — see the note there about
       // bcryptjs on a constrained CPU.
       passwordHash: await bcrypt.hash(parsed.data.newPassword, 8),
-      // An admin resetting the password implies the account is legitimate,
-      // so this also unblocks a signup stuck at verification.
-      emailVerified: true,
     },
   });
 

@@ -59,8 +59,8 @@ export type UserMinAggregateOutputType = {
   referralCode: string | null
   referredById: string | null
   referralRewardPaid: boolean | null
+  referralSignupBonusPaid: boolean | null
   isVerified: boolean | null
-  emailVerified: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -88,8 +88,8 @@ export type UserMaxAggregateOutputType = {
   referralCode: string | null
   referredById: string | null
   referralRewardPaid: boolean | null
+  referralSignupBonusPaid: boolean | null
   isVerified: boolean | null
-  emailVerified: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -117,8 +117,8 @@ export type UserCountAggregateOutputType = {
   referralCode: number
   referredById: number
   referralRewardPaid: number
+  referralSignupBonusPaid: number
   isVerified: number
-  emailVerified: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -158,8 +158,8 @@ export type UserMinAggregateInputType = {
   referralCode?: true
   referredById?: true
   referralRewardPaid?: true
+  referralSignupBonusPaid?: true
   isVerified?: true
-  emailVerified?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -187,8 +187,8 @@ export type UserMaxAggregateInputType = {
   referralCode?: true
   referredById?: true
   referralRewardPaid?: true
+  referralSignupBonusPaid?: true
   isVerified?: true
-  emailVerified?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -216,8 +216,8 @@ export type UserCountAggregateInputType = {
   referralCode?: true
   referredById?: true
   referralRewardPaid?: true
+  referralSignupBonusPaid?: true
   isVerified?: true
-  emailVerified?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -332,8 +332,8 @@ export type UserGroupByOutputType = {
   referralCode: string
   referredById: string | null
   referralRewardPaid: boolean
+  referralSignupBonusPaid: boolean
   isVerified: boolean
-  emailVerified: boolean
   createdAt: Date
   updatedAt: Date
   _count: UserCountAggregateOutputType | null
@@ -384,8 +384,8 @@ export type UserWhereInput = {
   referralCode?: Prisma.StringFilter<"User"> | string
   referredById?: Prisma.StringNullableFilter<"User"> | string | null
   referralRewardPaid?: Prisma.BoolFilter<"User"> | boolean
+  referralSignupBonusPaid?: Prisma.BoolFilter<"User"> | boolean
   isVerified?: Prisma.BoolFilter<"User"> | boolean
-  emailVerified?: Prisma.BoolFilter<"User"> | boolean
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   referredBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
@@ -422,8 +422,8 @@ export type UserOrderByWithRelationInput = {
   referralCode?: Prisma.SortOrder
   referredById?: Prisma.SortOrderInput | Prisma.SortOrder
   referralRewardPaid?: Prisma.SortOrder
+  referralSignupBonusPaid?: Prisma.SortOrder
   isVerified?: Prisma.SortOrder
-  emailVerified?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   referredBy?: Prisma.UserOrderByWithRelationInput
@@ -463,8 +463,8 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   referredByCode?: Prisma.StringNullableFilter<"User"> | string | null
   referredById?: Prisma.StringNullableFilter<"User"> | string | null
   referralRewardPaid?: Prisma.BoolFilter<"User"> | boolean
+  referralSignupBonusPaid?: Prisma.BoolFilter<"User"> | boolean
   isVerified?: Prisma.BoolFilter<"User"> | boolean
-  emailVerified?: Prisma.BoolFilter<"User"> | boolean
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   referredBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
@@ -501,8 +501,8 @@ export type UserOrderByWithAggregationInput = {
   referralCode?: Prisma.SortOrder
   referredById?: Prisma.SortOrderInput | Prisma.SortOrder
   referralRewardPaid?: Prisma.SortOrder
+  referralSignupBonusPaid?: Prisma.SortOrder
   isVerified?: Prisma.SortOrder
-  emailVerified?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
@@ -538,8 +538,8 @@ export type UserScalarWhereWithAggregatesInput = {
   referralCode?: Prisma.StringWithAggregatesFilter<"User"> | string
   referredById?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   referralRewardPaid?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
+  referralSignupBonusPaid?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
   isVerified?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
-  emailVerified?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
 }
@@ -566,8 +566,8 @@ export type UserCreateInput = {
   referredByCode?: string | null
   referralCode: string
   referralRewardPaid?: boolean
+  referralSignupBonusPaid?: boolean
   isVerified?: boolean
-  emailVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   referredBy?: Prisma.UserCreateNestedOneWithoutReferralsInput
@@ -604,8 +604,8 @@ export type UserUncheckedCreateInput = {
   referralCode: string
   referredById?: string | null
   referralRewardPaid?: boolean
+  referralSignupBonusPaid?: boolean
   isVerified?: boolean
-  emailVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   referrals?: Prisma.UserUncheckedCreateNestedManyWithoutReferredByInput
@@ -640,8 +640,8 @@ export type UserUpdateInput = {
   referredByCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   referralCode?: Prisma.StringFieldUpdateOperationsInput | string
   referralRewardPaid?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  referralSignupBonusPaid?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   referredBy?: Prisma.UserUpdateOneWithoutReferralsNestedInput
@@ -678,8 +678,8 @@ export type UserUncheckedUpdateInput = {
   referralCode?: Prisma.StringFieldUpdateOperationsInput | string
   referredById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   referralRewardPaid?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  referralSignupBonusPaid?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   referrals?: Prisma.UserUncheckedUpdateManyWithoutReferredByNestedInput
@@ -715,8 +715,8 @@ export type UserCreateManyInput = {
   referralCode: string
   referredById?: string | null
   referralRewardPaid?: boolean
+  referralSignupBonusPaid?: boolean
   isVerified?: boolean
-  emailVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -743,8 +743,8 @@ export type UserUpdateManyMutationInput = {
   referredByCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   referralCode?: Prisma.StringFieldUpdateOperationsInput | string
   referralRewardPaid?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  referralSignupBonusPaid?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -772,8 +772,8 @@ export type UserUncheckedUpdateManyInput = {
   referralCode?: Prisma.StringFieldUpdateOperationsInput | string
   referredById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   referralRewardPaid?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  referralSignupBonusPaid?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -816,8 +816,8 @@ export type UserCountOrderByAggregateInput = {
   referralCode?: Prisma.SortOrder
   referredById?: Prisma.SortOrder
   referralRewardPaid?: Prisma.SortOrder
+  referralSignupBonusPaid?: Prisma.SortOrder
   isVerified?: Prisma.SortOrder
-  emailVerified?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -850,8 +850,8 @@ export type UserMaxOrderByAggregateInput = {
   referralCode?: Prisma.SortOrder
   referredById?: Prisma.SortOrder
   referralRewardPaid?: Prisma.SortOrder
+  referralSignupBonusPaid?: Prisma.SortOrder
   isVerified?: Prisma.SortOrder
-  emailVerified?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -879,8 +879,8 @@ export type UserMinOrderByAggregateInput = {
   referralCode?: Prisma.SortOrder
   referredById?: Prisma.SortOrder
   referralRewardPaid?: Prisma.SortOrder
+  referralSignupBonusPaid?: Prisma.SortOrder
   isVerified?: Prisma.SortOrder
-  emailVerified?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -1103,8 +1103,8 @@ export type UserCreateWithoutReferralsInput = {
   referredByCode?: string | null
   referralCode: string
   referralRewardPaid?: boolean
+  referralSignupBonusPaid?: boolean
   isVerified?: boolean
-  emailVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   referredBy?: Prisma.UserCreateNestedOneWithoutReferralsInput
@@ -1140,8 +1140,8 @@ export type UserUncheckedCreateWithoutReferralsInput = {
   referralCode: string
   referredById?: string | null
   referralRewardPaid?: boolean
+  referralSignupBonusPaid?: boolean
   isVerified?: boolean
-  emailVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   userTeams?: Prisma.UserTeamUncheckedCreateNestedManyWithoutUserInput
@@ -1180,8 +1180,8 @@ export type UserCreateWithoutReferredByInput = {
   referredByCode?: string | null
   referralCode: string
   referralRewardPaid?: boolean
+  referralSignupBonusPaid?: boolean
   isVerified?: boolean
-  emailVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   referrals?: Prisma.UserCreateNestedManyWithoutReferredByInput
@@ -1216,8 +1216,8 @@ export type UserUncheckedCreateWithoutReferredByInput = {
   referredByCode?: string | null
   referralCode: string
   referralRewardPaid?: boolean
+  referralSignupBonusPaid?: boolean
   isVerified?: boolean
-  emailVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   referrals?: Prisma.UserUncheckedCreateNestedManyWithoutReferredByInput
@@ -1273,8 +1273,8 @@ export type UserUpdateWithoutReferralsInput = {
   referredByCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   referralCode?: Prisma.StringFieldUpdateOperationsInput | string
   referralRewardPaid?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  referralSignupBonusPaid?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   referredBy?: Prisma.UserUpdateOneWithoutReferralsNestedInput
@@ -1310,8 +1310,8 @@ export type UserUncheckedUpdateWithoutReferralsInput = {
   referralCode?: Prisma.StringFieldUpdateOperationsInput | string
   referredById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   referralRewardPaid?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  referralSignupBonusPaid?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   userTeams?: Prisma.UserTeamUncheckedUpdateManyWithoutUserNestedInput
@@ -1365,8 +1365,8 @@ export type UserScalarWhereInput = {
   referralCode?: Prisma.StringFilter<"User"> | string
   referredById?: Prisma.StringNullableFilter<"User"> | string | null
   referralRewardPaid?: Prisma.BoolFilter<"User"> | boolean
+  referralSignupBonusPaid?: Prisma.BoolFilter<"User"> | boolean
   isVerified?: Prisma.BoolFilter<"User"> | boolean
-  emailVerified?: Prisma.BoolFilter<"User"> | boolean
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
 }
@@ -1393,8 +1393,8 @@ export type UserCreateWithoutCoinLedgerInput = {
   referredByCode?: string | null
   referralCode: string
   referralRewardPaid?: boolean
+  referralSignupBonusPaid?: boolean
   isVerified?: boolean
-  emailVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   referredBy?: Prisma.UserCreateNestedOneWithoutReferralsInput
@@ -1430,8 +1430,8 @@ export type UserUncheckedCreateWithoutCoinLedgerInput = {
   referralCode: string
   referredById?: string | null
   referralRewardPaid?: boolean
+  referralSignupBonusPaid?: boolean
   isVerified?: boolean
-  emailVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   referrals?: Prisma.UserUncheckedCreateNestedManyWithoutReferredByInput
@@ -1481,8 +1481,8 @@ export type UserUpdateWithoutCoinLedgerInput = {
   referredByCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   referralCode?: Prisma.StringFieldUpdateOperationsInput | string
   referralRewardPaid?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  referralSignupBonusPaid?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   referredBy?: Prisma.UserUpdateOneWithoutReferralsNestedInput
@@ -1518,8 +1518,8 @@ export type UserUncheckedUpdateWithoutCoinLedgerInput = {
   referralCode?: Prisma.StringFieldUpdateOperationsInput | string
   referredById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   referralRewardPaid?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  referralSignupBonusPaid?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   referrals?: Prisma.UserUncheckedUpdateManyWithoutReferredByNestedInput
@@ -1553,8 +1553,8 @@ export type UserCreateWithoutNotificationsInput = {
   referredByCode?: string | null
   referralCode: string
   referralRewardPaid?: boolean
+  referralSignupBonusPaid?: boolean
   isVerified?: boolean
-  emailVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   referredBy?: Prisma.UserCreateNestedOneWithoutReferralsInput
@@ -1590,8 +1590,8 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   referralCode: string
   referredById?: string | null
   referralRewardPaid?: boolean
+  referralSignupBonusPaid?: boolean
   isVerified?: boolean
-  emailVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   referrals?: Prisma.UserUncheckedCreateNestedManyWithoutReferredByInput
@@ -1641,8 +1641,8 @@ export type UserUpdateWithoutNotificationsInput = {
   referredByCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   referralCode?: Prisma.StringFieldUpdateOperationsInput | string
   referralRewardPaid?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  referralSignupBonusPaid?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   referredBy?: Prisma.UserUpdateOneWithoutReferralsNestedInput
@@ -1678,8 +1678,8 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   referralCode?: Prisma.StringFieldUpdateOperationsInput | string
   referredById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   referralRewardPaid?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  referralSignupBonusPaid?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   referrals?: Prisma.UserUncheckedUpdateManyWithoutReferredByNestedInput
@@ -1713,8 +1713,8 @@ export type UserCreateWithoutGiftRequestsInput = {
   referredByCode?: string | null
   referralCode: string
   referralRewardPaid?: boolean
+  referralSignupBonusPaid?: boolean
   isVerified?: boolean
-  emailVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   referredBy?: Prisma.UserCreateNestedOneWithoutReferralsInput
@@ -1750,8 +1750,8 @@ export type UserUncheckedCreateWithoutGiftRequestsInput = {
   referralCode: string
   referredById?: string | null
   referralRewardPaid?: boolean
+  referralSignupBonusPaid?: boolean
   isVerified?: boolean
-  emailVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   referrals?: Prisma.UserUncheckedCreateNestedManyWithoutReferredByInput
@@ -1801,8 +1801,8 @@ export type UserUpdateWithoutGiftRequestsInput = {
   referredByCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   referralCode?: Prisma.StringFieldUpdateOperationsInput | string
   referralRewardPaid?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  referralSignupBonusPaid?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   referredBy?: Prisma.UserUpdateOneWithoutReferralsNestedInput
@@ -1838,8 +1838,8 @@ export type UserUncheckedUpdateWithoutGiftRequestsInput = {
   referralCode?: Prisma.StringFieldUpdateOperationsInput | string
   referredById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   referralRewardPaid?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  referralSignupBonusPaid?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   referrals?: Prisma.UserUncheckedUpdateManyWithoutReferredByNestedInput
@@ -1873,8 +1873,8 @@ export type UserCreateWithoutActiveSessionsInput = {
   referredByCode?: string | null
   referralCode: string
   referralRewardPaid?: boolean
+  referralSignupBonusPaid?: boolean
   isVerified?: boolean
-  emailVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   referredBy?: Prisma.UserCreateNestedOneWithoutReferralsInput
@@ -1910,8 +1910,8 @@ export type UserUncheckedCreateWithoutActiveSessionsInput = {
   referralCode: string
   referredById?: string | null
   referralRewardPaid?: boolean
+  referralSignupBonusPaid?: boolean
   isVerified?: boolean
-  emailVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   referrals?: Prisma.UserUncheckedCreateNestedManyWithoutReferredByInput
@@ -1961,8 +1961,8 @@ export type UserUpdateWithoutActiveSessionsInput = {
   referredByCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   referralCode?: Prisma.StringFieldUpdateOperationsInput | string
   referralRewardPaid?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  referralSignupBonusPaid?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   referredBy?: Prisma.UserUpdateOneWithoutReferralsNestedInput
@@ -1998,8 +1998,8 @@ export type UserUncheckedUpdateWithoutActiveSessionsInput = {
   referralCode?: Prisma.StringFieldUpdateOperationsInput | string
   referredById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   referralRewardPaid?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  referralSignupBonusPaid?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   referrals?: Prisma.UserUncheckedUpdateManyWithoutReferredByNestedInput
@@ -2033,8 +2033,8 @@ export type UserCreateWithoutUserTeamsInput = {
   referredByCode?: string | null
   referralCode: string
   referralRewardPaid?: boolean
+  referralSignupBonusPaid?: boolean
   isVerified?: boolean
-  emailVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   referredBy?: Prisma.UserCreateNestedOneWithoutReferralsInput
@@ -2070,8 +2070,8 @@ export type UserUncheckedCreateWithoutUserTeamsInput = {
   referralCode: string
   referredById?: string | null
   referralRewardPaid?: boolean
+  referralSignupBonusPaid?: boolean
   isVerified?: boolean
-  emailVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   referrals?: Prisma.UserUncheckedCreateNestedManyWithoutReferredByInput
@@ -2121,8 +2121,8 @@ export type UserUpdateWithoutUserTeamsInput = {
   referredByCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   referralCode?: Prisma.StringFieldUpdateOperationsInput | string
   referralRewardPaid?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  referralSignupBonusPaid?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   referredBy?: Prisma.UserUpdateOneWithoutReferralsNestedInput
@@ -2158,8 +2158,8 @@ export type UserUncheckedUpdateWithoutUserTeamsInput = {
   referralCode?: Prisma.StringFieldUpdateOperationsInput | string
   referredById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   referralRewardPaid?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  referralSignupBonusPaid?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   referrals?: Prisma.UserUncheckedUpdateManyWithoutReferredByNestedInput
@@ -2193,8 +2193,8 @@ export type UserCreateWithoutEntriesInput = {
   referredByCode?: string | null
   referralCode: string
   referralRewardPaid?: boolean
+  referralSignupBonusPaid?: boolean
   isVerified?: boolean
-  emailVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   referredBy?: Prisma.UserCreateNestedOneWithoutReferralsInput
@@ -2230,8 +2230,8 @@ export type UserUncheckedCreateWithoutEntriesInput = {
   referralCode: string
   referredById?: string | null
   referralRewardPaid?: boolean
+  referralSignupBonusPaid?: boolean
   isVerified?: boolean
-  emailVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   referrals?: Prisma.UserUncheckedCreateNestedManyWithoutReferredByInput
@@ -2281,8 +2281,8 @@ export type UserUpdateWithoutEntriesInput = {
   referredByCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   referralCode?: Prisma.StringFieldUpdateOperationsInput | string
   referralRewardPaid?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  referralSignupBonusPaid?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   referredBy?: Prisma.UserUpdateOneWithoutReferralsNestedInput
@@ -2318,8 +2318,8 @@ export type UserUncheckedUpdateWithoutEntriesInput = {
   referralCode?: Prisma.StringFieldUpdateOperationsInput | string
   referredById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   referralRewardPaid?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  referralSignupBonusPaid?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   referrals?: Prisma.UserUncheckedUpdateManyWithoutReferredByNestedInput
@@ -2353,8 +2353,8 @@ export type UserCreateWithoutPromoCodeClaimsInput = {
   referredByCode?: string | null
   referralCode: string
   referralRewardPaid?: boolean
+  referralSignupBonusPaid?: boolean
   isVerified?: boolean
-  emailVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   referredBy?: Prisma.UserCreateNestedOneWithoutReferralsInput
@@ -2390,8 +2390,8 @@ export type UserUncheckedCreateWithoutPromoCodeClaimsInput = {
   referralCode: string
   referredById?: string | null
   referralRewardPaid?: boolean
+  referralSignupBonusPaid?: boolean
   isVerified?: boolean
-  emailVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   referrals?: Prisma.UserUncheckedCreateNestedManyWithoutReferredByInput
@@ -2441,8 +2441,8 @@ export type UserUpdateWithoutPromoCodeClaimsInput = {
   referredByCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   referralCode?: Prisma.StringFieldUpdateOperationsInput | string
   referralRewardPaid?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  referralSignupBonusPaid?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   referredBy?: Prisma.UserUpdateOneWithoutReferralsNestedInput
@@ -2478,8 +2478,8 @@ export type UserUncheckedUpdateWithoutPromoCodeClaimsInput = {
   referralCode?: Prisma.StringFieldUpdateOperationsInput | string
   referredById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   referralRewardPaid?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  referralSignupBonusPaid?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   referrals?: Prisma.UserUncheckedUpdateManyWithoutReferredByNestedInput
@@ -2513,8 +2513,8 @@ export type UserCreateManyReferredByInput = {
   referredByCode?: string | null
   referralCode: string
   referralRewardPaid?: boolean
+  referralSignupBonusPaid?: boolean
   isVerified?: boolean
-  emailVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -2541,8 +2541,8 @@ export type UserUpdateWithoutReferredByInput = {
   referredByCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   referralCode?: Prisma.StringFieldUpdateOperationsInput | string
   referralRewardPaid?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  referralSignupBonusPaid?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   referrals?: Prisma.UserUpdateManyWithoutReferredByNestedInput
@@ -2577,8 +2577,8 @@ export type UserUncheckedUpdateWithoutReferredByInput = {
   referredByCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   referralCode?: Prisma.StringFieldUpdateOperationsInput | string
   referralRewardPaid?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  referralSignupBonusPaid?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   referrals?: Prisma.UserUncheckedUpdateManyWithoutReferredByNestedInput
@@ -2613,8 +2613,8 @@ export type UserUncheckedUpdateManyWithoutReferredByInput = {
   referredByCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   referralCode?: Prisma.StringFieldUpdateOperationsInput | string
   referralRewardPaid?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  referralSignupBonusPaid?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -2736,8 +2736,8 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   referralCode?: boolean
   referredById?: boolean
   referralRewardPaid?: boolean
+  referralSignupBonusPaid?: boolean
   isVerified?: boolean
-  emailVerified?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   referredBy?: boolean | Prisma.User$referredByArgs<ExtArgs>
@@ -2775,8 +2775,8 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   referralCode?: boolean
   referredById?: boolean
   referralRewardPaid?: boolean
+  referralSignupBonusPaid?: boolean
   isVerified?: boolean
-  emailVerified?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   referredBy?: boolean | Prisma.User$referredByArgs<ExtArgs>
@@ -2805,8 +2805,8 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   referralCode?: boolean
   referredById?: boolean
   referralRewardPaid?: boolean
+  referralSignupBonusPaid?: boolean
   isVerified?: boolean
-  emailVerified?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   referredBy?: boolean | Prisma.User$referredByArgs<ExtArgs>
@@ -2835,13 +2835,13 @@ export type UserSelectScalar = {
   referralCode?: boolean
   referredById?: boolean
   referralRewardPaid?: boolean
+  referralSignupBonusPaid?: boolean
   isVerified?: boolean
-  emailVerified?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "username" | "email" | "phone" | "passwordHash" | "avatarUrl" | "dateOfBirth" | "nidNumber" | "usernameChangedAt" | "avatarChangedAt" | "totalPoints" | "isAdmin" | "coins" | "lastDailyBonusAt" | "isBanned" | "bannedReason" | "bannedAt" | "referredByCode" | "referralCode" | "referredById" | "referralRewardPaid" | "isVerified" | "emailVerified" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "username" | "email" | "phone" | "passwordHash" | "avatarUrl" | "dateOfBirth" | "nidNumber" | "usernameChangedAt" | "avatarChangedAt" | "totalPoints" | "isAdmin" | "coins" | "lastDailyBonusAt" | "isBanned" | "bannedReason" | "bannedAt" | "referredByCode" | "referralCode" | "referredById" | "referralRewardPaid" | "referralSignupBonusPaid" | "isVerified" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   referredBy?: boolean | Prisma.User$referredByArgs<ExtArgs>
   referrals?: boolean | Prisma.User$referralsArgs<ExtArgs>
@@ -2897,8 +2897,8 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     referralCode: string
     referredById: string | null
     referralRewardPaid: boolean
+    referralSignupBonusPaid: boolean
     isVerified: boolean
-    emailVerified: boolean
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["user"]>
@@ -3355,8 +3355,8 @@ export interface UserFieldRefs {
   readonly referralCode: Prisma.FieldRef<"User", 'String'>
   readonly referredById: Prisma.FieldRef<"User", 'String'>
   readonly referralRewardPaid: Prisma.FieldRef<"User", 'Boolean'>
+  readonly referralSignupBonusPaid: Prisma.FieldRef<"User", 'Boolean'>
   readonly isVerified: Prisma.FieldRef<"User", 'Boolean'>
-  readonly emailVerified: Prisma.FieldRef<"User", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"User", 'DateTime'>
 }

@@ -20,22 +20,6 @@ export const loginSchema = z.object({
   password: z.string().min(1, "Password is required"),
 });
 
-export const sendOtpSchema = z.object({
-  email: z.string().email("Invalid email address"),
-  purpose: z.enum(["EMAIL_VERIFICATION", "PASSWORD_RESET"]),
-});
-
-export const verifyEmailSchema = z.object({
-  email: z.string().email("Invalid email address"),
-  code: z.string().min(4, "Enter the code from your email").max(10),
-});
-
-export const resetPasswordSchema = z.object({
-  email: z.string().email("Invalid email address"),
-  code: z.string().min(4, "Enter the code from your email").max(10),
-  newPassword: z.string().min(6, "Password must be at least 6 characters"),
-});
-
 // Admin-initiated reset — no code required, the admin is the authority.
 export const adminResetPasswordSchema = z.object({
   newPassword: z.string().min(6, "Password must be at least 6 characters"),
@@ -358,7 +342,9 @@ export const updateProfileSchema = z.object({
   dateOfBirth: z
     .string()
     .regex(/^\d{4}-\d{2}-\d{2}$/, "Date of birth must be in YYYY-MM-DD format"),
-  nidNumber: z.string().max(30).optional().or(z.literal("")),
+  // Required, not optional: admins verify accounts by checking the NID
+  // and date of birth, so both have to be present.
+  nidNumber: z.string().min(5, "Enter your NID number").max(30),
   // Set by the app's uploader, which returns a hosted imgbb URL — users
   // no longer type this by hand.
   avatarUrl: z.string().url("Invalid image URL").optional().or(z.literal("")),

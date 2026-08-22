@@ -43,17 +43,19 @@ async function loadRewardSettings() {
 }
 
 /**
- * Called during signup. Resolves the typed code to a real user and pays
- * the NEW user their joining bonus straight away.
+ * Called during signup. Resolves the typed code to a real user and
+ * returns their id so the accounts can be linked.
  *
- * Returns the inviter's id so the caller can link the accounts, or null
- * when the code was blank, unknown, or the user's own.
+ * Deliberately pays nothing here. Both halves of the referral reward now
+ * depend on an admin verifying the new user against their NID and date
+ * of birth — otherwise someone could farm coins by registering throwaway
+ * accounts with their own code.
  */
 export async function resolveReferral(
   typedCode: string | undefined,
   newUserId: string
-): Promise<{ referrerId: string | null; bonusCredited: number }> {
-  if (!typedCode) return { referrerId: null, bonusCredited: 0 };
+): Promise<{ referrerId: string | null }> {
+  if (!typedCode) return { referrerId: null };
 
   const referrer = await prisma.user.findUnique({
     where: { referralCode: typedCode.trim().toUpperCase() },
@@ -64,28 +66,53 @@ export async function resolveReferral(
   // just doesn't get the bonus. Failing here would block registration
   // over a typo.
   if (!referrer || referrer.id === newUserId || referrer.isBanned) {
-    return { referrerId: null, bonusCredited: 0 };
+    return { referrerId: null };
   }
 
+  return { referrerId: referrer.id };
+}
+
+/**
+ * Pays the invitee's joining bonus. Called when an admin verifies the
+ * account — that check against NID and date of birth is what makes the
+ * bonus worth paying.
+ *
+ * Safe to call repeatedly: the flag is claimed conditionally, so
+ * verifying, unverifying and re-verifying can't pay twice.
+ */
+export async function paySignupBonusIfDue(userId: string): Promise<void> {
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    select: { referredById: true, referralSignupBonusPaid: true, isVerified: true },
+  });
+
+  // No referral code used, already paid, or not actually verified.
+  if (!user?.referredById || user.referralSignupBonusPaid || !user.isVerified) return;
+
   const { signupBonus } = await loadRewardSettings();
-  if (signupBonus <= 0) return { referrerId: referrer.id, bonusCredited: 0 };
+  if (signupBonus <= 0) return;
 
   await prisma.$transaction(async (tx) => {
-    await creditCoins(tx, newUserId, signupBonus, "REFERRAL_BONUS", {
+    const claimed = await tx.user.updateMany({
+      where: { id: userId, referralSignupBonusPaid: false },
+      data: { referralSignupBonusPaid: true },
+    });
+    if (claimed.count === 0) return;
+
+    await creditCoins(tx, userId, signupBonus, "REFERRAL_BONUS", {
       reason: "Joining bonus for signing up with a referral code",
     });
+
     await tx.notification.create({
       data: {
-        userId: newUserId,
+        userId,
         type: "COIN_BONUS",
         title: "Referral bonus",
-        message: `You received ${signupBonus} coins for joining with a referral code. Welcome to Strong XI!`,
+        message: `Your account has been verified! You received ${signupBonus} coins for signing up with a referral code.`,
         coinAmount: signupBonus,
       },
     });
   });
-
-  return { referrerId: referrer.id, bonusCredited: signupBonus };
 }
 
 /**
@@ -102,10 +129,18 @@ export async function payInviterIfDue(userId: string, entryCost: number): Promis
 
   const user = await prisma.user.findUnique({
     where: { id: userId },
-    select: { referredById: true, referralRewardPaid: true, name: true, username: true },
+    select: {
+      referredById: true,
+      referralRewardPaid: true,
+      isVerified: true,
+      name: true,
+      username: true,
+    },
   });
 
-  if (!user?.referredById || user.referralRewardPaid) return;
+  // Unverified accounts never trigger the inviter's reward — that's the
+  // whole point of tying rewards to an admin identity check.
+  if (!user?.referredById || user.referralRewardPaid || !user.isVerified) return;
 
   const { inviterBonus } = await loadRewardSettings();
   if (inviterBonus <= 0) return;

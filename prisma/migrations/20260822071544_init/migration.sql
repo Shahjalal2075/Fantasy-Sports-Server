@@ -11,9 +11,6 @@ CREATE TYPE "CoinTransactionType" AS ENUM ('DAILY_BONUS', 'CONTEST_ENTRY', 'CONT
 CREATE TYPE "NotificationType" AS ENUM ('COIN_BONUS', 'COIN_FINE', 'BAN', 'GENERIC');
 
 -- CreateEnum
-CREATE TYPE "OtpPurpose" AS ENUM ('EMAIL_VERIFICATION', 'PASSWORD_RESET');
-
--- CreateEnum
 CREATE TYPE "GiftRequestStatus" AS ENUM ('PENDING', 'APPROVED', 'CANCELLED');
 
 -- CreateEnum
@@ -43,8 +40,8 @@ CREATE TABLE "users" (
     "referralCode" TEXT NOT NULL,
     "referredById" TEXT,
     "referralRewardPaid" BOOLEAN NOT NULL DEFAULT false,
+    "referralSignupBonusPaid" BOOLEAN NOT NULL DEFAULT false,
     "isVerified" BOOLEAN NOT NULL DEFAULT false,
-    "emailVerified" BOOLEAN NOT NULL DEFAULT false,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -132,20 +129,6 @@ CREATE TABLE "gift_requests" (
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "gift_requests_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "otp_codes" (
-    "id" TEXT NOT NULL,
-    "email" TEXT NOT NULL,
-    "codeHash" TEXT NOT NULL,
-    "purpose" "OtpPurpose" NOT NULL,
-    "expiresAt" TIMESTAMP(3) NOT NULL,
-    "attempts" INTEGER NOT NULL DEFAULT 0,
-    "consumedAt" TIMESTAMP(3),
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-
-    CONSTRAINT "otp_codes_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -390,9 +373,6 @@ CREATE INDEX "gift_requests_status_createdAt_idx" ON "gift_requests"("status", "
 
 -- CreateIndex
 CREATE INDEX "gift_requests_userId_createdAt_idx" ON "gift_requests"("userId", "createdAt");
-
--- CreateIndex
-CREATE INDEX "otp_codes_email_purpose_idx" ON "otp_codes"("email", "purpose");
 
 -- CreateIndex
 CREATE INDEX "contact_methods_isActive_sortOrder_idx" ON "contact_methods"("isActive", "sortOrder");

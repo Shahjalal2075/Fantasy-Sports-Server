@@ -213,8 +213,15 @@ export async function getTeamBreakdown(req: Request, res: Response) {
     match.status === "COMPLETED" ||
     (match.status !== "CANCELLED" && Date.now() >= liveSince + BREAKDOWN_DELAY_MS);
 
+  // Admins can always inspect any team — they need it to review a
+  // lineup from the leaderboard and to check scoring before paying out.
+  const viewer = await prisma.user.findUnique({
+    where: { id: req.userId as string },
+    select: { isAdmin: true },
+  });
+
   // Owners can always inspect their own team (that's My Teams -> eye).
-  if (!windowOpen && !isOwner) {
+  if (!windowOpen && !isOwner && !viewer?.isAdmin) {
     return res.status(403).json({
       error: "Point breakdowns open a few minutes after the match goes live",
       availableAt: new Date(liveSince + BREAKDOWN_DELAY_MS),

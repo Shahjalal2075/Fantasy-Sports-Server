@@ -193,6 +193,31 @@ export async function getLeaderboard(req: Request, res: Response) {
     return res.status(404).json({ error: "Contest not found" });
   }
 
+  // Only entrants may see who else is in a contest and how they're
+  // scoring. Enforced here rather than only in the app, since the
+  // endpoint is otherwise trivially callable by hand.
+  //
+  // Admins are exempt — they need the leaderboard to check scoring and
+  // distribute prizes.
+  const viewer = await prisma.user.findUnique({
+    where: { id: req.userId as string },
+    select: { isAdmin: true },
+  });
+
+  if (!viewer?.isAdmin) {
+    const ownEntry = await prisma.contestEntry.findFirst({
+      where: { contestId, userId: req.userId as string },
+      select: { id: true },
+    });
+
+    if (!ownEntry) {
+      return res.status(403).json({
+        error: "Join this contest to see its leaderboard.",
+        requiresEntry: true,
+      });
+    }
+  }
+
   const entries = await prisma.contestEntry.findMany({
     where: { contestId },
     include: {

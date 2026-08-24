@@ -16,9 +16,10 @@ const router = Router();
 // Public
 router.get("/", listContests);
 router.get("/:id", getContestById);
-router.get("/:id/leaderboard", getLeaderboard);
 
 // Auth required
+// The leaderboard is entrants-only — see the check inside getLeaderboard.
+router.get("/:id/leaderboard", requireAuth, getLeaderboard);
 router.get("/my/entries", requireAuth, getMyEntries);
 router.post("/:id/join", requireAuth, joinContest);
 

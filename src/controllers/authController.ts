@@ -156,6 +156,8 @@ export async function getProfile(req: Request, res: Response) {
       avatarChangedAt: true,
       totalPoints: true,
       coins: true,
+      depositCoins: true,
+      withdrawableCoins: true,
       isAdmin: true,
       createdAt: true,
     },

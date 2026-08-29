@@ -2045,6 +2045,8 @@ export const UserScalarFieldEnum = {
   totalPoints: 'totalPoints',
   isAdmin: 'isAdmin',
   coins: 'coins',
+  depositCoins: 'depositCoins',
+  withdrawableCoins: 'withdrawableCoins',
   lastDailyBonusAt: 'lastDailyBonusAt',
   isBanned: 'isBanned',
   bannedReason: 'bannedReason',

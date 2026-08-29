@@ -66,7 +66,16 @@ model User {
   isAdmin          Boolean   @default(false)
   // Virtual, non-purchasable, non-withdrawable in-app currency. Never
   // exchanged for real money in either direction — see CoinTransaction.
+  // Total balance. Kept as the sum of the two buckets below so every
+  // existing read — profile, leaderboard, admin — keeps working
+  // unchanged. All three are written together inside one transaction.
   coins            Int       @default(0)
+  // Bonuses, promo codes, referrals and admin grants. Spendable on
+  // contests, but never redeemable for a gift.
+  depositCoins     Int       @default(0)
+  // Won from contests. This is the only balance a gift can be requested
+  // against, which is what stops someone cashing out free coins.
+  withdrawableCoins Int      @default(0)
   lastDailyBonusAt DateTime?
   isBanned         Boolean   @default(false)
   bannedReason     String?

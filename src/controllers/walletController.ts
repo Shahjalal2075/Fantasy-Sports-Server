@@ -8,7 +8,7 @@ export async function getWallet(req: Request, res: Response) {
 
   const user = await prisma.user.findUnique({
     where: { id: userId },
-    select: { coins: true, lastDailyBonusAt: true },
+    select: { coins: true, depositCoins: true, withdrawableCoins: true, lastDailyBonusAt: true },
   });
 
   if (!user) {
@@ -22,7 +22,15 @@ export async function getWallet(req: Request, res: Response) {
     user.lastDailyBonusAt.getUTCMonth() === now.getUTCMonth() &&
     user.lastDailyBonusAt.getUTCDate() === now.getUTCDate();
 
-  return res.status(200).json({ coins: user.coins, dailyBonusClaimedToday: claimedToday });
+  return res.status(200).json({
+    // Total, shown on the profile.
+    coins: user.coins,
+    // Bonuses and referrals: spendable on contests, not redeemable.
+    depositCoins: user.depositCoins,
+    // Winnings: the only balance a gift can be requested against.
+    withdrawableCoins: user.withdrawableCoins,
+    dailyBonusClaimedToday: claimedToday,
+  });
 }
 
 // POST /api/wallet/claim-daily-bonus  (auth required)

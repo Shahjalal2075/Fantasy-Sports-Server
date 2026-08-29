@@ -14,10 +14,13 @@ interface RoleRule {
 
 // Cricket roles: WK (wicket-keeper), BAT (batsman), AR (all-rounder), BOWL (bowler)
 const CRICKET_ROLE_RULES: Record<string, RoleRule> = {
-  WK: { min: 1, max: 4 },
-  BAT: { min: 3, max: 6 },
-  AR: { min: 1, max: 4 },
-  BOWL: { min: 3, max: 6 },
+  // At least one from every role, and nothing else prescribed: with four
+  // roles and eleven picks, filling one of each leaves eight free, which
+  // is what caps any single role.
+  WK: { min: 1, max: 8 },
+  BAT: { min: 1, max: 8 },
+  AR: { min: 1, max: 8 },
+  BOWL: { min: 1, max: 8 },
 };
 
 // Football roles: GK (goalkeeper), DEF (defender), MID (midfielder), FWD (forward)

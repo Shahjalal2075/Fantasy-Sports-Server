@@ -1,5 +1,6 @@
 import { Prisma, CoinTransactionType, NotificationType } from "../generated/prisma/client";
 import prisma from "../config/prisma";
+import { creditBucket, planDebit } from "../utils/coinBuckets";
 
 // Coins are a virtual, non-purchasable, non-withdrawable in-app currency.
 // They are NEVER exchanged for real money in either direction. This file
@@ -46,7 +47,12 @@ export async function claimDailyBonus(userId: string): Promise<{ coins: number; 
 
     const updated = await tx.user.update({
       where: { id: userId },
-      data: { coins: { increment: bonusAmount }, lastDailyBonusAt: now },
+      data: {
+        coins: { increment: bonusAmount },
+        // A bonus is never withdrawable.
+        depositCoins: { increment: bonusAmount },
+        lastDailyBonusAt: now,
+      },
     });
 
     await tx.coinTransaction.create({
@@ -74,9 +80,30 @@ export async function debitCoins(
   type: CoinTransactionType,
   opts?: { contestId?: string; reason?: string }
 ): Promise<number> {
+  const before = await tx.user.findUniqueOrThrow({
+    where: { id: userId },
+    select: { depositCoins: true, withdrawableCoins: true },
+  });
+
+  const plan = planDebit(type, amount, before.depositCoins, before.withdrawableCoins);
+  if (!plan) {
+    throw new InsufficientCoinsError();
+  }
+
+  // Conditional update: the WHERE clause repeats the balances we planned
+  // against, so a concurrent debit that changed them makes this match
+  // zero rows rather than overdrawing.
   const result = await tx.user.updateMany({
-    where: { id: userId, coins: { gte: amount } },
-    data: { coins: { decrement: amount } },
+    where: {
+      id: userId,
+      depositCoins: { gte: plan.fromDeposit },
+      withdrawableCoins: { gte: plan.fromWithdrawable },
+    },
+    data: {
+      coins: { decrement: amount },
+      depositCoins: { decrement: plan.fromDeposit },
+      withdrawableCoins: { decrement: plan.fromWithdrawable },
+    },
   });
 
   if (result.count === 0) {
@@ -107,9 +134,16 @@ export async function creditCoins(
   type: CoinTransactionType,
   opts?: { contestId?: string; reason?: string }
 ): Promise<number> {
+  const bucket = creditBucket(type);
+
   const user = await tx.user.update({
     where: { id: userId },
-    data: { coins: { increment: amount } },
+    data: {
+      coins: { increment: amount },
+      ...(bucket === "withdrawable"
+        ? { withdrawableCoins: { increment: amount } }
+        : { depositCoins: { increment: amount } }),
+    },
   });
 
   await tx.coinTransaction.create({
@@ -152,9 +186,19 @@ export async function adminGiveFine(userId: string, amount: number, reason: stri
     const user = await tx.user.findUniqueOrThrow({ where: { id: userId } });
     const actualAmount = Math.min(amount, user.coins);
 
+    // Take from deposit first, then winnings — the same order a contest
+    // entry uses, so a fine doesn't wipe out someone's withdrawable
+    // balance while free coins sit untouched.
+    const fromDeposit = Math.min(user.depositCoins, actualAmount);
+    const fromWithdrawable = actualAmount - fromDeposit;
+
     const updated = await tx.user.update({
       where: { id: userId },
-      data: { coins: { decrement: actualAmount } },
+      data: {
+        coins: { decrement: actualAmount },
+        depositCoins: { decrement: fromDeposit },
+        withdrawableCoins: { decrement: fromWithdrawable },
+      },
     });
 
     await tx.coinTransaction.create({

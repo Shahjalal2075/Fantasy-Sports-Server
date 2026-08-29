@@ -15,7 +15,7 @@ const createSchema = z.object({
 });
 
 // GET /api/gift-requests/config  (auth) — what the app needs to render the form
-export async function getGiftConfig(_req: Request, res: Response) {
+export async function getGiftConfig(req: Request, res: Response) {
   const settings = await prisma.appSettings.upsert({
     where: { id: 1 },
     create: { id: 1 },
@@ -29,7 +29,15 @@ export async function getGiftConfig(_req: Request, res: Response) {
     select: { id: true, name: true, logoUrl: true },
   });
 
+  // Gifts are redeemed against winnings only, so the form needs that
+  // figure rather than the total balance.
+  const wallet = await prisma.user.findUnique({
+    where: { id: req.userId as string },
+    select: { withdrawableCoins: true },
+  });
+
   return res.status(200).json({
+    winningBalance: wallet?.withdrawableCoins ?? 0,
     config: {
       // With no contact methods configured there's no way to reach the
       // user, so the form stays closed regardless of the toggle.

@@ -16,6 +16,7 @@ import {
   removeMatchPlayer,
 } from "../controllers/matchPlayerController";
 import { listInnings, saveInnings } from "../controllers/inningsController";
+import { getPlayerBreakdown } from "../controllers/playerBreakdownController";
 import { requireAuth, requireAdmin } from "../middleware/auth";
 
 const router = Router();
@@ -27,6 +28,9 @@ router.get("/:matchId/players", listMatchPlayers);
 // Team scoreboard totals. Public to read — the app shows them above the
 // contest leaderboard.
 router.get("/:matchId/innings", listInnings);
+// Per-event scorecard for one player. Auth-only, and gated on the same
+// match clock as the team breakdown.
+router.get("/:matchId/players/:matchPlayerId/breakdown", requireAuth, getPlayerBreakdown);
 
 // Admin only — manage matches
 router.post("/", requireAuth, requireAdmin, createMatch);

@@ -150,6 +150,227 @@ export function calculateCricketPoints(stats: CricketMatchStats, role: string, r
   return Math.round(points * 10) / 10;
 }
 
+// ---------- Itemised breakdown ----------
+
+/**
+ * One line of the player-detail screen: what happened, and what it was
+ * worth.
+ */
+export interface ScoreLine {
+  label: string;
+  /** What the player actually did — runs, overs, an economy rate. */
+  actual: string;
+  points: number;
+}
+
+/** Trims a float for display: 8 stays "8", 11.25 stays "11.25". */
+function num(value: number): string {
+  return Number.isInteger(value) ? String(value) : String(Math.round(value * 100) / 100);
+}
+
+/**
+ * The same arithmetic as calculateCricketPoints, but reporting every
+ * component instead of only the total.
+ *
+ * Deliberately a separate function rather than a refactor of the
+ * original: that one runs on every scoring pass for every player, and
+ * its output is already stored against live matches. Changing it to
+ * build strings would risk shifting a number somebody has been paid on.
+ *
+ * The two are kept honest by a test that asserts the lines sum to the
+ * stored total.
+ */
+export function explainCricketPoints(
+  stats: CricketMatchStats,
+  role: string,
+  rules: CricketPointRules
+): ScoreLine[] {
+  const lines: ScoreLine[] = [];
+
+  lines.push({
+    label: "Announced/Sub",
+    actual: stats.isPlaying ? "Announced" : "Not playing",
+    points: stats.isPlaying ? rules.playingXIBonus : 0,
+  });
+
+  // ---- Batting ----
+  lines.push({ label: "Runs", actual: num(stats.runs), points: stats.runs * rules.perRun });
+  lines.push({ label: "4's", actual: num(stats.fours), points: stats.fours * rules.perFour });
+  lines.push({ label: "6's", actual: num(stats.sixes), points: stats.sixes * rules.perSix });
+  lines.push({ label: "Balls Faced", actual: num(stats.ballsFaced), points: 0 });
+
+  const milestoneBonus = highestMilestone(stats.runs, rules.runMilestones);
+  if (rules.runMilestones.length > 0) {
+    const reached = [...rules.runMilestones]
+      .filter((m) => stats.runs >= m.threshold)
+      .sort((a, b) => b.threshold - a.threshold)[0];
+    lines.push({
+      label: "Run Milestone",
+      actual: reached ? `${reached.threshold}+` : "0",
+      points: milestoneBonus,
+    });
+  }
+
+  const isDuck = stats.isOut && stats.runs === 0 && role !== "BOWL";
+  lines.push({
+    label: "Duck",
+    actual: isDuck ? "Out for 0" : "0",
+    points: isDuck ? rules.duckPenalty : 0,
+  });
+
+  // Strike rate only counts once the player has faced enough; below the
+  // threshold it shows as not applicable rather than as zero points,
+  // which would look like a penalty.
+  const srQualifies =
+    rules.strikeRateBands.length > 0 &&
+    stats.ballsFaced > 0 &&
+    (stats.runs >= rules.srQualifyMinRuns || stats.ballsFaced >= rules.srQualifyMinBalls);
+  if (rules.strikeRateBands.length > 0) {
+    const sr = stats.ballsFaced > 0 ? (stats.runs / stats.ballsFaced) * 100 : 0;
+    lines.push({
+      label: "S/R",
+      actual: srQualifies ? num(sr) : "—",
+      points: srQualifies ? bandPoints(sr, rules.strikeRateBands) : 0,
+    });
+  }
+
+  // ---- Bowling ----
+  const oversBowled = stats.ballsBowled / 6;
+  lines.push({ label: "Overs Bowled", actual: num(oversBowled), points: 0 });
+
+  if (rules.dotBallsPerBonus > 0) {
+    lines.push({
+      label: "Dot Balls",
+      actual: num(stats.dotBalls),
+      points: Math.floor(stats.dotBalls / rules.dotBallsPerBonus) * rules.dotBallBonusPoints,
+    });
+  }
+
+  lines.push({ label: "Wickets", actual: num(stats.wickets), points: stats.wickets * rules.perWicket });
+  lines.push({
+    label: "LBW/Bowled Bonus",
+    actual: num(stats.wicketsBowledOrLBW),
+    points: stats.wicketsBowledOrLBW * rules.lbwBowledBonus,
+  });
+
+  if (rules.wicketHaulBonuses.length > 0) {
+    const haul = [...rules.wicketHaulBonuses]
+      .filter((m) => stats.wickets >= m.threshold)
+      .sort((a, b) => b.threshold - a.threshold)[0];
+    lines.push({
+      label: "Wicket Haul Bonus",
+      actual: haul ? `${haul.threshold}+` : "0",
+      points: highestMilestone(stats.wickets, rules.wicketHaulBonuses),
+    });
+  }
+
+  lines.push({ label: "Maiden Over", actual: num(stats.maidens), points: stats.maidens * rules.perMaiden });
+
+  const economyQualifies =
+    rules.economyBands.length > 0 && oversBowled >= rules.economyQualifyMinOvers && oversBowled > 0;
+  if (rules.economyBands.length > 0) {
+    const economy = oversBowled > 0 ? stats.runsConceded / oversBowled : 0;
+    lines.push({
+      label: "E/R",
+      actual: economyQualifies ? num(economy) : "—",
+      points: economyQualifies ? bandPoints(economy, rules.economyBands) : 0,
+    });
+  }
+
+  // ---- Fielding ----
+  lines.push({ label: "Catch", actual: num(stats.catches), points: stats.catches * rules.perCatch });
+  lines.push({
+    label: "Catch Bonus",
+    actual: stats.catches >= 3 ? "3+" : "0",
+    points: stats.catches >= 3 ? rules.threeCatchBonus : 0,
+  });
+
+  const runOutsAndStumpings = stats.runOutsDirect + stats.runOutsIndirect + stats.stumpings;
+  lines.push({
+    label: "Run Out/Stumping",
+    actual: num(runOutsAndStumpings),
+    points:
+      stats.runOutsDirect * rules.perRunOutDirect +
+      stats.runOutsIndirect * rules.perRunOutIndirect +
+      stats.stumpings * rules.perStumping,
+  });
+
+  return lines.map((line) => ({ ...line, points: Math.round(line.points * 10) / 10 }));
+}
+
+/** Football equivalent of explainCricketPoints. */
+export function explainFootballPoints(
+  stats: FootballMatchStats,
+  role: string,
+  rules: FootballPointRules
+): ScoreLine[] {
+  const lines: ScoreLine[] = [];
+
+  lines.push({
+    label: "Announced/Sub",
+    actual: stats.isPlaying ? "Announced" : "Not playing",
+    points: stats.isPlaying ? rules.playingXIBonus : 0,
+  });
+
+  lines.push({
+    label: "Minutes Played",
+    actual: num(stats.minutesPlayed),
+    points:
+      stats.minutesPlayed >= 60
+        ? rules.fullAppearancePoints
+        : stats.minutesPlayed > 0
+          ? rules.appearancePoints
+          : 0,
+  });
+
+  const goalPoints =
+    role === "FWD"
+      ? rules.goalPointsFwd
+      : role === "MID"
+        ? rules.goalPointsMid
+        : rules.goalPointsDef;
+
+  lines.push({ label: "Goals", actual: num(stats.goals), points: stats.goals * goalPoints });
+  lines.push({ label: "Assists", actual: num(stats.assists), points: stats.assists * rules.assistPoints });
+  lines.push({
+    label: "Clean Sheet",
+    actual: stats.cleanSheet ? "Yes" : "No",
+    points: stats.cleanSheet ? rules.cleanSheetPoints : 0,
+  });
+  lines.push({
+    label: "Saves",
+    actual: num(stats.saves),
+    points: Math.floor(stats.saves / 3) * rules.perThreeSaves,
+  });
+  lines.push({
+    label: "Penalty Saved",
+    actual: num(stats.penaltiesSaved),
+    points: stats.penaltiesSaved * rules.penaltySavedPoints,
+  });
+  lines.push({
+    label: "Penalty Missed",
+    actual: num(stats.penaltiesMissed),
+    points: stats.penaltiesMissed * rules.penaltyMissedPenalty,
+  });
+  lines.push({
+    label: "Yellow Card",
+    actual: num(stats.yellowCards),
+    points: stats.yellowCards * rules.yellowCardPenalty,
+  });
+  lines.push({
+    label: "Red Card",
+    actual: num(stats.redCards),
+    points: stats.redCards * rules.redCardPenalty,
+  });
+  lines.push({
+    label: "Own Goal",
+    actual: num(stats.ownGoals),
+    points: stats.ownGoals * rules.ownGoalPenalty,
+  });
+
+  return lines.map((line) => ({ ...line, points: Math.round(line.points * 10) / 10 }));
+}
+
 // ---------- Football ----------
 
 export interface FootballMatchStats {

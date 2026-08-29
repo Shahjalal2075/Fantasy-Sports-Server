@@ -8,7 +8,12 @@ export const registerSchema = z.object({
     .max(20, "Username must be at most 20 characters")
     .regex(/^[a-zA-Z0-9_.]+$/, "Username can only contain letters, numbers, underscores, and periods"),
   email: z.string().email("Invalid email address"),
-  phone: z.string().min(10).max(15).optional(),
+  // Required: phone is one of the two ways a user signs in, and the
+  // only way support can reach someone whose email bounces.
+  phone: z
+    .string()
+    .min(10, "Enter a valid phone number")
+    .max(15, "Enter a valid phone number"),
   password: z.string().min(6, "Password must be at least 6 characters"),
   referralCode: z.string().max(30).optional(),
 });

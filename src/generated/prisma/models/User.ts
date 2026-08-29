@@ -29,11 +29,15 @@ export type AggregateUser = {
 export type UserAvgAggregateOutputType = {
   totalPoints: number | null
   coins: number | null
+  depositCoins: number | null
+  withdrawableCoins: number | null
 }
 
 export type UserSumAggregateOutputType = {
   totalPoints: number | null
   coins: number | null
+  depositCoins: number | null
+  withdrawableCoins: number | null
 }
 
 export type UserMinAggregateOutputType = {
@@ -51,6 +55,8 @@ export type UserMinAggregateOutputType = {
   totalPoints: number | null
   isAdmin: boolean | null
   coins: number | null
+  depositCoins: number | null
+  withdrawableCoins: number | null
   lastDailyBonusAt: Date | null
   isBanned: boolean | null
   bannedReason: string | null
@@ -80,6 +86,8 @@ export type UserMaxAggregateOutputType = {
   totalPoints: number | null
   isAdmin: boolean | null
   coins: number | null
+  depositCoins: number | null
+  withdrawableCoins: number | null
   lastDailyBonusAt: Date | null
   isBanned: boolean | null
   bannedReason: string | null
@@ -109,6 +117,8 @@ export type UserCountAggregateOutputType = {
   totalPoints: number
   isAdmin: number
   coins: number
+  depositCoins: number
+  withdrawableCoins: number
   lastDailyBonusAt: number
   isBanned: number
   bannedReason: number
@@ -128,11 +138,15 @@ export type UserCountAggregateOutputType = {
 export type UserAvgAggregateInputType = {
   totalPoints?: true
   coins?: true
+  depositCoins?: true
+  withdrawableCoins?: true
 }
 
 export type UserSumAggregateInputType = {
   totalPoints?: true
   coins?: true
+  depositCoins?: true
+  withdrawableCoins?: true
 }
 
 export type UserMinAggregateInputType = {
@@ -150,6 +164,8 @@ export type UserMinAggregateInputType = {
   totalPoints?: true
   isAdmin?: true
   coins?: true
+  depositCoins?: true
+  withdrawableCoins?: true
   lastDailyBonusAt?: true
   isBanned?: true
   bannedReason?: true
@@ -179,6 +195,8 @@ export type UserMaxAggregateInputType = {
   totalPoints?: true
   isAdmin?: true
   coins?: true
+  depositCoins?: true
+  withdrawableCoins?: true
   lastDailyBonusAt?: true
   isBanned?: true
   bannedReason?: true
@@ -208,6 +226,8 @@ export type UserCountAggregateInputType = {
   totalPoints?: true
   isAdmin?: true
   coins?: true
+  depositCoins?: true
+  withdrawableCoins?: true
   lastDailyBonusAt?: true
   isBanned?: true
   bannedReason?: true
@@ -324,6 +344,8 @@ export type UserGroupByOutputType = {
   totalPoints: number
   isAdmin: boolean
   coins: number
+  depositCoins: number
+  withdrawableCoins: number
   lastDailyBonusAt: Date | null
   isBanned: boolean
   bannedReason: string | null
@@ -376,6 +398,8 @@ export type UserWhereInput = {
   totalPoints?: Prisma.IntFilter<"User"> | number
   isAdmin?: Prisma.BoolFilter<"User"> | boolean
   coins?: Prisma.IntFilter<"User"> | number
+  depositCoins?: Prisma.IntFilter<"User"> | number
+  withdrawableCoins?: Prisma.IntFilter<"User"> | number
   lastDailyBonusAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   isBanned?: Prisma.BoolFilter<"User"> | boolean
   bannedReason?: Prisma.StringNullableFilter<"User"> | string | null
@@ -414,6 +438,8 @@ export type UserOrderByWithRelationInput = {
   totalPoints?: Prisma.SortOrder
   isAdmin?: Prisma.SortOrder
   coins?: Prisma.SortOrder
+  depositCoins?: Prisma.SortOrder
+  withdrawableCoins?: Prisma.SortOrder
   lastDailyBonusAt?: Prisma.SortOrderInput | Prisma.SortOrder
   isBanned?: Prisma.SortOrder
   bannedReason?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -456,6 +482,8 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   totalPoints?: Prisma.IntFilter<"User"> | number
   isAdmin?: Prisma.BoolFilter<"User"> | boolean
   coins?: Prisma.IntFilter<"User"> | number
+  depositCoins?: Prisma.IntFilter<"User"> | number
+  withdrawableCoins?: Prisma.IntFilter<"User"> | number
   lastDailyBonusAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   isBanned?: Prisma.BoolFilter<"User"> | boolean
   bannedReason?: Prisma.StringNullableFilter<"User"> | string | null
@@ -493,6 +521,8 @@ export type UserOrderByWithAggregationInput = {
   totalPoints?: Prisma.SortOrder
   isAdmin?: Prisma.SortOrder
   coins?: Prisma.SortOrder
+  depositCoins?: Prisma.SortOrder
+  withdrawableCoins?: Prisma.SortOrder
   lastDailyBonusAt?: Prisma.SortOrderInput | Prisma.SortOrder
   isBanned?: Prisma.SortOrder
   bannedReason?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -530,6 +560,8 @@ export type UserScalarWhereWithAggregatesInput = {
   totalPoints?: Prisma.IntWithAggregatesFilter<"User"> | number
   isAdmin?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
   coins?: Prisma.IntWithAggregatesFilter<"User"> | number
+  depositCoins?: Prisma.IntWithAggregatesFilter<"User"> | number
+  withdrawableCoins?: Prisma.IntWithAggregatesFilter<"User"> | number
   lastDailyBonusAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
   isBanned?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
   bannedReason?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
@@ -559,6 +591,8 @@ export type UserCreateInput = {
   totalPoints?: number
   isAdmin?: boolean
   coins?: number
+  depositCoins?: number
+  withdrawableCoins?: number
   lastDailyBonusAt?: Date | string | null
   isBanned?: boolean
   bannedReason?: string | null
@@ -596,6 +630,8 @@ export type UserUncheckedCreateInput = {
   totalPoints?: number
   isAdmin?: boolean
   coins?: number
+  depositCoins?: number
+  withdrawableCoins?: number
   lastDailyBonusAt?: Date | string | null
   isBanned?: boolean
   bannedReason?: string | null
@@ -633,6 +669,8 @@ export type UserUpdateInput = {
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   isAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   coins?: Prisma.IntFieldUpdateOperationsInput | number
+  depositCoins?: Prisma.IntFieldUpdateOperationsInput | number
+  withdrawableCoins?: Prisma.IntFieldUpdateOperationsInput | number
   lastDailyBonusAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
   bannedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -670,6 +708,8 @@ export type UserUncheckedUpdateInput = {
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   isAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   coins?: Prisma.IntFieldUpdateOperationsInput | number
+  depositCoins?: Prisma.IntFieldUpdateOperationsInput | number
+  withdrawableCoins?: Prisma.IntFieldUpdateOperationsInput | number
   lastDailyBonusAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
   bannedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -707,6 +747,8 @@ export type UserCreateManyInput = {
   totalPoints?: number
   isAdmin?: boolean
   coins?: number
+  depositCoins?: number
+  withdrawableCoins?: number
   lastDailyBonusAt?: Date | string | null
   isBanned?: boolean
   bannedReason?: string | null
@@ -736,6 +778,8 @@ export type UserUpdateManyMutationInput = {
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   isAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   coins?: Prisma.IntFieldUpdateOperationsInput | number
+  depositCoins?: Prisma.IntFieldUpdateOperationsInput | number
+  withdrawableCoins?: Prisma.IntFieldUpdateOperationsInput | number
   lastDailyBonusAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
   bannedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -764,6 +808,8 @@ export type UserUncheckedUpdateManyInput = {
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   isAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   coins?: Prisma.IntFieldUpdateOperationsInput | number
+  depositCoins?: Prisma.IntFieldUpdateOperationsInput | number
+  withdrawableCoins?: Prisma.IntFieldUpdateOperationsInput | number
   lastDailyBonusAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
   bannedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -808,6 +854,8 @@ export type UserCountOrderByAggregateInput = {
   totalPoints?: Prisma.SortOrder
   isAdmin?: Prisma.SortOrder
   coins?: Prisma.SortOrder
+  depositCoins?: Prisma.SortOrder
+  withdrawableCoins?: Prisma.SortOrder
   lastDailyBonusAt?: Prisma.SortOrder
   isBanned?: Prisma.SortOrder
   bannedReason?: Prisma.SortOrder
@@ -825,6 +873,8 @@ export type UserCountOrderByAggregateInput = {
 export type UserAvgOrderByAggregateInput = {
   totalPoints?: Prisma.SortOrder
   coins?: Prisma.SortOrder
+  depositCoins?: Prisma.SortOrder
+  withdrawableCoins?: Prisma.SortOrder
 }
 
 export type UserMaxOrderByAggregateInput = {
@@ -842,6 +892,8 @@ export type UserMaxOrderByAggregateInput = {
   totalPoints?: Prisma.SortOrder
   isAdmin?: Prisma.SortOrder
   coins?: Prisma.SortOrder
+  depositCoins?: Prisma.SortOrder
+  withdrawableCoins?: Prisma.SortOrder
   lastDailyBonusAt?: Prisma.SortOrder
   isBanned?: Prisma.SortOrder
   bannedReason?: Prisma.SortOrder
@@ -871,6 +923,8 @@ export type UserMinOrderByAggregateInput = {
   totalPoints?: Prisma.SortOrder
   isAdmin?: Prisma.SortOrder
   coins?: Prisma.SortOrder
+  depositCoins?: Prisma.SortOrder
+  withdrawableCoins?: Prisma.SortOrder
   lastDailyBonusAt?: Prisma.SortOrder
   isBanned?: Prisma.SortOrder
   bannedReason?: Prisma.SortOrder
@@ -888,6 +942,8 @@ export type UserMinOrderByAggregateInput = {
 export type UserSumOrderByAggregateInput = {
   totalPoints?: Prisma.SortOrder
   coins?: Prisma.SortOrder
+  depositCoins?: Prisma.SortOrder
+  withdrawableCoins?: Prisma.SortOrder
 }
 
 export type UserScalarRelationFilter = {
@@ -1096,6 +1152,8 @@ export type UserCreateWithoutReferralsInput = {
   totalPoints?: number
   isAdmin?: boolean
   coins?: number
+  depositCoins?: number
+  withdrawableCoins?: number
   lastDailyBonusAt?: Date | string | null
   isBanned?: boolean
   bannedReason?: string | null
@@ -1132,6 +1190,8 @@ export type UserUncheckedCreateWithoutReferralsInput = {
   totalPoints?: number
   isAdmin?: boolean
   coins?: number
+  depositCoins?: number
+  withdrawableCoins?: number
   lastDailyBonusAt?: Date | string | null
   isBanned?: boolean
   bannedReason?: string | null
@@ -1173,6 +1233,8 @@ export type UserCreateWithoutReferredByInput = {
   totalPoints?: number
   isAdmin?: boolean
   coins?: number
+  depositCoins?: number
+  withdrawableCoins?: number
   lastDailyBonusAt?: Date | string | null
   isBanned?: boolean
   bannedReason?: string | null
@@ -1209,6 +1271,8 @@ export type UserUncheckedCreateWithoutReferredByInput = {
   totalPoints?: number
   isAdmin?: boolean
   coins?: number
+  depositCoins?: number
+  withdrawableCoins?: number
   lastDailyBonusAt?: Date | string | null
   isBanned?: boolean
   bannedReason?: string | null
@@ -1266,6 +1330,8 @@ export type UserUpdateWithoutReferralsInput = {
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   isAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   coins?: Prisma.IntFieldUpdateOperationsInput | number
+  depositCoins?: Prisma.IntFieldUpdateOperationsInput | number
+  withdrawableCoins?: Prisma.IntFieldUpdateOperationsInput | number
   lastDailyBonusAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
   bannedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1302,6 +1368,8 @@ export type UserUncheckedUpdateWithoutReferralsInput = {
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   isAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   coins?: Prisma.IntFieldUpdateOperationsInput | number
+  depositCoins?: Prisma.IntFieldUpdateOperationsInput | number
+  withdrawableCoins?: Prisma.IntFieldUpdateOperationsInput | number
   lastDailyBonusAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
   bannedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1357,6 +1425,8 @@ export type UserScalarWhereInput = {
   totalPoints?: Prisma.IntFilter<"User"> | number
   isAdmin?: Prisma.BoolFilter<"User"> | boolean
   coins?: Prisma.IntFilter<"User"> | number
+  depositCoins?: Prisma.IntFilter<"User"> | number
+  withdrawableCoins?: Prisma.IntFilter<"User"> | number
   lastDailyBonusAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   isBanned?: Prisma.BoolFilter<"User"> | boolean
   bannedReason?: Prisma.StringNullableFilter<"User"> | string | null
@@ -1386,6 +1456,8 @@ export type UserCreateWithoutCoinLedgerInput = {
   totalPoints?: number
   isAdmin?: boolean
   coins?: number
+  depositCoins?: number
+  withdrawableCoins?: number
   lastDailyBonusAt?: Date | string | null
   isBanned?: boolean
   bannedReason?: string | null
@@ -1422,6 +1494,8 @@ export type UserUncheckedCreateWithoutCoinLedgerInput = {
   totalPoints?: number
   isAdmin?: boolean
   coins?: number
+  depositCoins?: number
+  withdrawableCoins?: number
   lastDailyBonusAt?: Date | string | null
   isBanned?: boolean
   bannedReason?: string | null
@@ -1474,6 +1548,8 @@ export type UserUpdateWithoutCoinLedgerInput = {
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   isAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   coins?: Prisma.IntFieldUpdateOperationsInput | number
+  depositCoins?: Prisma.IntFieldUpdateOperationsInput | number
+  withdrawableCoins?: Prisma.IntFieldUpdateOperationsInput | number
   lastDailyBonusAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
   bannedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1510,6 +1586,8 @@ export type UserUncheckedUpdateWithoutCoinLedgerInput = {
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   isAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   coins?: Prisma.IntFieldUpdateOperationsInput | number
+  depositCoins?: Prisma.IntFieldUpdateOperationsInput | number
+  withdrawableCoins?: Prisma.IntFieldUpdateOperationsInput | number
   lastDailyBonusAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
   bannedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1546,6 +1624,8 @@ export type UserCreateWithoutNotificationsInput = {
   totalPoints?: number
   isAdmin?: boolean
   coins?: number
+  depositCoins?: number
+  withdrawableCoins?: number
   lastDailyBonusAt?: Date | string | null
   isBanned?: boolean
   bannedReason?: string | null
@@ -1582,6 +1662,8 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   totalPoints?: number
   isAdmin?: boolean
   coins?: number
+  depositCoins?: number
+  withdrawableCoins?: number
   lastDailyBonusAt?: Date | string | null
   isBanned?: boolean
   bannedReason?: string | null
@@ -1634,6 +1716,8 @@ export type UserUpdateWithoutNotificationsInput = {
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   isAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   coins?: Prisma.IntFieldUpdateOperationsInput | number
+  depositCoins?: Prisma.IntFieldUpdateOperationsInput | number
+  withdrawableCoins?: Prisma.IntFieldUpdateOperationsInput | number
   lastDailyBonusAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
   bannedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1670,6 +1754,8 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   isAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   coins?: Prisma.IntFieldUpdateOperationsInput | number
+  depositCoins?: Prisma.IntFieldUpdateOperationsInput | number
+  withdrawableCoins?: Prisma.IntFieldUpdateOperationsInput | number
   lastDailyBonusAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
   bannedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1706,6 +1792,8 @@ export type UserCreateWithoutGiftRequestsInput = {
   totalPoints?: number
   isAdmin?: boolean
   coins?: number
+  depositCoins?: number
+  withdrawableCoins?: number
   lastDailyBonusAt?: Date | string | null
   isBanned?: boolean
   bannedReason?: string | null
@@ -1742,6 +1830,8 @@ export type UserUncheckedCreateWithoutGiftRequestsInput = {
   totalPoints?: number
   isAdmin?: boolean
   coins?: number
+  depositCoins?: number
+  withdrawableCoins?: number
   lastDailyBonusAt?: Date | string | null
   isBanned?: boolean
   bannedReason?: string | null
@@ -1794,6 +1884,8 @@ export type UserUpdateWithoutGiftRequestsInput = {
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   isAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   coins?: Prisma.IntFieldUpdateOperationsInput | number
+  depositCoins?: Prisma.IntFieldUpdateOperationsInput | number
+  withdrawableCoins?: Prisma.IntFieldUpdateOperationsInput | number
   lastDailyBonusAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
   bannedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1830,6 +1922,8 @@ export type UserUncheckedUpdateWithoutGiftRequestsInput = {
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   isAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   coins?: Prisma.IntFieldUpdateOperationsInput | number
+  depositCoins?: Prisma.IntFieldUpdateOperationsInput | number
+  withdrawableCoins?: Prisma.IntFieldUpdateOperationsInput | number
   lastDailyBonusAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
   bannedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1866,6 +1960,8 @@ export type UserCreateWithoutActiveSessionsInput = {
   totalPoints?: number
   isAdmin?: boolean
   coins?: number
+  depositCoins?: number
+  withdrawableCoins?: number
   lastDailyBonusAt?: Date | string | null
   isBanned?: boolean
   bannedReason?: string | null
@@ -1902,6 +1998,8 @@ export type UserUncheckedCreateWithoutActiveSessionsInput = {
   totalPoints?: number
   isAdmin?: boolean
   coins?: number
+  depositCoins?: number
+  withdrawableCoins?: number
   lastDailyBonusAt?: Date | string | null
   isBanned?: boolean
   bannedReason?: string | null
@@ -1954,6 +2052,8 @@ export type UserUpdateWithoutActiveSessionsInput = {
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   isAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   coins?: Prisma.IntFieldUpdateOperationsInput | number
+  depositCoins?: Prisma.IntFieldUpdateOperationsInput | number
+  withdrawableCoins?: Prisma.IntFieldUpdateOperationsInput | number
   lastDailyBonusAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
   bannedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1990,6 +2090,8 @@ export type UserUncheckedUpdateWithoutActiveSessionsInput = {
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   isAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   coins?: Prisma.IntFieldUpdateOperationsInput | number
+  depositCoins?: Prisma.IntFieldUpdateOperationsInput | number
+  withdrawableCoins?: Prisma.IntFieldUpdateOperationsInput | number
   lastDailyBonusAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
   bannedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2026,6 +2128,8 @@ export type UserCreateWithoutUserTeamsInput = {
   totalPoints?: number
   isAdmin?: boolean
   coins?: number
+  depositCoins?: number
+  withdrawableCoins?: number
   lastDailyBonusAt?: Date | string | null
   isBanned?: boolean
   bannedReason?: string | null
@@ -2062,6 +2166,8 @@ export type UserUncheckedCreateWithoutUserTeamsInput = {
   totalPoints?: number
   isAdmin?: boolean
   coins?: number
+  depositCoins?: number
+  withdrawableCoins?: number
   lastDailyBonusAt?: Date | string | null
   isBanned?: boolean
   bannedReason?: string | null
@@ -2114,6 +2220,8 @@ export type UserUpdateWithoutUserTeamsInput = {
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   isAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   coins?: Prisma.IntFieldUpdateOperationsInput | number
+  depositCoins?: Prisma.IntFieldUpdateOperationsInput | number
+  withdrawableCoins?: Prisma.IntFieldUpdateOperationsInput | number
   lastDailyBonusAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
   bannedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2150,6 +2258,8 @@ export type UserUncheckedUpdateWithoutUserTeamsInput = {
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   isAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   coins?: Prisma.IntFieldUpdateOperationsInput | number
+  depositCoins?: Prisma.IntFieldUpdateOperationsInput | number
+  withdrawableCoins?: Prisma.IntFieldUpdateOperationsInput | number
   lastDailyBonusAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
   bannedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2186,6 +2296,8 @@ export type UserCreateWithoutEntriesInput = {
   totalPoints?: number
   isAdmin?: boolean
   coins?: number
+  depositCoins?: number
+  withdrawableCoins?: number
   lastDailyBonusAt?: Date | string | null
   isBanned?: boolean
   bannedReason?: string | null
@@ -2222,6 +2334,8 @@ export type UserUncheckedCreateWithoutEntriesInput = {
   totalPoints?: number
   isAdmin?: boolean
   coins?: number
+  depositCoins?: number
+  withdrawableCoins?: number
   lastDailyBonusAt?: Date | string | null
   isBanned?: boolean
   bannedReason?: string | null
@@ -2274,6 +2388,8 @@ export type UserUpdateWithoutEntriesInput = {
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   isAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   coins?: Prisma.IntFieldUpdateOperationsInput | number
+  depositCoins?: Prisma.IntFieldUpdateOperationsInput | number
+  withdrawableCoins?: Prisma.IntFieldUpdateOperationsInput | number
   lastDailyBonusAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
   bannedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2310,6 +2426,8 @@ export type UserUncheckedUpdateWithoutEntriesInput = {
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   isAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   coins?: Prisma.IntFieldUpdateOperationsInput | number
+  depositCoins?: Prisma.IntFieldUpdateOperationsInput | number
+  withdrawableCoins?: Prisma.IntFieldUpdateOperationsInput | number
   lastDailyBonusAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
   bannedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2346,6 +2464,8 @@ export type UserCreateWithoutPromoCodeClaimsInput = {
   totalPoints?: number
   isAdmin?: boolean
   coins?: number
+  depositCoins?: number
+  withdrawableCoins?: number
   lastDailyBonusAt?: Date | string | null
   isBanned?: boolean
   bannedReason?: string | null
@@ -2382,6 +2502,8 @@ export type UserUncheckedCreateWithoutPromoCodeClaimsInput = {
   totalPoints?: number
   isAdmin?: boolean
   coins?: number
+  depositCoins?: number
+  withdrawableCoins?: number
   lastDailyBonusAt?: Date | string | null
   isBanned?: boolean
   bannedReason?: string | null
@@ -2434,6 +2556,8 @@ export type UserUpdateWithoutPromoCodeClaimsInput = {
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   isAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   coins?: Prisma.IntFieldUpdateOperationsInput | number
+  depositCoins?: Prisma.IntFieldUpdateOperationsInput | number
+  withdrawableCoins?: Prisma.IntFieldUpdateOperationsInput | number
   lastDailyBonusAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
   bannedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2470,6 +2594,8 @@ export type UserUncheckedUpdateWithoutPromoCodeClaimsInput = {
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   isAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   coins?: Prisma.IntFieldUpdateOperationsInput | number
+  depositCoins?: Prisma.IntFieldUpdateOperationsInput | number
+  withdrawableCoins?: Prisma.IntFieldUpdateOperationsInput | number
   lastDailyBonusAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
   bannedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2506,6 +2632,8 @@ export type UserCreateManyReferredByInput = {
   totalPoints?: number
   isAdmin?: boolean
   coins?: number
+  depositCoins?: number
+  withdrawableCoins?: number
   lastDailyBonusAt?: Date | string | null
   isBanned?: boolean
   bannedReason?: string | null
@@ -2534,6 +2662,8 @@ export type UserUpdateWithoutReferredByInput = {
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   isAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   coins?: Prisma.IntFieldUpdateOperationsInput | number
+  depositCoins?: Prisma.IntFieldUpdateOperationsInput | number
+  withdrawableCoins?: Prisma.IntFieldUpdateOperationsInput | number
   lastDailyBonusAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
   bannedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2570,6 +2700,8 @@ export type UserUncheckedUpdateWithoutReferredByInput = {
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   isAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   coins?: Prisma.IntFieldUpdateOperationsInput | number
+  depositCoins?: Prisma.IntFieldUpdateOperationsInput | number
+  withdrawableCoins?: Prisma.IntFieldUpdateOperationsInput | number
   lastDailyBonusAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
   bannedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2606,6 +2738,8 @@ export type UserUncheckedUpdateManyWithoutReferredByInput = {
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   isAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   coins?: Prisma.IntFieldUpdateOperationsInput | number
+  depositCoins?: Prisma.IntFieldUpdateOperationsInput | number
+  withdrawableCoins?: Prisma.IntFieldUpdateOperationsInput | number
   lastDailyBonusAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
   bannedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2728,6 +2862,8 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   totalPoints?: boolean
   isAdmin?: boolean
   coins?: boolean
+  depositCoins?: boolean
+  withdrawableCoins?: boolean
   lastDailyBonusAt?: boolean
   isBanned?: boolean
   bannedReason?: boolean
@@ -2767,6 +2903,8 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   totalPoints?: boolean
   isAdmin?: boolean
   coins?: boolean
+  depositCoins?: boolean
+  withdrawableCoins?: boolean
   lastDailyBonusAt?: boolean
   isBanned?: boolean
   bannedReason?: boolean
@@ -2797,6 +2935,8 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   totalPoints?: boolean
   isAdmin?: boolean
   coins?: boolean
+  depositCoins?: boolean
+  withdrawableCoins?: boolean
   lastDailyBonusAt?: boolean
   isBanned?: boolean
   bannedReason?: boolean
@@ -2827,6 +2967,8 @@ export type UserSelectScalar = {
   totalPoints?: boolean
   isAdmin?: boolean
   coins?: boolean
+  depositCoins?: boolean
+  withdrawableCoins?: boolean
   lastDailyBonusAt?: boolean
   isBanned?: boolean
   bannedReason?: boolean
@@ -2841,7 +2983,7 @@ export type UserSelectScalar = {
   updatedAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "username" | "email" | "phone" | "passwordHash" | "avatarUrl" | "dateOfBirth" | "nidNumber" | "usernameChangedAt" | "avatarChangedAt" | "totalPoints" | "isAdmin" | "coins" | "lastDailyBonusAt" | "isBanned" | "bannedReason" | "bannedAt" | "referredByCode" | "referralCode" | "referredById" | "referralRewardPaid" | "referralSignupBonusPaid" | "isVerified" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "username" | "email" | "phone" | "passwordHash" | "avatarUrl" | "dateOfBirth" | "nidNumber" | "usernameChangedAt" | "avatarChangedAt" | "totalPoints" | "isAdmin" | "coins" | "depositCoins" | "withdrawableCoins" | "lastDailyBonusAt" | "isBanned" | "bannedReason" | "bannedAt" | "referredByCode" | "referralCode" | "referredById" | "referralRewardPaid" | "referralSignupBonusPaid" | "isVerified" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   referredBy?: boolean | Prisma.User$referredByArgs<ExtArgs>
   referrals?: boolean | Prisma.User$referralsArgs<ExtArgs>
@@ -2889,6 +3031,8 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     totalPoints: number
     isAdmin: boolean
     coins: number
+    depositCoins: number
+    withdrawableCoins: number
     lastDailyBonusAt: Date | null
     isBanned: boolean
     bannedReason: string | null
@@ -3347,6 +3491,8 @@ export interface UserFieldRefs {
   readonly totalPoints: Prisma.FieldRef<"User", 'Int'>
   readonly isAdmin: Prisma.FieldRef<"User", 'Boolean'>
   readonly coins: Prisma.FieldRef<"User", 'Int'>
+  readonly depositCoins: Prisma.FieldRef<"User", 'Int'>
+  readonly withdrawableCoins: Prisma.FieldRef<"User", 'Int'>
   readonly lastDailyBonusAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly isBanned: Prisma.FieldRef<"User", 'Boolean'>
   readonly bannedReason: Prisma.FieldRef<"User", 'String'>

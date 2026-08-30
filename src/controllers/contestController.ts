@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { CoinTransactionType } from "../generated/prisma/client";
 import prisma from "../config/prisma";
 import { payInviterIfDue } from "../services/referralService";
+import { splitPrizes } from "../utils/prizeSplitting";
 import { createContestSchema, joinContestSchema } from "../utils/validators";
 import { debitCoins, creditCoins, InsufficientCoinsError } from "../services/walletService";
 
@@ -344,21 +345,43 @@ export async function distributePrizes(req: Request, res: Response) {
     return res.status(400).json({ error: "This contest has no prize distribution configured" });
   }
 
-  const winningEntries = await prisma.contestEntry.findMany({
-    where: { contestId, rank: { in: Array.from(prizeMap.keys()) } },
+  // Every ranked entry, not just those on a paying rank: a group tied at
+  // rank 3 in a top-3 contest still occupies places 3, 4 and 5, and the
+  // splitter needs to see the whole group to divide correctly.
+  const rankedEntries = await prisma.contestEntry.findMany({
+    where: { contestId, rank: { not: null } },
+    select: { id: true, userId: true, rank: true, createdAt: true },
+    // Same order the leaderboard uses, so the odd coin from an uneven
+    // split goes to the earliest joiner rather than at random.
+    orderBy: [{ rank: "asc" }, { createdAt: "asc" }],
   });
 
-  const payouts: { userId: string; rank: number; coins: number }[] = [];
+  const splits = splitPrizes(
+    rankedEntries.map((entry) => ({
+      id: entry.id,
+      userId: entry.userId,
+      rank: entry.rank as number,
+    })),
+    prizeMap
+  );
+
+  const payouts: { userId: string; rank: number; coins: number; sharedBy: number }[] = [];
 
   await prisma.$transaction(async (tx) => {
-    for (const entry of winningEntries) {
-      const coins = prizeMap.get(entry.rank as number);
-      if (!coins) continue;
-      await creditCoins(tx, entry.userId, coins, CoinTransactionType.CONTEST_PRIZE, {
+    for (const split of splits) {
+      await creditCoins(tx, split.userId, split.coins, CoinTransactionType.CONTEST_PRIZE, {
         contestId,
-        reason: `Rank #${entry.rank} prize — ${contest.name}`,
+        reason:
+          split.sharedBy > 1
+            ? `Rank #${split.rank} prize (shared by ${split.sharedBy}) — ${contest.name}`
+            : `Rank #${split.rank} prize — ${contest.name}`,
       });
-      payouts.push({ userId: entry.userId, rank: entry.rank as number, coins });
+      payouts.push({
+        userId: split.userId,
+        rank: split.rank,
+        coins: split.coins,
+        sharedBy: split.sharedBy,
+      });
     }
 
     await tx.contest.update({ where: { id: contestId }, data: { prizesDistributed: true } });

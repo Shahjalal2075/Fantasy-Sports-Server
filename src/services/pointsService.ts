@@ -100,12 +100,32 @@ export async function recalculateMatchPoints(matchId: string): Promise<Recalcula
     const entries = await prisma.contestEntry.findMany({
       where: { contestId: contest.id },
       include: { userTeam: { select: { totalPoints: true } } },
-      orderBy: { userTeam: { totalPoints: "desc" } },
+      // createdAt breaks the tie for DISPLAY ORDER only — whoever joined
+      // first is listed first. Without it Postgres returns equal-scoring
+      // entries in whatever order it likes, so re-running the scoring
+      // could silently reshuffle the leaderboard.
+      orderBy: [{ userTeam: { totalPoints: "desc" } }, { createdAt: "asc" }],
+    });
+
+    // Standard competition ranking: equal points share a rank, and the
+    // next rank skips the places they occupied — 425, 425, 420 gives
+    // ranks 1, 1, 3. Two people on the same score always get the same
+    // rank, whatever order they happen to be listed in.
+    let previousPoints: number | null = null;
+    let currentRank = 0;
+
+    const ranked = entries.map((entry, index) => {
+      const points = entry.userTeam.totalPoints;
+      if (points !== previousPoints) {
+        currentRank = index + 1;
+        previousPoints = points;
+      }
+      return { id: entry.id, rank: currentRank };
     });
 
     await prisma.$transaction(
-      entries.map((entry, index) =>
-        prisma.contestEntry.update({ where: { id: entry.id }, data: { rank: index + 1 } })
+      ranked.map((entry) =>
+        prisma.contestEntry.update({ where: { id: entry.id }, data: { rank: entry.rank } })
       )
     );
   }

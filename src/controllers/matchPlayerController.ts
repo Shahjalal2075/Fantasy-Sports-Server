@@ -153,11 +153,17 @@ export async function listPlayerInnings(req: Request, res: Response) {
   return res.status(200).json({ innings });
 }
 
-// PUT /api/matches/:matchId/players/:matchPlayerId/innings   (admin)
-//
-// Replaces the whole set of innings for one player. Sent as a unit
-// because the admin edits a player's full scorecard at once, and it
-// keeps innings numbering free of gaps.
+/**
+ * PUT /api/matches/:matchId/players/:matchPlayerId/innings   (admin)
+ *
+ * Merges the innings sent. Innings not mentioned are untouched, and
+ * within an innings only the fields present are written.
+ *
+ * Deliberately not a replace. An admin editing one innings — or one
+ * field — must not wipe the rest, and the fields the live feed can't
+ * supply (dot balls, the bowled/LBW split) live here too: replacing the
+ * row would erase them every time anything else was saved.
+ */
 export async function savePlayerInnings(req: Request, res: Response) {
   const { matchPlayerId } = req.params as { matchPlayerId: string };
 
@@ -179,15 +185,17 @@ export async function savePlayerInnings(req: Request, res: Response) {
     seen.add(entry.inningsNumber);
   }
 
-  await prisma.$transaction(async (tx) => {
-    await tx.matchPlayerInnings.deleteMany({ where: { matchPlayerId } });
+  for (const entry of parsed.data.innings) {
+    const { inningsNumber, ...stats } = entry;
 
-    if (parsed.data.innings.length > 0) {
-      await tx.matchPlayerInnings.createMany({
-        data: parsed.data.innings.map((entry) => ({ ...entry, matchPlayerId })),
-      });
-    }
-  });
+    // Undefined fields are dropped by the spread, so an update touches
+    // only what was actually sent.
+    await prisma.matchPlayerInnings.upsert({
+      where: { matchPlayerId_inningsNumber: { matchPlayerId, inningsNumber } },
+      create: { matchPlayerId, inningsNumber, ...stats },
+      update: stats,
+    });
+  }
 
   // The aggregate on MatchPlayer is what the rest of the app reads, so
   // it has to be rebuilt from the innings just written. Points stay

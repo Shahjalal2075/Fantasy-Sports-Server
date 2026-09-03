@@ -409,6 +409,9 @@ export const ModelName = {
   Team: 'Team',
   Player: 'Player',
   Match: 'Match',
+  MatchLiveLink: 'MatchLiveLink',
+  PlayerLiveLink: 'PlayerLiveLink',
+  MatchPlayerInnings: 'MatchPlayerInnings',
   MatchInnings: 'MatchInnings',
   MatchPlayer: 'MatchPlayer',
   UserTeam: 'UserTeam',
@@ -433,7 +436,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "coinTransaction" | "notification" | "appSettings" | "giftRequest" | "contactMethod" | "banner" | "activeSession" | "visitorStat" | "team" | "player" | "match" | "matchInnings" | "matchPlayer" | "userTeam" | "userTeamPlayer" | "contest" | "contestEntry" | "pointSystem" | "promoCode" | "promoCodeClaim"
+    modelProps: "user" | "coinTransaction" | "notification" | "appSettings" | "giftRequest" | "contactMethod" | "banner" | "activeSession" | "visitorStat" | "team" | "player" | "match" | "matchLiveLink" | "playerLiveLink" | "matchPlayerInnings" | "matchInnings" | "matchPlayer" | "userTeam" | "userTeamPlayer" | "contest" | "contestEntry" | "pointSystem" | "promoCode" | "promoCodeClaim"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1322,6 +1325,228 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.MatchCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.MatchCountAggregateOutputType> | number
+        }
+      }
+    }
+    MatchLiveLink: {
+      payload: Prisma.$MatchLiveLinkPayload<ExtArgs>
+      fields: Prisma.MatchLiveLinkFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.MatchLiveLinkFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MatchLiveLinkPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.MatchLiveLinkFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MatchLiveLinkPayload>
+        }
+        findFirst: {
+          args: Prisma.MatchLiveLinkFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MatchLiveLinkPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.MatchLiveLinkFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MatchLiveLinkPayload>
+        }
+        findMany: {
+          args: Prisma.MatchLiveLinkFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MatchLiveLinkPayload>[]
+        }
+        create: {
+          args: Prisma.MatchLiveLinkCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MatchLiveLinkPayload>
+        }
+        createMany: {
+          args: Prisma.MatchLiveLinkCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.MatchLiveLinkCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MatchLiveLinkPayload>[]
+        }
+        delete: {
+          args: Prisma.MatchLiveLinkDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MatchLiveLinkPayload>
+        }
+        update: {
+          args: Prisma.MatchLiveLinkUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MatchLiveLinkPayload>
+        }
+        deleteMany: {
+          args: Prisma.MatchLiveLinkDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.MatchLiveLinkUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.MatchLiveLinkUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MatchLiveLinkPayload>[]
+        }
+        upsert: {
+          args: Prisma.MatchLiveLinkUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MatchLiveLinkPayload>
+        }
+        aggregate: {
+          args: Prisma.MatchLiveLinkAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateMatchLiveLink>
+        }
+        groupBy: {
+          args: Prisma.MatchLiveLinkGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MatchLiveLinkGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.MatchLiveLinkCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MatchLiveLinkCountAggregateOutputType> | number
+        }
+      }
+    }
+    PlayerLiveLink: {
+      payload: Prisma.$PlayerLiveLinkPayload<ExtArgs>
+      fields: Prisma.PlayerLiveLinkFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PlayerLiveLinkFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlayerLiveLinkPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PlayerLiveLinkFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlayerLiveLinkPayload>
+        }
+        findFirst: {
+          args: Prisma.PlayerLiveLinkFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlayerLiveLinkPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PlayerLiveLinkFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlayerLiveLinkPayload>
+        }
+        findMany: {
+          args: Prisma.PlayerLiveLinkFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlayerLiveLinkPayload>[]
+        }
+        create: {
+          args: Prisma.PlayerLiveLinkCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlayerLiveLinkPayload>
+        }
+        createMany: {
+          args: Prisma.PlayerLiveLinkCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PlayerLiveLinkCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlayerLiveLinkPayload>[]
+        }
+        delete: {
+          args: Prisma.PlayerLiveLinkDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlayerLiveLinkPayload>
+        }
+        update: {
+          args: Prisma.PlayerLiveLinkUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlayerLiveLinkPayload>
+        }
+        deleteMany: {
+          args: Prisma.PlayerLiveLinkDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PlayerLiveLinkUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PlayerLiveLinkUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlayerLiveLinkPayload>[]
+        }
+        upsert: {
+          args: Prisma.PlayerLiveLinkUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlayerLiveLinkPayload>
+        }
+        aggregate: {
+          args: Prisma.PlayerLiveLinkAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePlayerLiveLink>
+        }
+        groupBy: {
+          args: Prisma.PlayerLiveLinkGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PlayerLiveLinkGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PlayerLiveLinkCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PlayerLiveLinkCountAggregateOutputType> | number
+        }
+      }
+    }
+    MatchPlayerInnings: {
+      payload: Prisma.$MatchPlayerInningsPayload<ExtArgs>
+      fields: Prisma.MatchPlayerInningsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.MatchPlayerInningsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MatchPlayerInningsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.MatchPlayerInningsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MatchPlayerInningsPayload>
+        }
+        findFirst: {
+          args: Prisma.MatchPlayerInningsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MatchPlayerInningsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.MatchPlayerInningsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MatchPlayerInningsPayload>
+        }
+        findMany: {
+          args: Prisma.MatchPlayerInningsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MatchPlayerInningsPayload>[]
+        }
+        create: {
+          args: Prisma.MatchPlayerInningsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MatchPlayerInningsPayload>
+        }
+        createMany: {
+          args: Prisma.MatchPlayerInningsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.MatchPlayerInningsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MatchPlayerInningsPayload>[]
+        }
+        delete: {
+          args: Prisma.MatchPlayerInningsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MatchPlayerInningsPayload>
+        }
+        update: {
+          args: Prisma.MatchPlayerInningsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MatchPlayerInningsPayload>
+        }
+        deleteMany: {
+          args: Prisma.MatchPlayerInningsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.MatchPlayerInningsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.MatchPlayerInningsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MatchPlayerInningsPayload>[]
+        }
+        upsert: {
+          args: Prisma.MatchPlayerInningsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MatchPlayerInningsPayload>
+        }
+        aggregate: {
+          args: Prisma.MatchPlayerInningsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateMatchPlayerInnings>
+        }
+        groupBy: {
+          args: Prisma.MatchPlayerInningsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MatchPlayerInningsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.MatchPlayerInningsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MatchPlayerInningsCountAggregateOutputType> | number
         }
       }
     }
@@ -2246,6 +2471,72 @@ export const MatchScalarFieldEnum = {
 export type MatchScalarFieldEnum = (typeof MatchScalarFieldEnum)[keyof typeof MatchScalarFieldEnum]
 
 
+export const MatchLiveLinkScalarFieldEnum = {
+  id: 'id',
+  matchId: 'matchId',
+  code: 'code',
+  liveMatchId: 'liveMatchId',
+  liveLabel: 'liveLabel',
+  connectedAt: 'connectedAt',
+  lastScoreAt: 'lastScoreAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type MatchLiveLinkScalarFieldEnum = (typeof MatchLiveLinkScalarFieldEnum)[keyof typeof MatchLiveLinkScalarFieldEnum]
+
+
+export const PlayerLiveLinkScalarFieldEnum = {
+  id: 'id',
+  matchPlayerId: 'matchPlayerId',
+  code: 'code',
+  liveName: 'liveName',
+  isActive: 'isActive',
+  matchedAutomatically: 'matchedAutomatically',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PlayerLiveLinkScalarFieldEnum = (typeof PlayerLiveLinkScalarFieldEnum)[keyof typeof PlayerLiveLinkScalarFieldEnum]
+
+
+export const MatchPlayerInningsScalarFieldEnum = {
+  id: 'id',
+  matchPlayerId: 'matchPlayerId',
+  inningsNumber: 'inningsNumber',
+  points: 'points',
+  runs: 'runs',
+  ballsFaced: 'ballsFaced',
+  fours: 'fours',
+  sixes: 'sixes',
+  isOut: 'isOut',
+  ballsBowled: 'ballsBowled',
+  dotBalls: 'dotBalls',
+  maidens: 'maidens',
+  runsConceded: 'runsConceded',
+  wickets: 'wickets',
+  wicketsBowledOrLBW: 'wicketsBowledOrLBW',
+  catches: 'catches',
+  runOutsDirect: 'runOutsDirect',
+  runOutsIndirect: 'runOutsIndirect',
+  stumpings: 'stumpings',
+  minutesPlayed: 'minutesPlayed',
+  goals: 'goals',
+  assists: 'assists',
+  cleanSheet: 'cleanSheet',
+  yellowCards: 'yellowCards',
+  redCards: 'redCards',
+  ownGoals: 'ownGoals',
+  penaltiesSaved: 'penaltiesSaved',
+  penaltiesMissed: 'penaltiesMissed',
+  saves: 'saves',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type MatchPlayerInningsScalarFieldEnum = (typeof MatchPlayerInningsScalarFieldEnum)[keyof typeof MatchPlayerInningsScalarFieldEnum]
+
+
 export const MatchInningsScalarFieldEnum = {
   id: 'id',
   matchId: 'matchId',
@@ -2757,6 +3048,9 @@ export type GlobalOmitConfig = {
   team?: Prisma.TeamOmit
   player?: Prisma.PlayerOmit
   match?: Prisma.MatchOmit
+  matchLiveLink?: Prisma.MatchLiveLinkOmit
+  playerLiveLink?: Prisma.PlayerLiveLinkOmit
+  matchPlayerInnings?: Prisma.MatchPlayerInningsOmit
   matchInnings?: Prisma.MatchInningsOmit
   matchPlayer?: Prisma.MatchPlayerOmit
   userTeam?: Prisma.UserTeamOmit

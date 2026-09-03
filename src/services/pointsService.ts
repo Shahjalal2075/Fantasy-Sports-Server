@@ -1,3 +1,4 @@
+import { Prisma } from "../generated/prisma";
 import prisma from "../config/prisma";
 import { computeTeamPoints } from "../utils/teamRules";
 import {
@@ -50,20 +51,122 @@ export async function calculateMatchPlayerPoints(matchId: string): Promise<numbe
 
   const matchPlayers = await prisma.matchPlayer.findMany({
     where: { matchId },
-    include: { player: true },
+    include: { player: true, innings: { orderBy: { inningsNumber: "asc" } } },
   });
 
-  await prisma.$transaction(
-    matchPlayers.map((mp) => {
+  // Collected first, then run as one transaction: a half-scored match
+  // is worse than an unscored one.
+  const writes: Prisma.PrismaPromise<unknown>[] = [];
+
+  for (const mp of matchPlayers) {
+    // Scored per innings and summed, not from the match aggregate.
+    //
+    // In a Test, a duck in the first innings and eighty in the second
+    // are two separate events: aggregating them would hide the duck
+    // penalty and award a milestone that wasn't earned in either single
+    // innings. Rate-based rules — strike rate, economy — are likewise
+    // per innings, which is how they're actually judged.
+    //
+    // A player with no innings rows falls back to the aggregate, so a
+    // squad member whose scorecard was never opened still scores the
+    // playing-XI bonus.
+    const sources =
+      mp.innings.length > 0
+        ? mp.innings.map((entry, index) => ({
+            entry,
+            stats: {
+              ...entry,
+              // The playing-XI bonus is for being selected, which happens
+              // once per match — so only the first innings carries it.
+              // Otherwise a Test player would collect it up to four
+              // times for the same selection.
+              isPlaying: index === 0 ? mp.isPlaying : false,
+            },
+          }))
+        : [{ entry: null, stats: mp }];
+
+    let total = 0;
+
+    for (const source of sources) {
       const points =
         match.sport === "CRICKET"
-          ? calculateCricketPoints(mp, mp.player.role, rules as CricketPointRules)
-          : calculateFootballPoints(mp, mp.player.role, rules as FootballPointRules);
-      return prisma.matchPlayer.update({ where: { id: mp.id }, data: { points } });
-    })
-  );
+          ? calculateCricketPoints(source.stats as any, mp.player.role, rules as CricketPointRules)
+          : calculateFootballPoints(source.stats as any, mp.player.role, rules as FootballPointRules);
+
+      total += points;
+
+      if (source.entry) {
+        writes.push(
+          prisma.matchPlayerInnings.update({
+            where: { id: source.entry.id },
+            data: { points },
+          })
+        );
+      }
+    }
+
+    // Float addition drifts (0.1 + 0.2), and these numbers decide payouts.
+    total = Math.round(total * 100) / 100;
+
+    writes.push(prisma.matchPlayer.update({ where: { id: mp.id }, data: { points: total } }));
+  }
+
+  await prisma.$transaction(writes);
 
   return matchPlayers.length;
+}
+
+/**
+ * Rewrites a MatchPlayer's aggregate stats as the sum of its innings.
+ *
+ * The aggregate stays the single source for anything that reads a
+ * player's match totals, so it has to be refreshed whenever an innings
+ * scorecard is saved.
+ */
+export async function syncMatchPlayerAggregate(matchPlayerId: string): Promise<void> {
+  const innings = await prisma.matchPlayerInnings.findMany({ where: { matchPlayerId } });
+
+  if (innings.length === 0) return;
+
+  const sum = (pick: (row: (typeof innings)[number]) => number) =>
+    innings.reduce((total, row) => total + pick(row), 0);
+
+  await prisma.matchPlayer.update({
+    where: { id: matchPlayerId },
+    data: {
+      runs: sum((r) => r.runs),
+      ballsFaced: sum((r) => r.ballsFaced),
+      fours: sum((r) => r.fours),
+      sixes: sum((r) => r.sixes),
+      // Dismissed in ANY innings — the aggregate can't express "out
+      // twice", and this flag only feeds displays now that scoring runs
+      // per innings.
+      isOut: innings.some((r) => r.isOut),
+
+      ballsBowled: sum((r) => r.ballsBowled),
+      dotBalls: sum((r) => r.dotBalls),
+      maidens: sum((r) => r.maidens),
+      runsConceded: sum((r) => r.runsConceded),
+      wickets: sum((r) => r.wickets),
+      wicketsBowledOrLBW: sum((r) => r.wicketsBowledOrLBW),
+
+      catches: sum((r) => r.catches),
+      runOutsDirect: sum((r) => r.runOutsDirect),
+      runOutsIndirect: sum((r) => r.runOutsIndirect),
+      stumpings: sum((r) => r.stumpings),
+
+      minutesPlayed: sum((r) => r.minutesPlayed),
+      goals: sum((r) => r.goals),
+      assists: sum((r) => r.assists),
+      cleanSheet: innings.some((r) => r.cleanSheet),
+      yellowCards: sum((r) => r.yellowCards),
+      redCards: sum((r) => r.redCards),
+      ownGoals: sum((r) => r.ownGoals),
+      penaltiesSaved: sum((r) => r.penaltiesSaved),
+      penaltiesMissed: sum((r) => r.penaltiesMissed),
+      saves: sum((r) => r.saves),
+    },
+  });
 }
 
 // STEP 2: recompute every UserTeam.totalPoints for a match (captain/VC

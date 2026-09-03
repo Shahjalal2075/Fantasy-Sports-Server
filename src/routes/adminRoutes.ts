@@ -29,6 +29,14 @@ import {
   createContactMethod,
   updateContactMethod,
 } from "../controllers/contactMethodController";
+import {
+  createMatchLink,
+  removeMatchLink,
+  getMatchLink,
+  setPlayerLiveCode,
+  clearPlayerLiveCode,
+  generatePlayerLiveCode,
+} from "../controllers/liveSyncController";
 import { requireAuth, requireAdmin } from "../middleware/auth";
 
 const router = Router();
@@ -59,6 +67,14 @@ router.post("/gift-requests/:id/approve", approveGiftRequestHandler);
 router.post("/gift-requests/:id/cancel", cancelGiftRequestHandler);
 
 // Contact methods offered on the gift request form
+// Pairing with the live-score service
+router.get("/matches/:id/live-link", getMatchLink);
+router.post("/matches/:id/live-link", createMatchLink);
+router.delete("/matches/:id/live-link", removeMatchLink);
+router.patch("/match-players/:matchPlayerId/live-code", setPlayerLiveCode);
+router.post("/match-players/:matchPlayerId/live-code/generate", generatePlayerLiveCode);
+router.delete("/match-players/:matchPlayerId/live-code", clearPlayerLiveCode);
+
 router.get("/contact-methods", listContactMethods);
 router.post("/contact-methods", createContactMethod);
 router.patch("/contact-methods/:id", updateContactMethod);

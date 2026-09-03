@@ -27,11 +27,22 @@ export async function listMatches(req: Request, res: Response) {
     where: {
       sport: sport ? (sport as any) : undefined,
     },
-    include: { teamA: true, teamB: true },
+    include: {
+      teamA: true,
+      teamB: true,
+      // Just enough for the admin list's Server column — one query
+      // rather than a lookup per row.
+      liveLink: { select: { code: true, liveMatchId: true, lastScoreAt: true } },
+    },
     orderBy: { startTime: "asc" },
   });
 
-  let withStatus = matches.map(withEffectiveStatus);
+  let withStatus = matches.map((match: any) => ({
+    ...withEffectiveStatus(match),
+    liveConnected: !!match.liveLink?.liveMatchId,
+    liveCode: match.liveLink?.code ?? null,
+    liveLastScoreAt: match.liveLink?.lastScoreAt ?? null,
+  }));
   if (status) {
     withStatus = withStatus.filter((m) => m.status === status);
   }

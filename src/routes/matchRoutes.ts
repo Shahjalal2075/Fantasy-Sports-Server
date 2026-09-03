@@ -14,6 +14,8 @@ import {
   addMatchPlayer,
   updateMatchPlayer,
   removeMatchPlayer,
+  listPlayerInnings,
+  savePlayerInnings,
 } from "../controllers/matchPlayerController";
 import { listInnings, saveInnings } from "../controllers/inningsController";
 import { getPlayerBreakdown } from "../controllers/playerBreakdownController";
@@ -44,6 +46,9 @@ router.get("/:matchId/available-players", requireAuth, requireAdmin, listAvailab
 router.put("/:matchId/innings", requireAuth, requireAdmin, saveInnings);
 router.post("/:matchId/players", requireAuth, requireAdmin, addMatchPlayer);
 router.patch("/:matchId/players/:matchPlayerId", requireAuth, requireAdmin, updateMatchPlayer);
+// Innings-by-innings scorecard for one player.
+router.get("/:matchId/players/:matchPlayerId/innings", requireAuth, requireAdmin, listPlayerInnings);
+router.put("/:matchId/players/:matchPlayerId/innings", requireAuth, requireAdmin, savePlayerInnings);
 router.delete("/:matchId/players/:matchPlayerId", requireAuth, requireAdmin, removeMatchPlayer);
 
 export default router;

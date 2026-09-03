@@ -63,6 +63,9 @@ export const ModelName = {
   Team: 'Team',
   Player: 'Player',
   Match: 'Match',
+  MatchLiveLink: 'MatchLiveLink',
+  PlayerLiveLink: 'PlayerLiveLink',
+  MatchPlayerInnings: 'MatchPlayerInnings',
   MatchInnings: 'MatchInnings',
   MatchPlayer: 'MatchPlayer',
   UserTeam: 'UserTeam',
@@ -304,6 +307,72 @@ export const MatchScalarFieldEnum = {
 } as const
 
 export type MatchScalarFieldEnum = (typeof MatchScalarFieldEnum)[keyof typeof MatchScalarFieldEnum]
+
+
+export const MatchLiveLinkScalarFieldEnum = {
+  id: 'id',
+  matchId: 'matchId',
+  code: 'code',
+  liveMatchId: 'liveMatchId',
+  liveLabel: 'liveLabel',
+  connectedAt: 'connectedAt',
+  lastScoreAt: 'lastScoreAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type MatchLiveLinkScalarFieldEnum = (typeof MatchLiveLinkScalarFieldEnum)[keyof typeof MatchLiveLinkScalarFieldEnum]
+
+
+export const PlayerLiveLinkScalarFieldEnum = {
+  id: 'id',
+  matchPlayerId: 'matchPlayerId',
+  code: 'code',
+  liveName: 'liveName',
+  isActive: 'isActive',
+  matchedAutomatically: 'matchedAutomatically',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PlayerLiveLinkScalarFieldEnum = (typeof PlayerLiveLinkScalarFieldEnum)[keyof typeof PlayerLiveLinkScalarFieldEnum]
+
+
+export const MatchPlayerInningsScalarFieldEnum = {
+  id: 'id',
+  matchPlayerId: 'matchPlayerId',
+  inningsNumber: 'inningsNumber',
+  points: 'points',
+  runs: 'runs',
+  ballsFaced: 'ballsFaced',
+  fours: 'fours',
+  sixes: 'sixes',
+  isOut: 'isOut',
+  ballsBowled: 'ballsBowled',
+  dotBalls: 'dotBalls',
+  maidens: 'maidens',
+  runsConceded: 'runsConceded',
+  wickets: 'wickets',
+  wicketsBowledOrLBW: 'wicketsBowledOrLBW',
+  catches: 'catches',
+  runOutsDirect: 'runOutsDirect',
+  runOutsIndirect: 'runOutsIndirect',
+  stumpings: 'stumpings',
+  minutesPlayed: 'minutesPlayed',
+  goals: 'goals',
+  assists: 'assists',
+  cleanSheet: 'cleanSheet',
+  yellowCards: 'yellowCards',
+  redCards: 'redCards',
+  ownGoals: 'ownGoals',
+  penaltiesSaved: 'penaltiesSaved',
+  penaltiesMissed: 'penaltiesMissed',
+  saves: 'saves',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type MatchPlayerInningsScalarFieldEnum = (typeof MatchPlayerInningsScalarFieldEnum)[keyof typeof MatchPlayerInningsScalarFieldEnum]
 
 
 export const MatchInningsScalarFieldEnum = {

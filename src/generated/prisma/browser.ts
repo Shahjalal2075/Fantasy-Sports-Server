@@ -78,6 +78,21 @@ export type Player = Prisma.PlayerModel
  */
 export type Match = Prisma.MatchModel
 /**
+ * Model MatchLiveLink
+ * 
+ */
+export type MatchLiveLink = Prisma.MatchLiveLinkModel
+/**
+ * Model PlayerLiveLink
+ * 
+ */
+export type PlayerLiveLink = Prisma.PlayerLiveLinkModel
+/**
+ * Model MatchPlayerInnings
+ * 
+ */
+export type MatchPlayerInnings = Prisma.MatchPlayerInningsModel
+/**
  * Model MatchInnings
  * 
  */

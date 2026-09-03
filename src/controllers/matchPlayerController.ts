@@ -1,6 +1,11 @@
 import { Request, Response } from "express";
 import prisma from "../config/prisma";
-import { addMatchPlayerSchema, updateMatchPlayerSchema } from "../utils/validators";
+import { syncMatchPlayerAggregate } from "../services/pointsService";
+import {
+  addMatchPlayerSchema,
+  updateMatchPlayerSchema,
+  savePlayerInningsSchema,
+} from "../utils/validators";
 
 // GET /api/matches/:matchId/players  (public)
 // The squad actually added to this match, with live stats + computed points.
@@ -104,6 +109,67 @@ export async function updateMatchPlayer(req: Request, res: Response) {
   });
 
   return res.status(200).json({ matchPlayer });
+}
+
+// GET /api/matches/:matchId/players/:matchPlayerId/innings   (admin)
+export async function listPlayerInnings(req: Request, res: Response) {
+  const { matchPlayerId } = req.params as { matchPlayerId: string };
+
+  const innings = await prisma.matchPlayerInnings.findMany({
+    where: { matchPlayerId },
+    orderBy: { inningsNumber: "asc" },
+  });
+
+  return res.status(200).json({ innings });
+}
+
+// PUT /api/matches/:matchId/players/:matchPlayerId/innings   (admin)
+//
+// Replaces the whole set of innings for one player. Sent as a unit
+// because the admin edits a player's full scorecard at once, and it
+// keeps innings numbering free of gaps.
+export async function savePlayerInnings(req: Request, res: Response) {
+  const { matchPlayerId } = req.params as { matchPlayerId: string };
+
+  const parsed = savePlayerInningsSchema.safeParse(req.body);
+  if (!parsed.success) {
+    return res.status(400).json({ error: parsed.error.issues[0].message });
+  }
+
+  const existing = await prisma.matchPlayer.findUnique({ where: { id: matchPlayerId } });
+  if (!existing) {
+    return res.status(404).json({ error: "This player is not part of this match" });
+  }
+
+  const seen = new Set<number>();
+  for (const entry of parsed.data.innings) {
+    if (seen.has(entry.inningsNumber)) {
+      return res.status(400).json({ error: "Two entries share the same innings number" });
+    }
+    seen.add(entry.inningsNumber);
+  }
+
+  await prisma.$transaction(async (tx) => {
+    await tx.matchPlayerInnings.deleteMany({ where: { matchPlayerId } });
+
+    if (parsed.data.innings.length > 0) {
+      await tx.matchPlayerInnings.createMany({
+        data: parsed.data.innings.map((entry) => ({ ...entry, matchPlayerId })),
+      });
+    }
+  });
+
+  // The aggregate on MatchPlayer is what the rest of the app reads, so
+  // it has to be rebuilt from the innings just written. Points stay
+  // stale until an admin runs Calculate Points, same as before.
+  await syncMatchPlayerAggregate(matchPlayerId);
+
+  const innings = await prisma.matchPlayerInnings.findMany({
+    where: { matchPlayerId },
+    orderBy: { inningsNumber: "asc" },
+  });
+
+  return res.status(200).json({ innings });
 }
 
 // DELETE /api/matches/:matchId/players/:matchPlayerId  (admin only)

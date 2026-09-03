@@ -250,6 +250,7 @@ export type MatchWhereInput = {
   teamB?: Prisma.XOR<Prisma.TeamScalarRelationFilter, Prisma.TeamWhereInput>
   matchPlayers?: Prisma.MatchPlayerListRelationFilter
   innings?: Prisma.MatchInningsListRelationFilter
+  liveLink?: Prisma.XOR<Prisma.MatchLiveLinkNullableScalarRelationFilter, Prisma.MatchLiveLinkWhereInput> | null
   userTeams?: Prisma.UserTeamListRelationFilter
   contests?: Prisma.ContestListRelationFilter
 }
@@ -272,6 +273,7 @@ export type MatchOrderByWithRelationInput = {
   teamB?: Prisma.TeamOrderByWithRelationInput
   matchPlayers?: Prisma.MatchPlayerOrderByRelationAggregateInput
   innings?: Prisma.MatchInningsOrderByRelationAggregateInput
+  liveLink?: Prisma.MatchLiveLinkOrderByWithRelationInput
   userTeams?: Prisma.UserTeamOrderByRelationAggregateInput
   contests?: Prisma.ContestOrderByRelationAggregateInput
 }
@@ -297,6 +299,7 @@ export type MatchWhereUniqueInput = Prisma.AtLeast<{
   teamB?: Prisma.XOR<Prisma.TeamScalarRelationFilter, Prisma.TeamWhereInput>
   matchPlayers?: Prisma.MatchPlayerListRelationFilter
   innings?: Prisma.MatchInningsListRelationFilter
+  liveLink?: Prisma.XOR<Prisma.MatchLiveLinkNullableScalarRelationFilter, Prisma.MatchLiveLinkWhereInput> | null
   userTeams?: Prisma.UserTeamListRelationFilter
   contests?: Prisma.ContestListRelationFilter
 }, "id">
@@ -355,6 +358,7 @@ export type MatchCreateInput = {
   teamB: Prisma.TeamCreateNestedOneWithoutMatchesAsTeamBInput
   matchPlayers?: Prisma.MatchPlayerCreateNestedManyWithoutMatchInput
   innings?: Prisma.MatchInningsCreateNestedManyWithoutMatchInput
+  liveLink?: Prisma.MatchLiveLinkCreateNestedOneWithoutMatchInput
   userTeams?: Prisma.UserTeamCreateNestedManyWithoutMatchInput
   contests?: Prisma.ContestCreateNestedManyWithoutMatchInput
 }
@@ -375,6 +379,7 @@ export type MatchUncheckedCreateInput = {
   updatedAt?: Date | string
   matchPlayers?: Prisma.MatchPlayerUncheckedCreateNestedManyWithoutMatchInput
   innings?: Prisma.MatchInningsUncheckedCreateNestedManyWithoutMatchInput
+  liveLink?: Prisma.MatchLiveLinkUncheckedCreateNestedOneWithoutMatchInput
   userTeams?: Prisma.UserTeamUncheckedCreateNestedManyWithoutMatchInput
   contests?: Prisma.ContestUncheckedCreateNestedManyWithoutMatchInput
 }
@@ -395,6 +400,7 @@ export type MatchUpdateInput = {
   teamB?: Prisma.TeamUpdateOneRequiredWithoutMatchesAsTeamBNestedInput
   matchPlayers?: Prisma.MatchPlayerUpdateManyWithoutMatchNestedInput
   innings?: Prisma.MatchInningsUpdateManyWithoutMatchNestedInput
+  liveLink?: Prisma.MatchLiveLinkUpdateOneWithoutMatchNestedInput
   userTeams?: Prisma.UserTeamUpdateManyWithoutMatchNestedInput
   contests?: Prisma.ContestUpdateManyWithoutMatchNestedInput
 }
@@ -415,6 +421,7 @@ export type MatchUncheckedUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   matchPlayers?: Prisma.MatchPlayerUncheckedUpdateManyWithoutMatchNestedInput
   innings?: Prisma.MatchInningsUncheckedUpdateManyWithoutMatchNestedInput
+  liveLink?: Prisma.MatchLiveLinkUncheckedUpdateOneWithoutMatchNestedInput
   userTeams?: Prisma.UserTeamUncheckedUpdateManyWithoutMatchNestedInput
   contests?: Prisma.ContestUncheckedUpdateManyWithoutMatchNestedInput
 }
@@ -616,6 +623,20 @@ export type EnumMatchStatusFieldUpdateOperationsInput = {
   set?: $Enums.MatchStatus
 }
 
+export type MatchCreateNestedOneWithoutLiveLinkInput = {
+  create?: Prisma.XOR<Prisma.MatchCreateWithoutLiveLinkInput, Prisma.MatchUncheckedCreateWithoutLiveLinkInput>
+  connectOrCreate?: Prisma.MatchCreateOrConnectWithoutLiveLinkInput
+  connect?: Prisma.MatchWhereUniqueInput
+}
+
+export type MatchUpdateOneRequiredWithoutLiveLinkNestedInput = {
+  create?: Prisma.XOR<Prisma.MatchCreateWithoutLiveLinkInput, Prisma.MatchUncheckedCreateWithoutLiveLinkInput>
+  connectOrCreate?: Prisma.MatchCreateOrConnectWithoutLiveLinkInput
+  upsert?: Prisma.MatchUpsertWithoutLiveLinkInput
+  connect?: Prisma.MatchWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.MatchUpdateToOneWithWhereWithoutLiveLinkInput, Prisma.MatchUpdateWithoutLiveLinkInput>, Prisma.MatchUncheckedUpdateWithoutLiveLinkInput>
+}
+
 export type MatchCreateNestedOneWithoutInningsInput = {
   create?: Prisma.XOR<Prisma.MatchCreateWithoutInningsInput, Prisma.MatchUncheckedCreateWithoutInningsInput>
   connectOrCreate?: Prisma.MatchCreateOrConnectWithoutInningsInput
@@ -687,6 +708,7 @@ export type MatchCreateWithoutTeamAInput = {
   teamB: Prisma.TeamCreateNestedOneWithoutMatchesAsTeamBInput
   matchPlayers?: Prisma.MatchPlayerCreateNestedManyWithoutMatchInput
   innings?: Prisma.MatchInningsCreateNestedManyWithoutMatchInput
+  liveLink?: Prisma.MatchLiveLinkCreateNestedOneWithoutMatchInput
   userTeams?: Prisma.UserTeamCreateNestedManyWithoutMatchInput
   contests?: Prisma.ContestCreateNestedManyWithoutMatchInput
 }
@@ -706,6 +728,7 @@ export type MatchUncheckedCreateWithoutTeamAInput = {
   updatedAt?: Date | string
   matchPlayers?: Prisma.MatchPlayerUncheckedCreateNestedManyWithoutMatchInput
   innings?: Prisma.MatchInningsUncheckedCreateNestedManyWithoutMatchInput
+  liveLink?: Prisma.MatchLiveLinkUncheckedCreateNestedOneWithoutMatchInput
   userTeams?: Prisma.UserTeamUncheckedCreateNestedManyWithoutMatchInput
   contests?: Prisma.ContestUncheckedCreateNestedManyWithoutMatchInput
 }
@@ -735,6 +758,7 @@ export type MatchCreateWithoutTeamBInput = {
   teamA: Prisma.TeamCreateNestedOneWithoutMatchesAsTeamAInput
   matchPlayers?: Prisma.MatchPlayerCreateNestedManyWithoutMatchInput
   innings?: Prisma.MatchInningsCreateNestedManyWithoutMatchInput
+  liveLink?: Prisma.MatchLiveLinkCreateNestedOneWithoutMatchInput
   userTeams?: Prisma.UserTeamCreateNestedManyWithoutMatchInput
   contests?: Prisma.ContestCreateNestedManyWithoutMatchInput
 }
@@ -754,6 +778,7 @@ export type MatchUncheckedCreateWithoutTeamBInput = {
   updatedAt?: Date | string
   matchPlayers?: Prisma.MatchPlayerUncheckedCreateNestedManyWithoutMatchInput
   innings?: Prisma.MatchInningsUncheckedCreateNestedManyWithoutMatchInput
+  liveLink?: Prisma.MatchLiveLinkUncheckedCreateNestedOneWithoutMatchInput
   userTeams?: Prisma.UserTeamUncheckedCreateNestedManyWithoutMatchInput
   contests?: Prisma.ContestUncheckedCreateNestedManyWithoutMatchInput
 }
@@ -819,6 +844,102 @@ export type MatchUpdateManyWithWhereWithoutTeamBInput = {
   data: Prisma.XOR<Prisma.MatchUpdateManyMutationInput, Prisma.MatchUncheckedUpdateManyWithoutTeamBInput>
 }
 
+export type MatchCreateWithoutLiveLinkInput = {
+  id?: string
+  sport: $Enums.SportType
+  tournamentName: string
+  format: string
+  venue?: string | null
+  startTime: Date | string
+  status?: $Enums.MatchStatus
+  lockTime: Date | string
+  pointsCalculatedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  teamA: Prisma.TeamCreateNestedOneWithoutMatchesAsTeamAInput
+  teamB: Prisma.TeamCreateNestedOneWithoutMatchesAsTeamBInput
+  matchPlayers?: Prisma.MatchPlayerCreateNestedManyWithoutMatchInput
+  innings?: Prisma.MatchInningsCreateNestedManyWithoutMatchInput
+  userTeams?: Prisma.UserTeamCreateNestedManyWithoutMatchInput
+  contests?: Prisma.ContestCreateNestedManyWithoutMatchInput
+}
+
+export type MatchUncheckedCreateWithoutLiveLinkInput = {
+  id?: string
+  sport: $Enums.SportType
+  teamAId: string
+  teamBId: string
+  tournamentName: string
+  format: string
+  venue?: string | null
+  startTime: Date | string
+  status?: $Enums.MatchStatus
+  lockTime: Date | string
+  pointsCalculatedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  matchPlayers?: Prisma.MatchPlayerUncheckedCreateNestedManyWithoutMatchInput
+  innings?: Prisma.MatchInningsUncheckedCreateNestedManyWithoutMatchInput
+  userTeams?: Prisma.UserTeamUncheckedCreateNestedManyWithoutMatchInput
+  contests?: Prisma.ContestUncheckedCreateNestedManyWithoutMatchInput
+}
+
+export type MatchCreateOrConnectWithoutLiveLinkInput = {
+  where: Prisma.MatchWhereUniqueInput
+  create: Prisma.XOR<Prisma.MatchCreateWithoutLiveLinkInput, Prisma.MatchUncheckedCreateWithoutLiveLinkInput>
+}
+
+export type MatchUpsertWithoutLiveLinkInput = {
+  update: Prisma.XOR<Prisma.MatchUpdateWithoutLiveLinkInput, Prisma.MatchUncheckedUpdateWithoutLiveLinkInput>
+  create: Prisma.XOR<Prisma.MatchCreateWithoutLiveLinkInput, Prisma.MatchUncheckedCreateWithoutLiveLinkInput>
+  where?: Prisma.MatchWhereInput
+}
+
+export type MatchUpdateToOneWithWhereWithoutLiveLinkInput = {
+  where?: Prisma.MatchWhereInput
+  data: Prisma.XOR<Prisma.MatchUpdateWithoutLiveLinkInput, Prisma.MatchUncheckedUpdateWithoutLiveLinkInput>
+}
+
+export type MatchUpdateWithoutLiveLinkInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  sport?: Prisma.EnumSportTypeFieldUpdateOperationsInput | $Enums.SportType
+  tournamentName?: Prisma.StringFieldUpdateOperationsInput | string
+  format?: Prisma.StringFieldUpdateOperationsInput | string
+  venue?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumMatchStatusFieldUpdateOperationsInput | $Enums.MatchStatus
+  lockTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  pointsCalculatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  teamA?: Prisma.TeamUpdateOneRequiredWithoutMatchesAsTeamANestedInput
+  teamB?: Prisma.TeamUpdateOneRequiredWithoutMatchesAsTeamBNestedInput
+  matchPlayers?: Prisma.MatchPlayerUpdateManyWithoutMatchNestedInput
+  innings?: Prisma.MatchInningsUpdateManyWithoutMatchNestedInput
+  userTeams?: Prisma.UserTeamUpdateManyWithoutMatchNestedInput
+  contests?: Prisma.ContestUpdateManyWithoutMatchNestedInput
+}
+
+export type MatchUncheckedUpdateWithoutLiveLinkInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  sport?: Prisma.EnumSportTypeFieldUpdateOperationsInput | $Enums.SportType
+  teamAId?: Prisma.StringFieldUpdateOperationsInput | string
+  teamBId?: Prisma.StringFieldUpdateOperationsInput | string
+  tournamentName?: Prisma.StringFieldUpdateOperationsInput | string
+  format?: Prisma.StringFieldUpdateOperationsInput | string
+  venue?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumMatchStatusFieldUpdateOperationsInput | $Enums.MatchStatus
+  lockTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  pointsCalculatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  matchPlayers?: Prisma.MatchPlayerUncheckedUpdateManyWithoutMatchNestedInput
+  innings?: Prisma.MatchInningsUncheckedUpdateManyWithoutMatchNestedInput
+  userTeams?: Prisma.UserTeamUncheckedUpdateManyWithoutMatchNestedInput
+  contests?: Prisma.ContestUncheckedUpdateManyWithoutMatchNestedInput
+}
+
 export type MatchCreateWithoutInningsInput = {
   id?: string
   sport: $Enums.SportType
@@ -834,6 +955,7 @@ export type MatchCreateWithoutInningsInput = {
   teamA: Prisma.TeamCreateNestedOneWithoutMatchesAsTeamAInput
   teamB: Prisma.TeamCreateNestedOneWithoutMatchesAsTeamBInput
   matchPlayers?: Prisma.MatchPlayerCreateNestedManyWithoutMatchInput
+  liveLink?: Prisma.MatchLiveLinkCreateNestedOneWithoutMatchInput
   userTeams?: Prisma.UserTeamCreateNestedManyWithoutMatchInput
   contests?: Prisma.ContestCreateNestedManyWithoutMatchInput
 }
@@ -853,6 +975,7 @@ export type MatchUncheckedCreateWithoutInningsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   matchPlayers?: Prisma.MatchPlayerUncheckedCreateNestedManyWithoutMatchInput
+  liveLink?: Prisma.MatchLiveLinkUncheckedCreateNestedOneWithoutMatchInput
   userTeams?: Prisma.UserTeamUncheckedCreateNestedManyWithoutMatchInput
   contests?: Prisma.ContestUncheckedCreateNestedManyWithoutMatchInput
 }
@@ -888,6 +1011,7 @@ export type MatchUpdateWithoutInningsInput = {
   teamA?: Prisma.TeamUpdateOneRequiredWithoutMatchesAsTeamANestedInput
   teamB?: Prisma.TeamUpdateOneRequiredWithoutMatchesAsTeamBNestedInput
   matchPlayers?: Prisma.MatchPlayerUpdateManyWithoutMatchNestedInput
+  liveLink?: Prisma.MatchLiveLinkUpdateOneWithoutMatchNestedInput
   userTeams?: Prisma.UserTeamUpdateManyWithoutMatchNestedInput
   contests?: Prisma.ContestUpdateManyWithoutMatchNestedInput
 }
@@ -907,6 +1031,7 @@ export type MatchUncheckedUpdateWithoutInningsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   matchPlayers?: Prisma.MatchPlayerUncheckedUpdateManyWithoutMatchNestedInput
+  liveLink?: Prisma.MatchLiveLinkUncheckedUpdateOneWithoutMatchNestedInput
   userTeams?: Prisma.UserTeamUncheckedUpdateManyWithoutMatchNestedInput
   contests?: Prisma.ContestUncheckedUpdateManyWithoutMatchNestedInput
 }
@@ -926,6 +1051,7 @@ export type MatchCreateWithoutMatchPlayersInput = {
   teamA: Prisma.TeamCreateNestedOneWithoutMatchesAsTeamAInput
   teamB: Prisma.TeamCreateNestedOneWithoutMatchesAsTeamBInput
   innings?: Prisma.MatchInningsCreateNestedManyWithoutMatchInput
+  liveLink?: Prisma.MatchLiveLinkCreateNestedOneWithoutMatchInput
   userTeams?: Prisma.UserTeamCreateNestedManyWithoutMatchInput
   contests?: Prisma.ContestCreateNestedManyWithoutMatchInput
 }
@@ -945,6 +1071,7 @@ export type MatchUncheckedCreateWithoutMatchPlayersInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   innings?: Prisma.MatchInningsUncheckedCreateNestedManyWithoutMatchInput
+  liveLink?: Prisma.MatchLiveLinkUncheckedCreateNestedOneWithoutMatchInput
   userTeams?: Prisma.UserTeamUncheckedCreateNestedManyWithoutMatchInput
   contests?: Prisma.ContestUncheckedCreateNestedManyWithoutMatchInput
 }
@@ -980,6 +1107,7 @@ export type MatchUpdateWithoutMatchPlayersInput = {
   teamA?: Prisma.TeamUpdateOneRequiredWithoutMatchesAsTeamANestedInput
   teamB?: Prisma.TeamUpdateOneRequiredWithoutMatchesAsTeamBNestedInput
   innings?: Prisma.MatchInningsUpdateManyWithoutMatchNestedInput
+  liveLink?: Prisma.MatchLiveLinkUpdateOneWithoutMatchNestedInput
   userTeams?: Prisma.UserTeamUpdateManyWithoutMatchNestedInput
   contests?: Prisma.ContestUpdateManyWithoutMatchNestedInput
 }
@@ -999,6 +1127,7 @@ export type MatchUncheckedUpdateWithoutMatchPlayersInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   innings?: Prisma.MatchInningsUncheckedUpdateManyWithoutMatchNestedInput
+  liveLink?: Prisma.MatchLiveLinkUncheckedUpdateOneWithoutMatchNestedInput
   userTeams?: Prisma.UserTeamUncheckedUpdateManyWithoutMatchNestedInput
   contests?: Prisma.ContestUncheckedUpdateManyWithoutMatchNestedInput
 }
@@ -1019,6 +1148,7 @@ export type MatchCreateWithoutUserTeamsInput = {
   teamB: Prisma.TeamCreateNestedOneWithoutMatchesAsTeamBInput
   matchPlayers?: Prisma.MatchPlayerCreateNestedManyWithoutMatchInput
   innings?: Prisma.MatchInningsCreateNestedManyWithoutMatchInput
+  liveLink?: Prisma.MatchLiveLinkCreateNestedOneWithoutMatchInput
   contests?: Prisma.ContestCreateNestedManyWithoutMatchInput
 }
 
@@ -1038,6 +1168,7 @@ export type MatchUncheckedCreateWithoutUserTeamsInput = {
   updatedAt?: Date | string
   matchPlayers?: Prisma.MatchPlayerUncheckedCreateNestedManyWithoutMatchInput
   innings?: Prisma.MatchInningsUncheckedCreateNestedManyWithoutMatchInput
+  liveLink?: Prisma.MatchLiveLinkUncheckedCreateNestedOneWithoutMatchInput
   contests?: Prisma.ContestUncheckedCreateNestedManyWithoutMatchInput
 }
 
@@ -1073,6 +1204,7 @@ export type MatchUpdateWithoutUserTeamsInput = {
   teamB?: Prisma.TeamUpdateOneRequiredWithoutMatchesAsTeamBNestedInput
   matchPlayers?: Prisma.MatchPlayerUpdateManyWithoutMatchNestedInput
   innings?: Prisma.MatchInningsUpdateManyWithoutMatchNestedInput
+  liveLink?: Prisma.MatchLiveLinkUpdateOneWithoutMatchNestedInput
   contests?: Prisma.ContestUpdateManyWithoutMatchNestedInput
 }
 
@@ -1092,6 +1224,7 @@ export type MatchUncheckedUpdateWithoutUserTeamsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   matchPlayers?: Prisma.MatchPlayerUncheckedUpdateManyWithoutMatchNestedInput
   innings?: Prisma.MatchInningsUncheckedUpdateManyWithoutMatchNestedInput
+  liveLink?: Prisma.MatchLiveLinkUncheckedUpdateOneWithoutMatchNestedInput
   contests?: Prisma.ContestUncheckedUpdateManyWithoutMatchNestedInput
 }
 
@@ -1111,6 +1244,7 @@ export type MatchCreateWithoutContestsInput = {
   teamB: Prisma.TeamCreateNestedOneWithoutMatchesAsTeamBInput
   matchPlayers?: Prisma.MatchPlayerCreateNestedManyWithoutMatchInput
   innings?: Prisma.MatchInningsCreateNestedManyWithoutMatchInput
+  liveLink?: Prisma.MatchLiveLinkCreateNestedOneWithoutMatchInput
   userTeams?: Prisma.UserTeamCreateNestedManyWithoutMatchInput
 }
 
@@ -1130,6 +1264,7 @@ export type MatchUncheckedCreateWithoutContestsInput = {
   updatedAt?: Date | string
   matchPlayers?: Prisma.MatchPlayerUncheckedCreateNestedManyWithoutMatchInput
   innings?: Prisma.MatchInningsUncheckedCreateNestedManyWithoutMatchInput
+  liveLink?: Prisma.MatchLiveLinkUncheckedCreateNestedOneWithoutMatchInput
   userTeams?: Prisma.UserTeamUncheckedCreateNestedManyWithoutMatchInput
 }
 
@@ -1165,6 +1300,7 @@ export type MatchUpdateWithoutContestsInput = {
   teamB?: Prisma.TeamUpdateOneRequiredWithoutMatchesAsTeamBNestedInput
   matchPlayers?: Prisma.MatchPlayerUpdateManyWithoutMatchNestedInput
   innings?: Prisma.MatchInningsUpdateManyWithoutMatchNestedInput
+  liveLink?: Prisma.MatchLiveLinkUpdateOneWithoutMatchNestedInput
   userTeams?: Prisma.UserTeamUpdateManyWithoutMatchNestedInput
 }
 
@@ -1184,6 +1320,7 @@ export type MatchUncheckedUpdateWithoutContestsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   matchPlayers?: Prisma.MatchPlayerUncheckedUpdateManyWithoutMatchNestedInput
   innings?: Prisma.MatchInningsUncheckedUpdateManyWithoutMatchNestedInput
+  liveLink?: Prisma.MatchLiveLinkUncheckedUpdateOneWithoutMatchNestedInput
   userTeams?: Prisma.UserTeamUncheckedUpdateManyWithoutMatchNestedInput
 }
 
@@ -1232,6 +1369,7 @@ export type MatchUpdateWithoutTeamAInput = {
   teamB?: Prisma.TeamUpdateOneRequiredWithoutMatchesAsTeamBNestedInput
   matchPlayers?: Prisma.MatchPlayerUpdateManyWithoutMatchNestedInput
   innings?: Prisma.MatchInningsUpdateManyWithoutMatchNestedInput
+  liveLink?: Prisma.MatchLiveLinkUpdateOneWithoutMatchNestedInput
   userTeams?: Prisma.UserTeamUpdateManyWithoutMatchNestedInput
   contests?: Prisma.ContestUpdateManyWithoutMatchNestedInput
 }
@@ -1251,6 +1389,7 @@ export type MatchUncheckedUpdateWithoutTeamAInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   matchPlayers?: Prisma.MatchPlayerUncheckedUpdateManyWithoutMatchNestedInput
   innings?: Prisma.MatchInningsUncheckedUpdateManyWithoutMatchNestedInput
+  liveLink?: Prisma.MatchLiveLinkUncheckedUpdateOneWithoutMatchNestedInput
   userTeams?: Prisma.UserTeamUncheckedUpdateManyWithoutMatchNestedInput
   contests?: Prisma.ContestUncheckedUpdateManyWithoutMatchNestedInput
 }
@@ -1285,6 +1424,7 @@ export type MatchUpdateWithoutTeamBInput = {
   teamA?: Prisma.TeamUpdateOneRequiredWithoutMatchesAsTeamANestedInput
   matchPlayers?: Prisma.MatchPlayerUpdateManyWithoutMatchNestedInput
   innings?: Prisma.MatchInningsUpdateManyWithoutMatchNestedInput
+  liveLink?: Prisma.MatchLiveLinkUpdateOneWithoutMatchNestedInput
   userTeams?: Prisma.UserTeamUpdateManyWithoutMatchNestedInput
   contests?: Prisma.ContestUpdateManyWithoutMatchNestedInput
 }
@@ -1304,6 +1444,7 @@ export type MatchUncheckedUpdateWithoutTeamBInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   matchPlayers?: Prisma.MatchPlayerUncheckedUpdateManyWithoutMatchNestedInput
   innings?: Prisma.MatchInningsUncheckedUpdateManyWithoutMatchNestedInput
+  liveLink?: Prisma.MatchLiveLinkUncheckedUpdateOneWithoutMatchNestedInput
   userTeams?: Prisma.UserTeamUncheckedUpdateManyWithoutMatchNestedInput
   contests?: Prisma.ContestUncheckedUpdateManyWithoutMatchNestedInput
 }
@@ -1399,6 +1540,7 @@ export type MatchSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   teamB?: boolean | Prisma.TeamDefaultArgs<ExtArgs>
   matchPlayers?: boolean | Prisma.Match$matchPlayersArgs<ExtArgs>
   innings?: boolean | Prisma.Match$inningsArgs<ExtArgs>
+  liveLink?: boolean | Prisma.Match$liveLinkArgs<ExtArgs>
   userTeams?: boolean | Prisma.Match$userTeamsArgs<ExtArgs>
   contests?: boolean | Prisma.Match$contestsArgs<ExtArgs>
   _count?: boolean | Prisma.MatchCountOutputTypeDefaultArgs<ExtArgs>
@@ -1462,6 +1604,7 @@ export type MatchInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   teamB?: boolean | Prisma.TeamDefaultArgs<ExtArgs>
   matchPlayers?: boolean | Prisma.Match$matchPlayersArgs<ExtArgs>
   innings?: boolean | Prisma.Match$inningsArgs<ExtArgs>
+  liveLink?: boolean | Prisma.Match$liveLinkArgs<ExtArgs>
   userTeams?: boolean | Prisma.Match$userTeamsArgs<ExtArgs>
   contests?: boolean | Prisma.Match$contestsArgs<ExtArgs>
   _count?: boolean | Prisma.MatchCountOutputTypeDefaultArgs<ExtArgs>
@@ -1482,6 +1625,7 @@ export type $MatchPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     teamB: Prisma.$TeamPayload<ExtArgs>
     matchPlayers: Prisma.$MatchPlayerPayload<ExtArgs>[]
     innings: Prisma.$MatchInningsPayload<ExtArgs>[]
+    liveLink: Prisma.$MatchLiveLinkPayload<ExtArgs> | null
     userTeams: Prisma.$UserTeamPayload<ExtArgs>[]
     contests: Prisma.$ContestPayload<ExtArgs>[]
   }
@@ -1897,6 +2041,7 @@ export interface Prisma__MatchClient<T, Null = never, ExtArgs extends runtime.Ty
   teamB<T extends Prisma.TeamDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TeamDefaultArgs<ExtArgs>>): Prisma.Prisma__TeamClient<runtime.Types.Result.GetResult<Prisma.$TeamPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   matchPlayers<T extends Prisma.Match$matchPlayersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Match$matchPlayersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MatchPlayerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   innings<T extends Prisma.Match$inningsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Match$inningsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MatchInningsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  liveLink<T extends Prisma.Match$liveLinkArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Match$liveLinkArgs<ExtArgs>>): Prisma.Prisma__MatchLiveLinkClient<runtime.Types.Result.GetResult<Prisma.$MatchLiveLinkPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   userTeams<T extends Prisma.Match$userTeamsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Match$userTeamsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserTeamPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   contests<T extends Prisma.Match$contestsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Match$contestsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ContestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
@@ -2387,6 +2532,25 @@ export type Match$inningsArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   take?: number
   skip?: number
   distinct?: Prisma.MatchInningsScalarFieldEnum | Prisma.MatchInningsScalarFieldEnum[]
+}
+
+/**
+ * Match.liveLink
+ */
+export type Match$liveLinkArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the MatchLiveLink
+   */
+  select?: Prisma.MatchLiveLinkSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the MatchLiveLink
+   */
+  omit?: Prisma.MatchLiveLinkOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MatchLiveLinkInclude<ExtArgs> | null
+  where?: Prisma.MatchLiveLinkWhereInput
 }
 
 /**

@@ -356,3 +356,42 @@ export const updateProfileSchema = z.object({
 });
 
 export type UpdateProfileInput = z.infer<typeof updateProfileSchema>;
+
+// One innings of a player's scorecard. Mirrors updateMatchPlayerSchema
+// minus isPlaying, which belongs to the match rather than an innings.
+const playerInningsSchema = z.object({
+  inningsNumber: z.number().int().min(1).max(4),
+
+  runs: z.number().int().min(0).max(1000).optional(),
+  ballsFaced: z.number().int().min(0).max(1000).optional(),
+  fours: z.number().int().min(0).max(200).optional(),
+  sixes: z.number().int().min(0).max(200).optional(),
+  isOut: z.boolean().optional(),
+
+  ballsBowled: z.number().int().min(0).max(1000).optional(),
+  dotBalls: z.number().int().min(0).max(1000).optional(),
+  maidens: z.number().int().min(0).max(100).optional(),
+  runsConceded: z.number().int().min(0).max(1000).optional(),
+  wickets: z.number().int().min(0).max(20).optional(),
+  wicketsBowledOrLBW: z.number().int().min(0).max(20).optional(),
+
+  catches: z.number().int().min(0).max(50).optional(),
+  runOutsDirect: z.number().int().min(0).max(50).optional(),
+  runOutsIndirect: z.number().int().min(0).max(50).optional(),
+  stumpings: z.number().int().min(0).max(50).optional(),
+
+  minutesPlayed: z.number().int().min(0).max(200).optional(),
+  goals: z.number().int().min(0).max(50).optional(),
+  assists: z.number().int().min(0).max(50).optional(),
+  cleanSheet: z.boolean().optional(),
+  yellowCards: z.number().int().min(0).max(5).optional(),
+  redCards: z.number().int().min(0).max(5).optional(),
+  ownGoals: z.number().int().min(0).max(10).optional(),
+  penaltiesSaved: z.number().int().min(0).max(20).optional(),
+  penaltiesMissed: z.number().int().min(0).max(20).optional(),
+  saves: z.number().int().min(0).max(100).optional(),
+});
+
+export const savePlayerInningsSchema = z.object({
+  innings: z.array(playerInningsSchema).max(4),
+});

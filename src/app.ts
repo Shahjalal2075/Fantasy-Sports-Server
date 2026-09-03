@@ -4,6 +4,7 @@ import cors from "cors";
 import appConfigRoutes from "./routes/appConfigRoutes";
 import uploadRoutes from "./routes/uploadRoutes";
 import giftRequestRoutes from "./routes/giftRequestRoutes";
+import liveSyncRoutes from "./routes/liveSyncRoutes";
 import authRoutes from "./routes/authRoutes";
 import matchRoutes from "./routes/matchRoutes";
 import playerRoutes from "./routes/playerRoutes";
@@ -46,6 +47,8 @@ app.get("/health", (_req, res) => {
 app.use("/api/app-config", appConfigRoutes); // public: maintenance, forced update, banner, heartbeat
 app.use("/api/uploads", uploadRoutes);     // imgbb proxy for avatars, logos, player photos
 app.use("/api/gift-requests", giftRequestRoutes);
+// Machine-to-machine: the separate live-score service pushes here.
+app.use("/api/live-sync", liveSyncRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/matches", matchRoutes);
 app.use("/api/players", playerRoutes);          // player CATALOG admin CRUD

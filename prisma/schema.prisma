@@ -400,6 +400,7 @@ model Match {
 
   matchPlayers MatchPlayer[]
   innings      MatchInnings[]
+  liveLink     MatchLiveLink?
   userTeams    UserTeam[]
   contests     Contest[]
 
@@ -410,6 +411,130 @@ model Match {
 // This is what gets added via "Add Player" inside a match (picked from the
 // two teams' catalogs), and what the manual "Sync Live Score" scorecard
 // form fills in. Points are computed from these raw stats using the
+// Binds one match to a match in the separate live-score service.
+//
+// The two systems share no database and no code — they speak only over
+// HTTP, authenticated with a shared key. This row is the fantasy side's
+// record of that pairing, kept here rather than in the live service so
+// the admin panel can show connection state without depending on the
+// live service being up.
+model MatchLiveLink {
+  id      String @id @default(uuid())
+  matchId String @unique
+  match   Match  @relation(fields: [matchId], references: [id], onDelete: Cascade)
+
+  // Short pairing code, generated here and typed into the live panel.
+  code String @unique
+
+  // The live service's own id for the match. Null until it connects.
+  liveMatchId String?
+  // Free text from the live side, purely so an admin can confirm the
+  // right fixture was paired.
+  liveLabel   String  @default("")
+
+  connectedAt DateTime?
+  // When a scorecard was last pushed in.
+  lastScoreAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("match_live_links")
+}
+
+// Binds one MatchPlayer to a named player on the live side.
+//
+// The code is the identity, not the name. Names are only used to make
+// the first match automatically; once a code exists the pairing survives
+// a refetch, a renamed player, or two players sharing a name.
+model PlayerLiveLink {
+  id            String      @id @default(uuid())
+  matchPlayerId String      @unique
+  matchPlayer   MatchPlayer @relation(fields: [matchPlayerId], references: [id], onDelete: Cascade)
+
+  // Short code, unique within the match.
+  code String
+
+  // The live side's name for this player, as last seen.
+  liveName String @default("")
+  // True when the live service still reports this player. A refetch that
+  // drops someone (a 30-man squad cut to the XI) flips this to false
+  // without discarding the code, so re-selection reconnects instantly.
+  isActive Boolean @default(true)
+
+  // Set automatically by name, or entered by an admin to correct a
+  // mismatch. Shown in the panel so a wrong pairing can be spotted.
+  matchedAutomatically Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("player_live_links")
+}
+
+// One player's stats for a single innings.
+//
+// Test cricket scores each innings separately: a duck in the first and
+// eighty in the second are two distinct events, and rolling them into a
+// match total would erase the duck penalty and hand out a milestone
+// bonus that wasn't earned. Points are therefore computed per innings
+// and summed.
+//
+// MatchPlayer keeps the match totals — the sum of these rows — so
+// everything that already reads a player's aggregate stats, and every
+// UserTeamPlayer that points at them, keeps working untouched.
+model MatchPlayerInnings {
+  id            String      @id @default(uuid())
+  matchPlayerId String
+  matchPlayer   MatchPlayer @relation(fields: [matchPlayerId], references: [id], onDelete: Cascade)
+
+  // 1-2 for limited overs, 1-4 for Test.
+  inningsNumber Int
+
+  // Points earned in this innings alone.
+  points Float @default(0)
+
+  // ---- Batting ----
+  runs       Int     @default(0)
+  ballsFaced Int     @default(0)
+  fours      Int     @default(0)
+  sixes      Int     @default(0)
+  isOut      Boolean @default(false)
+
+  // ---- Bowling ----
+  ballsBowled        Int @default(0)
+  dotBalls           Int @default(0)
+  maidens            Int @default(0)
+  runsConceded       Int @default(0)
+  wickets            Int @default(0)
+  wicketsBowledOrLBW Int @default(0)
+
+  // ---- Fielding (cricket) ----
+  catches         Int @default(0)
+  runOutsDirect   Int @default(0)
+  runOutsIndirect Int @default(0)
+  stumpings       Int @default(0)
+
+  // ---- Football ----
+  minutesPlayed   Int     @default(0)
+  goals           Int     @default(0)
+  assists         Int     @default(0)
+  cleanSheet      Boolean @default(false)
+  yellowCards     Int     @default(0)
+  redCards        Int     @default(0)
+  ownGoals        Int     @default(0)
+  penaltiesSaved  Int     @default(0)
+  penaltiesMissed Int     @default(0)
+  saves           Int     @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([matchPlayerId, inningsNumber])
+  @@index([matchPlayerId])
+  @@map("match_player_innings")
+}
+
 // A team's total for one innings — the scoreboard line the app shows
 // above the leaderboard ("BAN 164/5 (20.0)").
 //
@@ -495,6 +620,8 @@ model MatchPlayer {
   updatedAt DateTime @updatedAt
 
   userTeamSelections UserTeamPlayer[]
+  innings            MatchPlayerInnings[]
+  liveLink           PlayerLiveLink?
 
   @@unique([matchId, playerId])
   @@map("match_players")

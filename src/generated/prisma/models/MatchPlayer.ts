@@ -527,6 +527,8 @@ export type MatchPlayerWhereInput = {
   match?: Prisma.XOR<Prisma.MatchScalarRelationFilter, Prisma.MatchWhereInput>
   player?: Prisma.XOR<Prisma.PlayerScalarRelationFilter, Prisma.PlayerWhereInput>
   userTeamSelections?: Prisma.UserTeamPlayerListRelationFilter
+  innings?: Prisma.MatchPlayerInningsListRelationFilter
+  liveLink?: Prisma.XOR<Prisma.PlayerLiveLinkNullableScalarRelationFilter, Prisma.PlayerLiveLinkWhereInput> | null
 }
 
 export type MatchPlayerOrderByWithRelationInput = {
@@ -565,6 +567,8 @@ export type MatchPlayerOrderByWithRelationInput = {
   match?: Prisma.MatchOrderByWithRelationInput
   player?: Prisma.PlayerOrderByWithRelationInput
   userTeamSelections?: Prisma.UserTeamPlayerOrderByRelationAggregateInput
+  innings?: Prisma.MatchPlayerInningsOrderByRelationAggregateInput
+  liveLink?: Prisma.PlayerLiveLinkOrderByWithRelationInput
 }
 
 export type MatchPlayerWhereUniqueInput = Prisma.AtLeast<{
@@ -607,6 +611,8 @@ export type MatchPlayerWhereUniqueInput = Prisma.AtLeast<{
   match?: Prisma.XOR<Prisma.MatchScalarRelationFilter, Prisma.MatchWhereInput>
   player?: Prisma.XOR<Prisma.PlayerScalarRelationFilter, Prisma.PlayerWhereInput>
   userTeamSelections?: Prisma.UserTeamPlayerListRelationFilter
+  innings?: Prisma.MatchPlayerInningsListRelationFilter
+  liveLink?: Prisma.XOR<Prisma.PlayerLiveLinkNullableScalarRelationFilter, Prisma.PlayerLiveLinkWhereInput> | null
 }, "id" | "matchId_playerId">
 
 export type MatchPlayerOrderByWithAggregationInput = {
@@ -721,6 +727,8 @@ export type MatchPlayerCreateInput = {
   match: Prisma.MatchCreateNestedOneWithoutMatchPlayersInput
   player: Prisma.PlayerCreateNestedOneWithoutMatchEntriesInput
   userTeamSelections?: Prisma.UserTeamPlayerCreateNestedManyWithoutMatchPlayerInput
+  innings?: Prisma.MatchPlayerInningsCreateNestedManyWithoutMatchPlayerInput
+  liveLink?: Prisma.PlayerLiveLinkCreateNestedOneWithoutMatchPlayerInput
 }
 
 export type MatchPlayerUncheckedCreateInput = {
@@ -757,6 +765,8 @@ export type MatchPlayerUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   userTeamSelections?: Prisma.UserTeamPlayerUncheckedCreateNestedManyWithoutMatchPlayerInput
+  innings?: Prisma.MatchPlayerInningsUncheckedCreateNestedManyWithoutMatchPlayerInput
+  liveLink?: Prisma.PlayerLiveLinkUncheckedCreateNestedOneWithoutMatchPlayerInput
 }
 
 export type MatchPlayerUpdateInput = {
@@ -793,6 +803,8 @@ export type MatchPlayerUpdateInput = {
   match?: Prisma.MatchUpdateOneRequiredWithoutMatchPlayersNestedInput
   player?: Prisma.PlayerUpdateOneRequiredWithoutMatchEntriesNestedInput
   userTeamSelections?: Prisma.UserTeamPlayerUpdateManyWithoutMatchPlayerNestedInput
+  innings?: Prisma.MatchPlayerInningsUpdateManyWithoutMatchPlayerNestedInput
+  liveLink?: Prisma.PlayerLiveLinkUpdateOneWithoutMatchPlayerNestedInput
 }
 
 export type MatchPlayerUncheckedUpdateInput = {
@@ -829,6 +841,8 @@ export type MatchPlayerUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   userTeamSelections?: Prisma.UserTeamPlayerUncheckedUpdateManyWithoutMatchPlayerNestedInput
+  innings?: Prisma.MatchPlayerInningsUncheckedUpdateManyWithoutMatchPlayerNestedInput
+  liveLink?: Prisma.PlayerLiveLinkUncheckedUpdateOneWithoutMatchPlayerNestedInput
 }
 
 export type MatchPlayerCreateManyInput = {
@@ -942,6 +956,11 @@ export type MatchPlayerListRelationFilter = {
 
 export type MatchPlayerOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
+}
+
+export type MatchPlayerScalarRelationFilter = {
+  is?: Prisma.MatchPlayerWhereInput
+  isNot?: Prisma.MatchPlayerWhereInput
 }
 
 export type MatchPlayerMatchIdPlayerIdCompoundUniqueInput = {
@@ -1108,11 +1127,6 @@ export type MatchPlayerSumOrderByAggregateInput = {
   saves?: Prisma.SortOrder
 }
 
-export type MatchPlayerScalarRelationFilter = {
-  is?: Prisma.MatchPlayerWhereInput
-  isNot?: Prisma.MatchPlayerWhereInput
-}
-
 export type MatchPlayerCreateNestedManyWithoutPlayerInput = {
   create?: Prisma.XOR<Prisma.MatchPlayerCreateWithoutPlayerInput, Prisma.MatchPlayerUncheckedCreateWithoutPlayerInput> | Prisma.MatchPlayerCreateWithoutPlayerInput[] | Prisma.MatchPlayerUncheckedCreateWithoutPlayerInput[]
   connectOrCreate?: Prisma.MatchPlayerCreateOrConnectWithoutPlayerInput | Prisma.MatchPlayerCreateOrConnectWithoutPlayerInput[]
@@ -1197,6 +1211,34 @@ export type MatchPlayerUncheckedUpdateManyWithoutMatchNestedInput = {
   deleteMany?: Prisma.MatchPlayerScalarWhereInput | Prisma.MatchPlayerScalarWhereInput[]
 }
 
+export type MatchPlayerCreateNestedOneWithoutLiveLinkInput = {
+  create?: Prisma.XOR<Prisma.MatchPlayerCreateWithoutLiveLinkInput, Prisma.MatchPlayerUncheckedCreateWithoutLiveLinkInput>
+  connectOrCreate?: Prisma.MatchPlayerCreateOrConnectWithoutLiveLinkInput
+  connect?: Prisma.MatchPlayerWhereUniqueInput
+}
+
+export type MatchPlayerUpdateOneRequiredWithoutLiveLinkNestedInput = {
+  create?: Prisma.XOR<Prisma.MatchPlayerCreateWithoutLiveLinkInput, Prisma.MatchPlayerUncheckedCreateWithoutLiveLinkInput>
+  connectOrCreate?: Prisma.MatchPlayerCreateOrConnectWithoutLiveLinkInput
+  upsert?: Prisma.MatchPlayerUpsertWithoutLiveLinkInput
+  connect?: Prisma.MatchPlayerWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.MatchPlayerUpdateToOneWithWhereWithoutLiveLinkInput, Prisma.MatchPlayerUpdateWithoutLiveLinkInput>, Prisma.MatchPlayerUncheckedUpdateWithoutLiveLinkInput>
+}
+
+export type MatchPlayerCreateNestedOneWithoutInningsInput = {
+  create?: Prisma.XOR<Prisma.MatchPlayerCreateWithoutInningsInput, Prisma.MatchPlayerUncheckedCreateWithoutInningsInput>
+  connectOrCreate?: Prisma.MatchPlayerCreateOrConnectWithoutInningsInput
+  connect?: Prisma.MatchPlayerWhereUniqueInput
+}
+
+export type MatchPlayerUpdateOneRequiredWithoutInningsNestedInput = {
+  create?: Prisma.XOR<Prisma.MatchPlayerCreateWithoutInningsInput, Prisma.MatchPlayerUncheckedCreateWithoutInningsInput>
+  connectOrCreate?: Prisma.MatchPlayerCreateOrConnectWithoutInningsInput
+  upsert?: Prisma.MatchPlayerUpsertWithoutInningsInput
+  connect?: Prisma.MatchPlayerWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.MatchPlayerUpdateToOneWithWhereWithoutInningsInput, Prisma.MatchPlayerUpdateWithoutInningsInput>, Prisma.MatchPlayerUncheckedUpdateWithoutInningsInput>
+}
+
 export type MatchPlayerCreateNestedOneWithoutUserTeamSelectionsInput = {
   create?: Prisma.XOR<Prisma.MatchPlayerCreateWithoutUserTeamSelectionsInput, Prisma.MatchPlayerUncheckedCreateWithoutUserTeamSelectionsInput>
   connectOrCreate?: Prisma.MatchPlayerCreateOrConnectWithoutUserTeamSelectionsInput
@@ -1244,6 +1286,8 @@ export type MatchPlayerCreateWithoutPlayerInput = {
   updatedAt?: Date | string
   match: Prisma.MatchCreateNestedOneWithoutMatchPlayersInput
   userTeamSelections?: Prisma.UserTeamPlayerCreateNestedManyWithoutMatchPlayerInput
+  innings?: Prisma.MatchPlayerInningsCreateNestedManyWithoutMatchPlayerInput
+  liveLink?: Prisma.PlayerLiveLinkCreateNestedOneWithoutMatchPlayerInput
 }
 
 export type MatchPlayerUncheckedCreateWithoutPlayerInput = {
@@ -1279,6 +1323,8 @@ export type MatchPlayerUncheckedCreateWithoutPlayerInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   userTeamSelections?: Prisma.UserTeamPlayerUncheckedCreateNestedManyWithoutMatchPlayerInput
+  innings?: Prisma.MatchPlayerInningsUncheckedCreateNestedManyWithoutMatchPlayerInput
+  liveLink?: Prisma.PlayerLiveLinkUncheckedCreateNestedOneWithoutMatchPlayerInput
 }
 
 export type MatchPlayerCreateOrConnectWithoutPlayerInput = {
@@ -1378,6 +1424,8 @@ export type MatchPlayerCreateWithoutMatchInput = {
   updatedAt?: Date | string
   player: Prisma.PlayerCreateNestedOneWithoutMatchEntriesInput
   userTeamSelections?: Prisma.UserTeamPlayerCreateNestedManyWithoutMatchPlayerInput
+  innings?: Prisma.MatchPlayerInningsCreateNestedManyWithoutMatchPlayerInput
+  liveLink?: Prisma.PlayerLiveLinkCreateNestedOneWithoutMatchPlayerInput
 }
 
 export type MatchPlayerUncheckedCreateWithoutMatchInput = {
@@ -1413,6 +1461,8 @@ export type MatchPlayerUncheckedCreateWithoutMatchInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   userTeamSelections?: Prisma.UserTeamPlayerUncheckedCreateNestedManyWithoutMatchPlayerInput
+  innings?: Prisma.MatchPlayerInningsUncheckedCreateNestedManyWithoutMatchPlayerInput
+  liveLink?: Prisma.PlayerLiveLinkUncheckedCreateNestedOneWithoutMatchPlayerInput
 }
 
 export type MatchPlayerCreateOrConnectWithoutMatchInput = {
@@ -1439,6 +1489,334 @@ export type MatchPlayerUpdateWithWhereUniqueWithoutMatchInput = {
 export type MatchPlayerUpdateManyWithWhereWithoutMatchInput = {
   where: Prisma.MatchPlayerScalarWhereInput
   data: Prisma.XOR<Prisma.MatchPlayerUpdateManyMutationInput, Prisma.MatchPlayerUncheckedUpdateManyWithoutMatchInput>
+}
+
+export type MatchPlayerCreateWithoutLiveLinkInput = {
+  id?: string
+  isPlaying?: boolean
+  points?: number
+  runs?: number
+  ballsFaced?: number
+  fours?: number
+  sixes?: number
+  isOut?: boolean
+  ballsBowled?: number
+  dotBalls?: number
+  maidens?: number
+  runsConceded?: number
+  wickets?: number
+  wicketsBowledOrLBW?: number
+  catches?: number
+  runOutsDirect?: number
+  runOutsIndirect?: number
+  stumpings?: number
+  minutesPlayed?: number
+  goals?: number
+  assists?: number
+  cleanSheet?: boolean
+  yellowCards?: number
+  redCards?: number
+  ownGoals?: number
+  penaltiesSaved?: number
+  penaltiesMissed?: number
+  saves?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  match: Prisma.MatchCreateNestedOneWithoutMatchPlayersInput
+  player: Prisma.PlayerCreateNestedOneWithoutMatchEntriesInput
+  userTeamSelections?: Prisma.UserTeamPlayerCreateNestedManyWithoutMatchPlayerInput
+  innings?: Prisma.MatchPlayerInningsCreateNestedManyWithoutMatchPlayerInput
+}
+
+export type MatchPlayerUncheckedCreateWithoutLiveLinkInput = {
+  id?: string
+  matchId: string
+  playerId: string
+  isPlaying?: boolean
+  points?: number
+  runs?: number
+  ballsFaced?: number
+  fours?: number
+  sixes?: number
+  isOut?: boolean
+  ballsBowled?: number
+  dotBalls?: number
+  maidens?: number
+  runsConceded?: number
+  wickets?: number
+  wicketsBowledOrLBW?: number
+  catches?: number
+  runOutsDirect?: number
+  runOutsIndirect?: number
+  stumpings?: number
+  minutesPlayed?: number
+  goals?: number
+  assists?: number
+  cleanSheet?: boolean
+  yellowCards?: number
+  redCards?: number
+  ownGoals?: number
+  penaltiesSaved?: number
+  penaltiesMissed?: number
+  saves?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  userTeamSelections?: Prisma.UserTeamPlayerUncheckedCreateNestedManyWithoutMatchPlayerInput
+  innings?: Prisma.MatchPlayerInningsUncheckedCreateNestedManyWithoutMatchPlayerInput
+}
+
+export type MatchPlayerCreateOrConnectWithoutLiveLinkInput = {
+  where: Prisma.MatchPlayerWhereUniqueInput
+  create: Prisma.XOR<Prisma.MatchPlayerCreateWithoutLiveLinkInput, Prisma.MatchPlayerUncheckedCreateWithoutLiveLinkInput>
+}
+
+export type MatchPlayerUpsertWithoutLiveLinkInput = {
+  update: Prisma.XOR<Prisma.MatchPlayerUpdateWithoutLiveLinkInput, Prisma.MatchPlayerUncheckedUpdateWithoutLiveLinkInput>
+  create: Prisma.XOR<Prisma.MatchPlayerCreateWithoutLiveLinkInput, Prisma.MatchPlayerUncheckedCreateWithoutLiveLinkInput>
+  where?: Prisma.MatchPlayerWhereInput
+}
+
+export type MatchPlayerUpdateToOneWithWhereWithoutLiveLinkInput = {
+  where?: Prisma.MatchPlayerWhereInput
+  data: Prisma.XOR<Prisma.MatchPlayerUpdateWithoutLiveLinkInput, Prisma.MatchPlayerUncheckedUpdateWithoutLiveLinkInput>
+}
+
+export type MatchPlayerUpdateWithoutLiveLinkInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  isPlaying?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  points?: Prisma.FloatFieldUpdateOperationsInput | number
+  runs?: Prisma.IntFieldUpdateOperationsInput | number
+  ballsFaced?: Prisma.IntFieldUpdateOperationsInput | number
+  fours?: Prisma.IntFieldUpdateOperationsInput | number
+  sixes?: Prisma.IntFieldUpdateOperationsInput | number
+  isOut?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  ballsBowled?: Prisma.IntFieldUpdateOperationsInput | number
+  dotBalls?: Prisma.IntFieldUpdateOperationsInput | number
+  maidens?: Prisma.IntFieldUpdateOperationsInput | number
+  runsConceded?: Prisma.IntFieldUpdateOperationsInput | number
+  wickets?: Prisma.IntFieldUpdateOperationsInput | number
+  wicketsBowledOrLBW?: Prisma.IntFieldUpdateOperationsInput | number
+  catches?: Prisma.IntFieldUpdateOperationsInput | number
+  runOutsDirect?: Prisma.IntFieldUpdateOperationsInput | number
+  runOutsIndirect?: Prisma.IntFieldUpdateOperationsInput | number
+  stumpings?: Prisma.IntFieldUpdateOperationsInput | number
+  minutesPlayed?: Prisma.IntFieldUpdateOperationsInput | number
+  goals?: Prisma.IntFieldUpdateOperationsInput | number
+  assists?: Prisma.IntFieldUpdateOperationsInput | number
+  cleanSheet?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  yellowCards?: Prisma.IntFieldUpdateOperationsInput | number
+  redCards?: Prisma.IntFieldUpdateOperationsInput | number
+  ownGoals?: Prisma.IntFieldUpdateOperationsInput | number
+  penaltiesSaved?: Prisma.IntFieldUpdateOperationsInput | number
+  penaltiesMissed?: Prisma.IntFieldUpdateOperationsInput | number
+  saves?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  match?: Prisma.MatchUpdateOneRequiredWithoutMatchPlayersNestedInput
+  player?: Prisma.PlayerUpdateOneRequiredWithoutMatchEntriesNestedInput
+  userTeamSelections?: Prisma.UserTeamPlayerUpdateManyWithoutMatchPlayerNestedInput
+  innings?: Prisma.MatchPlayerInningsUpdateManyWithoutMatchPlayerNestedInput
+}
+
+export type MatchPlayerUncheckedUpdateWithoutLiveLinkInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  matchId?: Prisma.StringFieldUpdateOperationsInput | string
+  playerId?: Prisma.StringFieldUpdateOperationsInput | string
+  isPlaying?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  points?: Prisma.FloatFieldUpdateOperationsInput | number
+  runs?: Prisma.IntFieldUpdateOperationsInput | number
+  ballsFaced?: Prisma.IntFieldUpdateOperationsInput | number
+  fours?: Prisma.IntFieldUpdateOperationsInput | number
+  sixes?: Prisma.IntFieldUpdateOperationsInput | number
+  isOut?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  ballsBowled?: Prisma.IntFieldUpdateOperationsInput | number
+  dotBalls?: Prisma.IntFieldUpdateOperationsInput | number
+  maidens?: Prisma.IntFieldUpdateOperationsInput | number
+  runsConceded?: Prisma.IntFieldUpdateOperationsInput | number
+  wickets?: Prisma.IntFieldUpdateOperationsInput | number
+  wicketsBowledOrLBW?: Prisma.IntFieldUpdateOperationsInput | number
+  catches?: Prisma.IntFieldUpdateOperationsInput | number
+  runOutsDirect?: Prisma.IntFieldUpdateOperationsInput | number
+  runOutsIndirect?: Prisma.IntFieldUpdateOperationsInput | number
+  stumpings?: Prisma.IntFieldUpdateOperationsInput | number
+  minutesPlayed?: Prisma.IntFieldUpdateOperationsInput | number
+  goals?: Prisma.IntFieldUpdateOperationsInput | number
+  assists?: Prisma.IntFieldUpdateOperationsInput | number
+  cleanSheet?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  yellowCards?: Prisma.IntFieldUpdateOperationsInput | number
+  redCards?: Prisma.IntFieldUpdateOperationsInput | number
+  ownGoals?: Prisma.IntFieldUpdateOperationsInput | number
+  penaltiesSaved?: Prisma.IntFieldUpdateOperationsInput | number
+  penaltiesMissed?: Prisma.IntFieldUpdateOperationsInput | number
+  saves?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userTeamSelections?: Prisma.UserTeamPlayerUncheckedUpdateManyWithoutMatchPlayerNestedInput
+  innings?: Prisma.MatchPlayerInningsUncheckedUpdateManyWithoutMatchPlayerNestedInput
+}
+
+export type MatchPlayerCreateWithoutInningsInput = {
+  id?: string
+  isPlaying?: boolean
+  points?: number
+  runs?: number
+  ballsFaced?: number
+  fours?: number
+  sixes?: number
+  isOut?: boolean
+  ballsBowled?: number
+  dotBalls?: number
+  maidens?: number
+  runsConceded?: number
+  wickets?: number
+  wicketsBowledOrLBW?: number
+  catches?: number
+  runOutsDirect?: number
+  runOutsIndirect?: number
+  stumpings?: number
+  minutesPlayed?: number
+  goals?: number
+  assists?: number
+  cleanSheet?: boolean
+  yellowCards?: number
+  redCards?: number
+  ownGoals?: number
+  penaltiesSaved?: number
+  penaltiesMissed?: number
+  saves?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  match: Prisma.MatchCreateNestedOneWithoutMatchPlayersInput
+  player: Prisma.PlayerCreateNestedOneWithoutMatchEntriesInput
+  userTeamSelections?: Prisma.UserTeamPlayerCreateNestedManyWithoutMatchPlayerInput
+  liveLink?: Prisma.PlayerLiveLinkCreateNestedOneWithoutMatchPlayerInput
+}
+
+export type MatchPlayerUncheckedCreateWithoutInningsInput = {
+  id?: string
+  matchId: string
+  playerId: string
+  isPlaying?: boolean
+  points?: number
+  runs?: number
+  ballsFaced?: number
+  fours?: number
+  sixes?: number
+  isOut?: boolean
+  ballsBowled?: number
+  dotBalls?: number
+  maidens?: number
+  runsConceded?: number
+  wickets?: number
+  wicketsBowledOrLBW?: number
+  catches?: number
+  runOutsDirect?: number
+  runOutsIndirect?: number
+  stumpings?: number
+  minutesPlayed?: number
+  goals?: number
+  assists?: number
+  cleanSheet?: boolean
+  yellowCards?: number
+  redCards?: number
+  ownGoals?: number
+  penaltiesSaved?: number
+  penaltiesMissed?: number
+  saves?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  userTeamSelections?: Prisma.UserTeamPlayerUncheckedCreateNestedManyWithoutMatchPlayerInput
+  liveLink?: Prisma.PlayerLiveLinkUncheckedCreateNestedOneWithoutMatchPlayerInput
+}
+
+export type MatchPlayerCreateOrConnectWithoutInningsInput = {
+  where: Prisma.MatchPlayerWhereUniqueInput
+  create: Prisma.XOR<Prisma.MatchPlayerCreateWithoutInningsInput, Prisma.MatchPlayerUncheckedCreateWithoutInningsInput>
+}
+
+export type MatchPlayerUpsertWithoutInningsInput = {
+  update: Prisma.XOR<Prisma.MatchPlayerUpdateWithoutInningsInput, Prisma.MatchPlayerUncheckedUpdateWithoutInningsInput>
+  create: Prisma.XOR<Prisma.MatchPlayerCreateWithoutInningsInput, Prisma.MatchPlayerUncheckedCreateWithoutInningsInput>
+  where?: Prisma.MatchPlayerWhereInput
+}
+
+export type MatchPlayerUpdateToOneWithWhereWithoutInningsInput = {
+  where?: Prisma.MatchPlayerWhereInput
+  data: Prisma.XOR<Prisma.MatchPlayerUpdateWithoutInningsInput, Prisma.MatchPlayerUncheckedUpdateWithoutInningsInput>
+}
+
+export type MatchPlayerUpdateWithoutInningsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  isPlaying?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  points?: Prisma.FloatFieldUpdateOperationsInput | number
+  runs?: Prisma.IntFieldUpdateOperationsInput | number
+  ballsFaced?: Prisma.IntFieldUpdateOperationsInput | number
+  fours?: Prisma.IntFieldUpdateOperationsInput | number
+  sixes?: Prisma.IntFieldUpdateOperationsInput | number
+  isOut?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  ballsBowled?: Prisma.IntFieldUpdateOperationsInput | number
+  dotBalls?: Prisma.IntFieldUpdateOperationsInput | number
+  maidens?: Prisma.IntFieldUpdateOperationsInput | number
+  runsConceded?: Prisma.IntFieldUpdateOperationsInput | number
+  wickets?: Prisma.IntFieldUpdateOperationsInput | number
+  wicketsBowledOrLBW?: Prisma.IntFieldUpdateOperationsInput | number
+  catches?: Prisma.IntFieldUpdateOperationsInput | number
+  runOutsDirect?: Prisma.IntFieldUpdateOperationsInput | number
+  runOutsIndirect?: Prisma.IntFieldUpdateOperationsInput | number
+  stumpings?: Prisma.IntFieldUpdateOperationsInput | number
+  minutesPlayed?: Prisma.IntFieldUpdateOperationsInput | number
+  goals?: Prisma.IntFieldUpdateOperationsInput | number
+  assists?: Prisma.IntFieldUpdateOperationsInput | number
+  cleanSheet?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  yellowCards?: Prisma.IntFieldUpdateOperationsInput | number
+  redCards?: Prisma.IntFieldUpdateOperationsInput | number
+  ownGoals?: Prisma.IntFieldUpdateOperationsInput | number
+  penaltiesSaved?: Prisma.IntFieldUpdateOperationsInput | number
+  penaltiesMissed?: Prisma.IntFieldUpdateOperationsInput | number
+  saves?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  match?: Prisma.MatchUpdateOneRequiredWithoutMatchPlayersNestedInput
+  player?: Prisma.PlayerUpdateOneRequiredWithoutMatchEntriesNestedInput
+  userTeamSelections?: Prisma.UserTeamPlayerUpdateManyWithoutMatchPlayerNestedInput
+  liveLink?: Prisma.PlayerLiveLinkUpdateOneWithoutMatchPlayerNestedInput
+}
+
+export type MatchPlayerUncheckedUpdateWithoutInningsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  matchId?: Prisma.StringFieldUpdateOperationsInput | string
+  playerId?: Prisma.StringFieldUpdateOperationsInput | string
+  isPlaying?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  points?: Prisma.FloatFieldUpdateOperationsInput | number
+  runs?: Prisma.IntFieldUpdateOperationsInput | number
+  ballsFaced?: Prisma.IntFieldUpdateOperationsInput | number
+  fours?: Prisma.IntFieldUpdateOperationsInput | number
+  sixes?: Prisma.IntFieldUpdateOperationsInput | number
+  isOut?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  ballsBowled?: Prisma.IntFieldUpdateOperationsInput | number
+  dotBalls?: Prisma.IntFieldUpdateOperationsInput | number
+  maidens?: Prisma.IntFieldUpdateOperationsInput | number
+  runsConceded?: Prisma.IntFieldUpdateOperationsInput | number
+  wickets?: Prisma.IntFieldUpdateOperationsInput | number
+  wicketsBowledOrLBW?: Prisma.IntFieldUpdateOperationsInput | number
+  catches?: Prisma.IntFieldUpdateOperationsInput | number
+  runOutsDirect?: Prisma.IntFieldUpdateOperationsInput | number
+  runOutsIndirect?: Prisma.IntFieldUpdateOperationsInput | number
+  stumpings?: Prisma.IntFieldUpdateOperationsInput | number
+  minutesPlayed?: Prisma.IntFieldUpdateOperationsInput | number
+  goals?: Prisma.IntFieldUpdateOperationsInput | number
+  assists?: Prisma.IntFieldUpdateOperationsInput | number
+  cleanSheet?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  yellowCards?: Prisma.IntFieldUpdateOperationsInput | number
+  redCards?: Prisma.IntFieldUpdateOperationsInput | number
+  ownGoals?: Prisma.IntFieldUpdateOperationsInput | number
+  penaltiesSaved?: Prisma.IntFieldUpdateOperationsInput | number
+  penaltiesMissed?: Prisma.IntFieldUpdateOperationsInput | number
+  saves?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userTeamSelections?: Prisma.UserTeamPlayerUncheckedUpdateManyWithoutMatchPlayerNestedInput
+  liveLink?: Prisma.PlayerLiveLinkUncheckedUpdateOneWithoutMatchPlayerNestedInput
 }
 
 export type MatchPlayerCreateWithoutUserTeamSelectionsInput = {
@@ -1474,6 +1852,8 @@ export type MatchPlayerCreateWithoutUserTeamSelectionsInput = {
   updatedAt?: Date | string
   match: Prisma.MatchCreateNestedOneWithoutMatchPlayersInput
   player: Prisma.PlayerCreateNestedOneWithoutMatchEntriesInput
+  innings?: Prisma.MatchPlayerInningsCreateNestedManyWithoutMatchPlayerInput
+  liveLink?: Prisma.PlayerLiveLinkCreateNestedOneWithoutMatchPlayerInput
 }
 
 export type MatchPlayerUncheckedCreateWithoutUserTeamSelectionsInput = {
@@ -1509,6 +1889,8 @@ export type MatchPlayerUncheckedCreateWithoutUserTeamSelectionsInput = {
   saves?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  innings?: Prisma.MatchPlayerInningsUncheckedCreateNestedManyWithoutMatchPlayerInput
+  liveLink?: Prisma.PlayerLiveLinkUncheckedCreateNestedOneWithoutMatchPlayerInput
 }
 
 export type MatchPlayerCreateOrConnectWithoutUserTeamSelectionsInput = {
@@ -1560,6 +1942,8 @@ export type MatchPlayerUpdateWithoutUserTeamSelectionsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   match?: Prisma.MatchUpdateOneRequiredWithoutMatchPlayersNestedInput
   player?: Prisma.PlayerUpdateOneRequiredWithoutMatchEntriesNestedInput
+  innings?: Prisma.MatchPlayerInningsUpdateManyWithoutMatchPlayerNestedInput
+  liveLink?: Prisma.PlayerLiveLinkUpdateOneWithoutMatchPlayerNestedInput
 }
 
 export type MatchPlayerUncheckedUpdateWithoutUserTeamSelectionsInput = {
@@ -1595,6 +1979,8 @@ export type MatchPlayerUncheckedUpdateWithoutUserTeamSelectionsInput = {
   saves?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  innings?: Prisma.MatchPlayerInningsUncheckedUpdateManyWithoutMatchPlayerNestedInput
+  liveLink?: Prisma.PlayerLiveLinkUncheckedUpdateOneWithoutMatchPlayerNestedInput
 }
 
 export type MatchPlayerCreateManyPlayerInput = {
@@ -1664,6 +2050,8 @@ export type MatchPlayerUpdateWithoutPlayerInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   match?: Prisma.MatchUpdateOneRequiredWithoutMatchPlayersNestedInput
   userTeamSelections?: Prisma.UserTeamPlayerUpdateManyWithoutMatchPlayerNestedInput
+  innings?: Prisma.MatchPlayerInningsUpdateManyWithoutMatchPlayerNestedInput
+  liveLink?: Prisma.PlayerLiveLinkUpdateOneWithoutMatchPlayerNestedInput
 }
 
 export type MatchPlayerUncheckedUpdateWithoutPlayerInput = {
@@ -1699,6 +2087,8 @@ export type MatchPlayerUncheckedUpdateWithoutPlayerInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   userTeamSelections?: Prisma.UserTeamPlayerUncheckedUpdateManyWithoutMatchPlayerNestedInput
+  innings?: Prisma.MatchPlayerInningsUncheckedUpdateManyWithoutMatchPlayerNestedInput
+  liveLink?: Prisma.PlayerLiveLinkUncheckedUpdateOneWithoutMatchPlayerNestedInput
 }
 
 export type MatchPlayerUncheckedUpdateManyWithoutPlayerInput = {
@@ -1802,6 +2192,8 @@ export type MatchPlayerUpdateWithoutMatchInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   player?: Prisma.PlayerUpdateOneRequiredWithoutMatchEntriesNestedInput
   userTeamSelections?: Prisma.UserTeamPlayerUpdateManyWithoutMatchPlayerNestedInput
+  innings?: Prisma.MatchPlayerInningsUpdateManyWithoutMatchPlayerNestedInput
+  liveLink?: Prisma.PlayerLiveLinkUpdateOneWithoutMatchPlayerNestedInput
 }
 
 export type MatchPlayerUncheckedUpdateWithoutMatchInput = {
@@ -1837,6 +2229,8 @@ export type MatchPlayerUncheckedUpdateWithoutMatchInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   userTeamSelections?: Prisma.UserTeamPlayerUncheckedUpdateManyWithoutMatchPlayerNestedInput
+  innings?: Prisma.MatchPlayerInningsUncheckedUpdateManyWithoutMatchPlayerNestedInput
+  liveLink?: Prisma.PlayerLiveLinkUncheckedUpdateOneWithoutMatchPlayerNestedInput
 }
 
 export type MatchPlayerUncheckedUpdateManyWithoutMatchInput = {
@@ -1880,10 +2274,12 @@ export type MatchPlayerUncheckedUpdateManyWithoutMatchInput = {
 
 export type MatchPlayerCountOutputType = {
   userTeamSelections: number
+  innings: number
 }
 
 export type MatchPlayerCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   userTeamSelections?: boolean | MatchPlayerCountOutputTypeCountUserTeamSelectionsArgs
+  innings?: boolean | MatchPlayerCountOutputTypeCountInningsArgs
 }
 
 /**
@@ -1901,6 +2297,13 @@ export type MatchPlayerCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.
  */
 export type MatchPlayerCountOutputTypeCountUserTeamSelectionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.UserTeamPlayerWhereInput
+}
+
+/**
+ * MatchPlayerCountOutputType without action
+ */
+export type MatchPlayerCountOutputTypeCountInningsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.MatchPlayerInningsWhereInput
 }
 
 
@@ -1940,6 +2343,8 @@ export type MatchPlayerSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   match?: boolean | Prisma.MatchDefaultArgs<ExtArgs>
   player?: boolean | Prisma.PlayerDefaultArgs<ExtArgs>
   userTeamSelections?: boolean | Prisma.MatchPlayer$userTeamSelectionsArgs<ExtArgs>
+  innings?: boolean | Prisma.MatchPlayer$inningsArgs<ExtArgs>
+  liveLink?: boolean | Prisma.MatchPlayer$liveLinkArgs<ExtArgs>
   _count?: boolean | Prisma.MatchPlayerCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["matchPlayer"]>
 
@@ -2057,6 +2462,8 @@ export type MatchPlayerInclude<ExtArgs extends runtime.Types.Extensions.Internal
   match?: boolean | Prisma.MatchDefaultArgs<ExtArgs>
   player?: boolean | Prisma.PlayerDefaultArgs<ExtArgs>
   userTeamSelections?: boolean | Prisma.MatchPlayer$userTeamSelectionsArgs<ExtArgs>
+  innings?: boolean | Prisma.MatchPlayer$inningsArgs<ExtArgs>
+  liveLink?: boolean | Prisma.MatchPlayer$liveLinkArgs<ExtArgs>
   _count?: boolean | Prisma.MatchPlayerCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type MatchPlayerIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2074,6 +2481,8 @@ export type $MatchPlayerPayload<ExtArgs extends runtime.Types.Extensions.Interna
     match: Prisma.$MatchPayload<ExtArgs>
     player: Prisma.$PlayerPayload<ExtArgs>
     userTeamSelections: Prisma.$UserTeamPlayerPayload<ExtArgs>[]
+    innings: Prisma.$MatchPlayerInningsPayload<ExtArgs>[]
+    liveLink: Prisma.$PlayerLiveLinkPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2505,6 +2914,8 @@ export interface Prisma__MatchPlayerClient<T, Null = never, ExtArgs extends runt
   match<T extends Prisma.MatchDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.MatchDefaultArgs<ExtArgs>>): Prisma.Prisma__MatchClient<runtime.Types.Result.GetResult<Prisma.$MatchPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   player<T extends Prisma.PlayerDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PlayerDefaultArgs<ExtArgs>>): Prisma.Prisma__PlayerClient<runtime.Types.Result.GetResult<Prisma.$PlayerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   userTeamSelections<T extends Prisma.MatchPlayer$userTeamSelectionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.MatchPlayer$userTeamSelectionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserTeamPlayerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  innings<T extends Prisma.MatchPlayer$inningsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.MatchPlayer$inningsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MatchPlayerInningsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  liveLink<T extends Prisma.MatchPlayer$liveLinkArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.MatchPlayer$liveLinkArgs<ExtArgs>>): Prisma.Prisma__PlayerLiveLinkClient<runtime.Types.Result.GetResult<Prisma.$PlayerLiveLinkPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2988,6 +3399,49 @@ export type MatchPlayer$userTeamSelectionsArgs<ExtArgs extends runtime.Types.Ext
   take?: number
   skip?: number
   distinct?: Prisma.UserTeamPlayerScalarFieldEnum | Prisma.UserTeamPlayerScalarFieldEnum[]
+}
+
+/**
+ * MatchPlayer.innings
+ */
+export type MatchPlayer$inningsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the MatchPlayerInnings
+   */
+  select?: Prisma.MatchPlayerInningsSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the MatchPlayerInnings
+   */
+  omit?: Prisma.MatchPlayerInningsOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MatchPlayerInningsInclude<ExtArgs> | null
+  where?: Prisma.MatchPlayerInningsWhereInput
+  orderBy?: Prisma.MatchPlayerInningsOrderByWithRelationInput | Prisma.MatchPlayerInningsOrderByWithRelationInput[]
+  cursor?: Prisma.MatchPlayerInningsWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.MatchPlayerInningsScalarFieldEnum | Prisma.MatchPlayerInningsScalarFieldEnum[]
+}
+
+/**
+ * MatchPlayer.liveLink
+ */
+export type MatchPlayer$liveLinkArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PlayerLiveLink
+   */
+  select?: Prisma.PlayerLiveLinkSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PlayerLiveLink
+   */
+  omit?: Prisma.PlayerLiveLinkOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PlayerLiveLinkInclude<ExtArgs> | null
+  where?: Prisma.PlayerLiveLinkWhereInput
 }
 
 /**

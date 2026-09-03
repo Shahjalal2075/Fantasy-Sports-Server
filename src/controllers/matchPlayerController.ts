@@ -108,6 +108,36 @@ export async function updateMatchPlayer(req: Request, res: Response) {
     include: { player: { include: { team: true } } },
   });
 
+  // Points are scored from innings rows whenever any exist, so a stat
+  // written only to this aggregate would be stored and then ignored.
+  // Mirror anything beyond isPlaying into the first innings.
+  //
+  // isPlaying is excluded deliberately: it belongs to the match, not to
+  // an innings, and the scorer reads it from here.
+  const { isPlaying, ...stats } = parsed.data as Record<string, unknown>;
+
+  if (Object.keys(stats).length > 0) {
+    const hasInnings = await prisma.matchPlayerInnings.findFirst({
+      where: { matchPlayerId },
+      select: { id: true },
+    });
+
+    if (hasInnings) {
+      await prisma.matchPlayerInnings.update({
+        where: { matchPlayerId_inningsNumber: { matchPlayerId, inningsNumber: 1 } },
+        data: stats,
+      }).catch(async () => {
+        // No innings 1 (a Test edited from innings 2 onwards): create it
+        // rather than losing the edit.
+        await prisma.matchPlayerInnings.create({
+          data: { matchPlayerId, inningsNumber: 1, ...stats },
+        });
+      });
+
+      await syncMatchPlayerAggregate(matchPlayerId);
+    }
+  }
+
   return res.status(200).json({ matchPlayer });
 }
 

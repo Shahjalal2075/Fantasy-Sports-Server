@@ -156,15 +156,28 @@ export async function getMatchLink(req: Request, res: Response) {
   return res.status(200).json({
     link,
     connected: !!link?.liveMatchId,
-    players: matchPlayers.map((mp) => ({
-      matchPlayerId: mp.id,
-      name: mp.player.name,
-      code: mp.liveLink?.code ?? null,
-      liveName: mp.liveLink?.liveName ?? null,
-      // Paired AND still reported by the live side.
-      isConnected: !!mp.liveLink?.isActive,
-      matchedAutomatically: mp.liveLink?.matchedAutomatically ?? true,
-    })),
+    players: matchPlayers.map((mp) => {
+      // Three states, not two. "Pending" is the one that matters: a code
+      // exists but the live service has never sent it back, so nothing
+      // is actually paired yet — reporting that as connected is how a
+      // scorecard silently arrives with a player missing.
+      const matchConnected = !!link?.liveMatchId;
+      const status = !mp.liveLink
+        ? "unpaired"
+        : matchConnected && mp.liveLink.isActive
+          ? "connected"
+          : "pending";
+
+      return {
+        matchPlayerId: mp.id,
+        name: mp.player.name,
+        code: mp.liveLink?.code ?? null,
+        liveName: mp.liveLink?.liveName ?? null,
+        status,
+        isConnected: status === "connected",
+        matchedAutomatically: mp.liveLink?.matchedAutomatically ?? true,
+      };
+    }),
   });
 }
 
@@ -212,8 +225,11 @@ export async function setPlayerLiveCode(req: Request, res: Response) {
 
   const link = await prisma.playerLiveLink.upsert({
     where: { matchPlayerId },
-    create: { matchPlayerId, code, matchedAutomatically: false },
-    update: { code, matchedAutomatically: false },
+    // Not connected yet: the code is a claim until the live service
+    // sends it back. Changing an existing code resets the same way —
+    // the new code has never been confirmed.
+    create: { matchPlayerId, code, matchedAutomatically: false, isActive: false },
+    update: { code, matchedAutomatically: false, isActive: false },
   });
 
   return res.status(200).json({ link });
@@ -253,8 +269,8 @@ export async function generatePlayerLiveCode(req: Request, res: Response) {
 
   const link = await prisma.playerLiveLink.upsert({
     where: { matchPlayerId },
-    create: { matchPlayerId, code, matchedAutomatically: false },
-    update: { code, matchedAutomatically: false },
+    create: { matchPlayerId, code, matchedAutomatically: false, isActive: false },
+    update: { code, matchedAutomatically: false, isActive: false },
   });
 
   return res.status(200).json({ link });

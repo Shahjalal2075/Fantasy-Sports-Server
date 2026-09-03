@@ -38,6 +38,13 @@ export async function disconnectMatch(matchId: string) {
     where: { matchId },
     data: { liveMatchId: null, liveLabel: "", connectedAt: null },
   });
+
+  // Nobody is connected once the match isn't. The codes stay, so
+  // reconnecting confirms them all again in one step.
+  await prisma.playerLiveLink.updateMany({
+    where: { matchPlayer: { matchId } },
+    data: { isActive: false },
+  });
 }
 
 export interface IncomingPlayer {
@@ -154,6 +161,8 @@ export async function connectAndReconcile(input: {
         isActive: true,
         matchedAutomatically: automatic,
       },
+      // Confirmed by the live service. matchedAutomatically is left as
+      // it was: a hand-set pairing stays flagged as one.
       update: { liveName: name, isActive: true },
     });
 

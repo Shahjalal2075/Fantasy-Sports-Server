@@ -457,10 +457,15 @@ model PlayerLiveLink {
 
   // The live side's name for this player, as last seen.
   liveName String @default("")
-  // True when the live service still reports this player. A refetch that
-  // drops someone (a 30-man squad cut to the XI) flips this to false
-  // without discarding the code, so re-selection reconnects instantly.
-  isActive Boolean @default(true)
+  // True only once the live service has confirmed this pairing — that
+  // is, it reported a player carrying this code.
+  //
+  // Defaults to FALSE on purpose. A code an admin types in is a claim,
+  // not a connection: until the live side sends it back, nothing is
+  // actually paired, and showing "connected" would be a lie. A refetch
+  // that drops someone also flips this to false while keeping the code,
+  // so re-selection reconnects instantly.
+  isActive Boolean @default(false)
 
   // Set automatically by name, or entered by an admin to correct a
   // mismatch. Shown in the panel so a wrong pairing can be spotted.

@@ -279,6 +279,22 @@ export async function applyLiveScore(input: {
   if (!link) return { error: "That pairing code doesn't match any fixture." };
   if (!link.liveMatchId) return { error: "This fixture isn't connected to the live service." };
 
+  /**
+   * Whether this format really has separate innings per player.
+   *
+   * Only Test cricket does. In a limited-overs match the live feed still
+   * splits a player across two innings — batting in the one their side
+   * batted, bowling in the other — but the fantasy match has a single
+   * scorecard per player, and the admin form edits innings 1.
+   *
+   * Left split, a player who both batted and bowled ended up with
+   * figures in two rows. The aggregate sums them, so saving the form
+   * once wrote the bowling figures into innings 1 as well and the
+   * player's overs doubled. Collapsing to one innings keeps both sides
+   * looking at the same row.
+   */
+  const multiInnings = /test|first.?class/i.test(link.match.format ?? "");
+
   const matchPlayers = await prisma.matchPlayer.findMany({
     where: { matchId: link.matchId },
     include: { liveLink: true, player: true },
@@ -325,23 +341,29 @@ export async function applyLiveScore(input: {
       ] as (keyof IncomingPlayerStats)[]
     ).forEach(copy);
 
+    const inningsNumber = multiInnings ? incoming.inningsNumber : 1;
+
     await prisma.matchPlayerInnings.upsert({
       where: {
-        matchPlayerId_inningsNumber: {
-          matchPlayerId: target.id,
-          inningsNumber: incoming.inningsNumber,
-        },
+        matchPlayerId_inningsNumber: { matchPlayerId: target.id, inningsNumber },
       },
-      create: {
-        matchPlayerId: target.id,
-        inningsNumber: incoming.inningsNumber,
-        ...data,
-      },
+      create: { matchPlayerId: target.id, inningsNumber, ...data },
       update: data,
     });
 
     touched.add(target.id);
     playersUpdated += 1;
+  }
+
+  // Clear out any innings beyond the first in a single-innings format.
+  //
+  // Earlier pushes stored a player's bowling under innings 2. Those rows
+  // would keep being summed into the aggregate alongside the collapsed
+  // innings 1, which is the doubling this fix exists to remove.
+  if (!multiInnings && touched.size > 0) {
+    await prisma.matchPlayerInnings.deleteMany({
+      where: { matchPlayerId: { in: [...touched] }, inningsNumber: { gt: 1 } },
+    });
   }
 
   // The aggregate on MatchPlayer is what the rest of the app reads.

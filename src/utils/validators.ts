@@ -269,6 +269,13 @@ export const updateSettingsSchema = z
   .object({
     dailyBonusAmount: z.number().int().min(0).max(100000).optional(),
 
+    coinRequestEnabled: z.boolean().optional(),
+    coinRequestMessenger: z.string().url().or(z.literal("")).optional(),
+    coinRequestTelegram: z.string().url().or(z.literal("")).optional(),
+    coinRequestMinCoins: z.number().int().min(1).max(1_000_000).optional(),
+    coinRequestMaxPending: z.number().int().min(1).max(20).optional(),
+    coinRequestNote: z.string().max(400).optional(),
+
     giftRequestsEnabled: z.boolean().optional(),
     giftRequestCooldownHours: z.number().int().min(0).max(720).optional(),
     giftRequestMinCoins: z.number().int().min(0).max(1000000).optional(),

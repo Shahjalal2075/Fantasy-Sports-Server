@@ -67,6 +67,21 @@ export type AppSettings = Prisma.AppSettingsModel
  */
 export type GiftRequest = Prisma.GiftRequestModel
 /**
+ * Model RequestAgent
+ * 
+ */
+export type RequestAgent = Prisma.RequestAgentModel
+/**
+ * Model CoinCoupon
+ * 
+ */
+export type CoinCoupon = Prisma.CoinCouponModel
+/**
+ * Model CoinRequest
+ * 
+ */
+export type CoinRequest = Prisma.CoinRequestModel
+/**
  * Model ContactMethod
  * 
  */

@@ -36,6 +36,8 @@ enum CoinTransactionType {
   REFERRAL_BONUS
   GIFT_REQUEST
   GIFT_REFUND
+  // Coins granted by an agent from an approved request.
+  COIN_REQUEST
 }
 
 enum NotificationType {
@@ -106,6 +108,7 @@ model User {
   promoCodeClaims PromoCodeClaim[]
   activeSessions  ActiveSession[]
   giftRequests    GiftRequest[]
+  coinRequests    CoinRequest[]
 
   @@map("users")
 }
@@ -156,6 +159,17 @@ model AppSettings {
   giftRequestCooldownHours Int  @default(24)
   // Shown on the app's request screen so users know what to expect.
   giftRequestNote       String  @default("Our team reviews every request. If yours isn't selected, your coins are returned in full.")
+
+  // Coin requests: where the Messenger and Telegram icons point, and the
+  // limits the request form enforces.
+  coinRequestEnabled     Boolean @default(true)
+  coinRequestMessenger   String  @default("")
+  coinRequestTelegram    String  @default("")
+  coinRequestMinCoins    Int     @default(10)
+  // How many unresolved requests one user may have at a time. Held
+  // requests count, or parking them would sidestep the limit.
+  coinRequestMaxPending  Int     @default(3)
+  coinRequestNote        String  @default("")
 
   // Deposit isn't supported — coins can't be bought. This is the copy
   // and call-to-action shown when someone taps Deposit anyway, editable
@@ -251,6 +265,105 @@ model GiftRequest {
   @@index([status, createdAt])
   @@index([userId, createdAt])
   @@map("gift_requests")
+}
+
+// A person who reviews coin requests and decides which to grant.
+//
+// Shown to the user before they submit, so they know who will be reading
+// their reason. Managed entirely from the admin panel.
+model RequestAgent {
+  id     String @id @default(uuid())
+  name   String
+  logoUrl String @default("")
+  // How to reach them — "WhatsApp", "Telegram", and so on.
+  method String @default("")
+  // Displayed with a copy button on the instructions screen.
+  number String @default("")
+
+  sortOrder Int     @default(0)
+  isActive  Boolean @default(true)
+
+  requests CoinRequest[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([isActive, sortOrder])
+  @@map("request_agents")
+}
+
+// A code that adds a bonus to an approved coin request.
+//
+// The bonus is only ever paid on approval: a coupon applied to a request
+// that gets rejected is worth nothing, which is why the amount is
+// recomputed at approval time rather than trusted from the request.
+model CoinCoupon {
+  id   String @id @default(uuid())
+  code String @unique
+
+  bonusType  CouponBonusType @default(PERCENTAGE)
+  // Coins when FIXED, percent of the request when PERCENTAGE.
+  bonusValue Int             @default(0)
+
+  // The request has to fall inside this range for the code to apply.
+  minCoins Int @default(0)
+  // 0 means no upper limit.
+  maxCoins Int @default(0)
+
+  expiresAt DateTime?
+  isActive  Boolean   @default(true)
+
+  requests CoinRequest[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([isActive])
+  @@map("coin_coupons")
+}
+
+// A user asking an agent for coins.
+//
+// Not a purchase: no money changes hands. The user states an amount and
+// a reason, and an agent decides. Most requests are refused.
+model CoinRequest {
+  id     String            @id @default(uuid())
+  userId String
+  user   User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  status CoinRequestStatus @default(PENDING)
+
+  // What they asked for, the coupon bonus on top, and the sum. All three
+  // are stored so the figures a user saw can never drift.
+  coinAmount  Int
+  bonusAmount Int @default(0)
+  totalAmount Int
+
+  // Up to 16 characters, as shown on the form.
+  reason String @default("")
+
+  // Which agent they chose. Name, logo and method are snapshotted so an
+  // agent being edited or removed later doesn't rewrite history.
+  agentId     String?
+  agent       RequestAgent? @relation(fields: [agentId], references: [id], onDelete: SetNull)
+  agentName   String        @default("")
+  agentLogo   String        @default("")
+  agentMethod String        @default("")
+  agentNumber String        @default("")
+
+  couponId   String?
+  coupon     CoinCoupon? @relation(fields: [couponId], references: [id], onDelete: SetNull)
+  couponCode String      @default("")
+
+  // Shown to the user with the decision.
+  adminNote  String    @default("")
+  resolvedAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([status, createdAt])
+  @@index([userId, createdAt])
+  @@map("coin_requests")
 }
 
 // A way for the admin to reach a user about their gift — WhatsApp,
@@ -683,6 +796,20 @@ model Contest {
   entries ContestEntry[]
 
   @@map("contests")
+}
+
+enum CoinRequestStatus {
+  PENDING
+  // Parked for a decision later. Still counts against a user's pending
+  // limit — otherwise held requests would pile up unbounded.
+  HELD
+  APPROVED
+  REJECTED
+}
+
+enum CouponBonusType {
+  FIXED
+  PERCENTAGE
 }
 
 enum GiftRequestStatus {

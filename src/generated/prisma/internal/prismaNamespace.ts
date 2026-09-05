@@ -402,6 +402,9 @@ export const ModelName = {
   Notification: 'Notification',
   AppSettings: 'AppSettings',
   GiftRequest: 'GiftRequest',
+  RequestAgent: 'RequestAgent',
+  CoinCoupon: 'CoinCoupon',
+  CoinRequest: 'CoinRequest',
   ContactMethod: 'ContactMethod',
   Banner: 'Banner',
   ActiveSession: 'ActiveSession',
@@ -436,7 +439,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "coinTransaction" | "notification" | "appSettings" | "giftRequest" | "contactMethod" | "banner" | "activeSession" | "visitorStat" | "team" | "player" | "match" | "matchLiveLink" | "playerLiveLink" | "matchPlayerInnings" | "matchInnings" | "matchPlayer" | "userTeam" | "userTeamPlayer" | "contest" | "contestEntry" | "pointSystem" | "promoCode" | "promoCodeClaim"
+    modelProps: "user" | "coinTransaction" | "notification" | "appSettings" | "giftRequest" | "requestAgent" | "coinCoupon" | "coinRequest" | "contactMethod" | "banner" | "activeSession" | "visitorStat" | "team" | "player" | "match" | "matchLiveLink" | "playerLiveLink" | "matchPlayerInnings" | "matchInnings" | "matchPlayer" | "userTeam" | "userTeamPlayer" | "contest" | "contestEntry" | "pointSystem" | "promoCode" | "promoCodeClaim"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -807,6 +810,228 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.GiftRequestCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.GiftRequestCountAggregateOutputType> | number
+        }
+      }
+    }
+    RequestAgent: {
+      payload: Prisma.$RequestAgentPayload<ExtArgs>
+      fields: Prisma.RequestAgentFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.RequestAgentFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RequestAgentPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.RequestAgentFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RequestAgentPayload>
+        }
+        findFirst: {
+          args: Prisma.RequestAgentFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RequestAgentPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.RequestAgentFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RequestAgentPayload>
+        }
+        findMany: {
+          args: Prisma.RequestAgentFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RequestAgentPayload>[]
+        }
+        create: {
+          args: Prisma.RequestAgentCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RequestAgentPayload>
+        }
+        createMany: {
+          args: Prisma.RequestAgentCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.RequestAgentCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RequestAgentPayload>[]
+        }
+        delete: {
+          args: Prisma.RequestAgentDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RequestAgentPayload>
+        }
+        update: {
+          args: Prisma.RequestAgentUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RequestAgentPayload>
+        }
+        deleteMany: {
+          args: Prisma.RequestAgentDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.RequestAgentUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.RequestAgentUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RequestAgentPayload>[]
+        }
+        upsert: {
+          args: Prisma.RequestAgentUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RequestAgentPayload>
+        }
+        aggregate: {
+          args: Prisma.RequestAgentAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateRequestAgent>
+        }
+        groupBy: {
+          args: Prisma.RequestAgentGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.RequestAgentGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.RequestAgentCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.RequestAgentCountAggregateOutputType> | number
+        }
+      }
+    }
+    CoinCoupon: {
+      payload: Prisma.$CoinCouponPayload<ExtArgs>
+      fields: Prisma.CoinCouponFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CoinCouponFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CoinCouponPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CoinCouponFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CoinCouponPayload>
+        }
+        findFirst: {
+          args: Prisma.CoinCouponFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CoinCouponPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CoinCouponFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CoinCouponPayload>
+        }
+        findMany: {
+          args: Prisma.CoinCouponFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CoinCouponPayload>[]
+        }
+        create: {
+          args: Prisma.CoinCouponCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CoinCouponPayload>
+        }
+        createMany: {
+          args: Prisma.CoinCouponCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CoinCouponCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CoinCouponPayload>[]
+        }
+        delete: {
+          args: Prisma.CoinCouponDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CoinCouponPayload>
+        }
+        update: {
+          args: Prisma.CoinCouponUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CoinCouponPayload>
+        }
+        deleteMany: {
+          args: Prisma.CoinCouponDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CoinCouponUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CoinCouponUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CoinCouponPayload>[]
+        }
+        upsert: {
+          args: Prisma.CoinCouponUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CoinCouponPayload>
+        }
+        aggregate: {
+          args: Prisma.CoinCouponAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCoinCoupon>
+        }
+        groupBy: {
+          args: Prisma.CoinCouponGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CoinCouponGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CoinCouponCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CoinCouponCountAggregateOutputType> | number
+        }
+      }
+    }
+    CoinRequest: {
+      payload: Prisma.$CoinRequestPayload<ExtArgs>
+      fields: Prisma.CoinRequestFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CoinRequestFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CoinRequestPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CoinRequestFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CoinRequestPayload>
+        }
+        findFirst: {
+          args: Prisma.CoinRequestFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CoinRequestPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CoinRequestFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CoinRequestPayload>
+        }
+        findMany: {
+          args: Prisma.CoinRequestFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CoinRequestPayload>[]
+        }
+        create: {
+          args: Prisma.CoinRequestCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CoinRequestPayload>
+        }
+        createMany: {
+          args: Prisma.CoinRequestCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CoinRequestCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CoinRequestPayload>[]
+        }
+        delete: {
+          args: Prisma.CoinRequestDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CoinRequestPayload>
+        }
+        update: {
+          args: Prisma.CoinRequestUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CoinRequestPayload>
+        }
+        deleteMany: {
+          args: Prisma.CoinRequestDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CoinRequestUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CoinRequestUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CoinRequestPayload>[]
+        }
+        upsert: {
+          args: Prisma.CoinRequestUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CoinRequestPayload>
+        }
+        aggregate: {
+          args: Prisma.CoinRequestAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCoinRequest>
+        }
+        groupBy: {
+          args: Prisma.CoinRequestGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CoinRequestGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CoinRequestCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CoinRequestCountAggregateOutputType> | number
         }
       }
     }
@@ -2325,6 +2550,12 @@ export const AppSettingsScalarFieldEnum = {
   giftRequestExpiryDays: 'giftRequestExpiryDays',
   giftRequestCooldownHours: 'giftRequestCooldownHours',
   giftRequestNote: 'giftRequestNote',
+  coinRequestEnabled: 'coinRequestEnabled',
+  coinRequestMessenger: 'coinRequestMessenger',
+  coinRequestTelegram: 'coinRequestTelegram',
+  coinRequestMinCoins: 'coinRequestMinCoins',
+  coinRequestMaxPending: 'coinRequestMaxPending',
+  coinRequestNote: 'coinRequestNote',
   depositMessage: 'depositMessage',
   depositButtonText: 'depositButtonText',
   depositButtonLogo: 'depositButtonLogo',
@@ -2370,6 +2601,61 @@ export const GiftRequestScalarFieldEnum = {
 } as const
 
 export type GiftRequestScalarFieldEnum = (typeof GiftRequestScalarFieldEnum)[keyof typeof GiftRequestScalarFieldEnum]
+
+
+export const RequestAgentScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  logoUrl: 'logoUrl',
+  method: 'method',
+  number: 'number',
+  sortOrder: 'sortOrder',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type RequestAgentScalarFieldEnum = (typeof RequestAgentScalarFieldEnum)[keyof typeof RequestAgentScalarFieldEnum]
+
+
+export const CoinCouponScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  bonusType: 'bonusType',
+  bonusValue: 'bonusValue',
+  minCoins: 'minCoins',
+  maxCoins: 'maxCoins',
+  expiresAt: 'expiresAt',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CoinCouponScalarFieldEnum = (typeof CoinCouponScalarFieldEnum)[keyof typeof CoinCouponScalarFieldEnum]
+
+
+export const CoinRequestScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  status: 'status',
+  coinAmount: 'coinAmount',
+  bonusAmount: 'bonusAmount',
+  totalAmount: 'totalAmount',
+  reason: 'reason',
+  agentId: 'agentId',
+  agentName: 'agentName',
+  agentLogo: 'agentLogo',
+  agentMethod: 'agentMethod',
+  agentNumber: 'agentNumber',
+  couponId: 'couponId',
+  couponCode: 'couponCode',
+  adminNote: 'adminNote',
+  resolvedAt: 'resolvedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CoinRequestScalarFieldEnum = (typeof CoinRequestScalarFieldEnum)[keyof typeof CoinRequestScalarFieldEnum]
 
 
 export const ContactMethodScalarFieldEnum = {
@@ -2817,6 +3103,34 @@ export type ListEnumGiftRequestStatusFieldRefInput<$PrismaModel> = FieldRefInput
 
 
 /**
+ * Reference to a field of type 'CouponBonusType'
+ */
+export type EnumCouponBonusTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CouponBonusType'>
+    
+
+
+/**
+ * Reference to a field of type 'CouponBonusType[]'
+ */
+export type ListEnumCouponBonusTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CouponBonusType[]'>
+    
+
+
+/**
+ * Reference to a field of type 'CoinRequestStatus'
+ */
+export type EnumCoinRequestStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CoinRequestStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'CoinRequestStatus[]'
+ */
+export type ListEnumCoinRequestStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CoinRequestStatus[]'>
+    
+
+
+/**
  * Reference to a field of type 'SportType'
  */
 export type EnumSportTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SportType'>
@@ -3041,6 +3355,9 @@ export type GlobalOmitConfig = {
   notification?: Prisma.NotificationOmit
   appSettings?: Prisma.AppSettingsOmit
   giftRequest?: Prisma.GiftRequestOmit
+  requestAgent?: Prisma.RequestAgentOmit
+  coinCoupon?: Prisma.CoinCouponOmit
+  coinRequest?: Prisma.CoinRequestOmit
   contactMethod?: Prisma.ContactMethodOmit
   banner?: Prisma.BannerOmit
   activeSession?: Prisma.ActiveSessionOmit

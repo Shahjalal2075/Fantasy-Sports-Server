@@ -115,9 +115,10 @@ export async function listGiftRequests(req: Request, res: Response) {
 
   const requests = await prisma.giftRequest.findMany({
     where,
-    // Highest coin amount first — that's the ordering an admin picking
-    // winners actually wants; ties fall back to who asked first.
-    orderBy: [{ coinAmount: "desc" }, { createdAt: "asc" }],
+    // Newest first. Ordering by coin amount buried today's requests
+    // under older large ones, which is the opposite of how a queue gets
+    // worked through.
+    orderBy: { createdAt: "desc" },
     take: 200,
     include: {
       user: {

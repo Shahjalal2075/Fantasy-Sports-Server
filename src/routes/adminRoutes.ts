@@ -37,6 +37,20 @@ import {
   clearPlayerLiveCode,
   generatePlayerLiveCode,
 } from "../controllers/liveSyncController";
+import {
+  listCoinRequests,
+  approveHandler,
+  decisionHandler,
+  rejectAllHandler,
+  listAgents,
+  createAgent,
+  updateAgent,
+  deleteAgent,
+  listCoupons,
+  createCoupon,
+  updateCoupon,
+  deleteCoupon,
+} from "../controllers/coinRequestController";
 import { requireAuth, requireAdmin } from "../middleware/auth";
 
 const router = Router();
@@ -74,6 +88,23 @@ router.delete("/matches/:id/live-link", removeMatchLink);
 router.patch("/match-players/:matchPlayerId/live-code", setPlayerLiveCode);
 router.post("/match-players/:matchPlayerId/live-code/generate", generatePlayerLiveCode);
 router.delete("/match-players/:matchPlayerId/live-code", clearPlayerLiveCode);
+
+// Coin requests
+router.get("/coin-requests", listCoinRequests);
+router.post("/coin-requests/reject-all", rejectAllHandler);
+router.post("/coin-requests/:id/approve", approveHandler);
+router.post("/coin-requests/:id/hold", decisionHandler("HELD"));
+router.post("/coin-requests/:id/reject", decisionHandler("REJECTED"));
+
+router.get("/request-agents", listAgents);
+router.post("/request-agents", createAgent);
+router.patch("/request-agents/:id", updateAgent);
+router.delete("/request-agents/:id", deleteAgent);
+
+router.get("/coin-coupons", listCoupons);
+router.post("/coin-coupons", createCoupon);
+router.patch("/coin-coupons/:id", updateCoupon);
+router.delete("/coin-coupons/:id", deleteCoupon);
 
 router.get("/contact-methods", listContactMethods);
 router.post("/contact-methods", createContactMethod);

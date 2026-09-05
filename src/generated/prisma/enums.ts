@@ -37,7 +37,8 @@ export const CoinTransactionType = {
   PROMO_CODE: 'PROMO_CODE',
   REFERRAL_BONUS: 'REFERRAL_BONUS',
   GIFT_REQUEST: 'GIFT_REQUEST',
-  GIFT_REFUND: 'GIFT_REFUND'
+  GIFT_REFUND: 'GIFT_REFUND',
+  COIN_REQUEST: 'COIN_REQUEST'
 } as const
 
 export type CoinTransactionType = (typeof CoinTransactionType)[keyof typeof CoinTransactionType]
@@ -51,6 +52,24 @@ export const NotificationType = {
 } as const
 
 export type NotificationType = (typeof NotificationType)[keyof typeof NotificationType]
+
+
+export const CoinRequestStatus = {
+  PENDING: 'PENDING',
+  HELD: 'HELD',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
+} as const
+
+export type CoinRequestStatus = (typeof CoinRequestStatus)[keyof typeof CoinRequestStatus]
+
+
+export const CouponBonusType = {
+  FIXED: 'FIXED',
+  PERCENTAGE: 'PERCENTAGE'
+} as const
+
+export type CouponBonusType = (typeof CouponBonusType)[keyof typeof CouponBonusType]
 
 
 export const GiftRequestStatus = {

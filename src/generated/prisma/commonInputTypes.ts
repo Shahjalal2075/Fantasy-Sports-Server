@@ -253,6 +253,40 @@ export type EnumGiftRequestStatusWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumGiftRequestStatusFilter<$PrismaModel>
 }
 
+export type EnumCouponBonusTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.CouponBonusType | Prisma.EnumCouponBonusTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.CouponBonusType[] | Prisma.ListEnumCouponBonusTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.CouponBonusType[] | Prisma.ListEnumCouponBonusTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumCouponBonusTypeFilter<$PrismaModel> | $Enums.CouponBonusType
+}
+
+export type EnumCouponBonusTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.CouponBonusType | Prisma.EnumCouponBonusTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.CouponBonusType[] | Prisma.ListEnumCouponBonusTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.CouponBonusType[] | Prisma.ListEnumCouponBonusTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumCouponBonusTypeWithAggregatesFilter<$PrismaModel> | $Enums.CouponBonusType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumCouponBonusTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumCouponBonusTypeFilter<$PrismaModel>
+}
+
+export type EnumCoinRequestStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.CoinRequestStatus | Prisma.EnumCoinRequestStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.CoinRequestStatus[] | Prisma.ListEnumCoinRequestStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.CoinRequestStatus[] | Prisma.ListEnumCoinRequestStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumCoinRequestStatusFilter<$PrismaModel> | $Enums.CoinRequestStatus
+}
+
+export type EnumCoinRequestStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.CoinRequestStatus | Prisma.EnumCoinRequestStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.CoinRequestStatus[] | Prisma.ListEnumCoinRequestStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.CoinRequestStatus[] | Prisma.ListEnumCoinRequestStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumCoinRequestStatusWithAggregatesFilter<$PrismaModel> | $Enums.CoinRequestStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumCoinRequestStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumCoinRequestStatusFilter<$PrismaModel>
+}
+
 export type EnumSportTypeFilter<$PrismaModel = never> = {
   equals?: $Enums.SportType | Prisma.EnumSportTypeFieldRefInput<$PrismaModel>
   in?: $Enums.SportType[] | Prisma.ListEnumSportTypeFieldRefInput<$PrismaModel>
@@ -632,6 +666,40 @@ export type NestedEnumGiftRequestStatusWithAggregatesFilter<$PrismaModel = never
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumGiftRequestStatusFilter<$PrismaModel>
   _max?: Prisma.NestedEnumGiftRequestStatusFilter<$PrismaModel>
+}
+
+export type NestedEnumCouponBonusTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.CouponBonusType | Prisma.EnumCouponBonusTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.CouponBonusType[] | Prisma.ListEnumCouponBonusTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.CouponBonusType[] | Prisma.ListEnumCouponBonusTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumCouponBonusTypeFilter<$PrismaModel> | $Enums.CouponBonusType
+}
+
+export type NestedEnumCouponBonusTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.CouponBonusType | Prisma.EnumCouponBonusTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.CouponBonusType[] | Prisma.ListEnumCouponBonusTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.CouponBonusType[] | Prisma.ListEnumCouponBonusTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumCouponBonusTypeWithAggregatesFilter<$PrismaModel> | $Enums.CouponBonusType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumCouponBonusTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumCouponBonusTypeFilter<$PrismaModel>
+}
+
+export type NestedEnumCoinRequestStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.CoinRequestStatus | Prisma.EnumCoinRequestStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.CoinRequestStatus[] | Prisma.ListEnumCoinRequestStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.CoinRequestStatus[] | Prisma.ListEnumCoinRequestStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumCoinRequestStatusFilter<$PrismaModel> | $Enums.CoinRequestStatus
+}
+
+export type NestedEnumCoinRequestStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.CoinRequestStatus | Prisma.EnumCoinRequestStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.CoinRequestStatus[] | Prisma.ListEnumCoinRequestStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.CoinRequestStatus[] | Prisma.ListEnumCoinRequestStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumCoinRequestStatusWithAggregatesFilter<$PrismaModel> | $Enums.CoinRequestStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumCoinRequestStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumCoinRequestStatusFilter<$PrismaModel>
 }
 
 export type NestedEnumSportTypeFilter<$PrismaModel = never> = {

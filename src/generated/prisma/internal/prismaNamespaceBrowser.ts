@@ -56,6 +56,9 @@ export const ModelName = {
   Notification: 'Notification',
   AppSettings: 'AppSettings',
   GiftRequest: 'GiftRequest',
+  RequestAgent: 'RequestAgent',
+  CoinCoupon: 'CoinCoupon',
+  CoinRequest: 'CoinRequest',
   ContactMethod: 'ContactMethod',
   Banner: 'Banner',
   ActiveSession: 'ActiveSession',
@@ -163,6 +166,12 @@ export const AppSettingsScalarFieldEnum = {
   giftRequestExpiryDays: 'giftRequestExpiryDays',
   giftRequestCooldownHours: 'giftRequestCooldownHours',
   giftRequestNote: 'giftRequestNote',
+  coinRequestEnabled: 'coinRequestEnabled',
+  coinRequestMessenger: 'coinRequestMessenger',
+  coinRequestTelegram: 'coinRequestTelegram',
+  coinRequestMinCoins: 'coinRequestMinCoins',
+  coinRequestMaxPending: 'coinRequestMaxPending',
+  coinRequestNote: 'coinRequestNote',
   depositMessage: 'depositMessage',
   depositButtonText: 'depositButtonText',
   depositButtonLogo: 'depositButtonLogo',
@@ -208,6 +217,61 @@ export const GiftRequestScalarFieldEnum = {
 } as const
 
 export type GiftRequestScalarFieldEnum = (typeof GiftRequestScalarFieldEnum)[keyof typeof GiftRequestScalarFieldEnum]
+
+
+export const RequestAgentScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  logoUrl: 'logoUrl',
+  method: 'method',
+  number: 'number',
+  sortOrder: 'sortOrder',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type RequestAgentScalarFieldEnum = (typeof RequestAgentScalarFieldEnum)[keyof typeof RequestAgentScalarFieldEnum]
+
+
+export const CoinCouponScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  bonusType: 'bonusType',
+  bonusValue: 'bonusValue',
+  minCoins: 'minCoins',
+  maxCoins: 'maxCoins',
+  expiresAt: 'expiresAt',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CoinCouponScalarFieldEnum = (typeof CoinCouponScalarFieldEnum)[keyof typeof CoinCouponScalarFieldEnum]
+
+
+export const CoinRequestScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  status: 'status',
+  coinAmount: 'coinAmount',
+  bonusAmount: 'bonusAmount',
+  totalAmount: 'totalAmount',
+  reason: 'reason',
+  agentId: 'agentId',
+  agentName: 'agentName',
+  agentLogo: 'agentLogo',
+  agentMethod: 'agentMethod',
+  agentNumber: 'agentNumber',
+  couponId: 'couponId',
+  couponCode: 'couponCode',
+  adminNote: 'adminNote',
+  resolvedAt: 'resolvedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CoinRequestScalarFieldEnum = (typeof CoinRequestScalarFieldEnum)[keyof typeof CoinRequestScalarFieldEnum]
 
 
 export const ContactMethodScalarFieldEnum = {

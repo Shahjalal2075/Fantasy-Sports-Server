@@ -1,13 +1,6 @@
--- Per-event notification settings.
+-- Whether an event's notification is also kept in the app's list.
 --
---   saveInApp — whether it's also kept in the app's notification list,
---               separate from whether a push is sent at all
---   title/body — the admin's own wording; blank means the built-in text
+-- Separate from "enabled", which only decides whether a push is sent.
+-- Existing rows default to true, matching how it behaved before.
 ALTER TABLE "notification_settings"
   ADD COLUMN "saveInApp" BOOLEAN NOT NULL DEFAULT true;
-
-ALTER TABLE "notification_settings"
-  ADD COLUMN "title" TEXT NOT NULL DEFAULT '';
-
-ALTER TABLE "notification_settings"
-  ADD COLUMN "body" TEXT NOT NULL DEFAULT '';

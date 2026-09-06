@@ -1,5 +1,5 @@
 import prisma from "../config/prisma";
-import { sendPush } from "./pushService";
+import { broadcast } from "./pushService";
 
 /**
  * Match reminders.
@@ -66,7 +66,7 @@ async function runTick(): Promise<void> {
 
       const fixture = `${match.teamA?.shortName ?? "?"} vs ${match.teamB?.shortName ?? "?"}`;
 
-      await sendPush({
+      await broadcast({
         event: reminder.event,
         title: `${fixture} starts in ${reminder.minutesBefore} minutes`,
         body: "Pick your team before the lineup locks.",

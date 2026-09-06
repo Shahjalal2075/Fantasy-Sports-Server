@@ -39,10 +39,24 @@ export interface SendResult {
   error: string;
 }
 
-/** Whether this event is switched on. Unknown events default to on. */
-export async function isEventEnabled(event: NotificationEvent): Promise<boolean> {
+export interface EventSetting {
+  /** Sends a push. */
+  enabled: boolean;
+  /** Also kept in the app's notification list. */
+  saveInApp: boolean;
+}
+
+/** Both switches for an event. Unknown events default to on. */
+export async function eventSetting(event: NotificationEvent): Promise<EventSetting> {
   const setting = await prisma.notificationSetting.findUnique({ where: { event } });
-  return setting?.enabled ?? true;
+  return {
+    enabled: setting?.enabled ?? true,
+    saveInApp: setting?.saveInApp ?? true,
+  };
+}
+
+export async function isEventEnabled(event: NotificationEvent): Promise<boolean> {
+  return (await eventSetting(event)).enabled;
 }
 
 async function activeTokensFor(userIds: string[] | null): Promise<string[]> {
@@ -216,12 +230,16 @@ export async function notify(options: {
 }): Promise<void> {
   const { userId, event, type = "GENERIC", title, message, coinAmount, url } = options;
 
-  try {
-    await prisma.notification.create({
-      data: { userId, type, title, message, coinAmount: coinAmount ?? null },
-    });
-  } catch (error) {
-    console.error("Failed to write notification:", error);
+  const setting = await eventSetting(event);
+
+  if (setting.saveInApp) {
+    try {
+      await prisma.notification.create({
+        data: { userId, type, title, message, coinAmount: coinAmount ?? null },
+      });
+    } catch (error) {
+      console.error("Failed to write notification:", error);
+    }
   }
 
   try {
@@ -243,12 +261,16 @@ export async function notifyMany(options: {
   const { userIds, event, type = "GENERIC", title, message, url } = options;
   if (userIds.length === 0) return;
 
-  try {
-    await prisma.notification.createMany({
-      data: userIds.map((userId) => ({ userId, type, title, message })),
-    });
-  } catch (error) {
-    console.error("Failed to write notifications:", error);
+  const setting = await eventSetting(event);
+
+  if (setting.saveInApp) {
+    try {
+      await prisma.notification.createMany({
+        data: userIds.map((userId) => ({ userId, type, title, message })),
+      });
+    } catch (error) {
+      console.error("Failed to write notifications:", error);
+    }
   }
 
   try {
@@ -256,4 +278,56 @@ export async function notifyMany(options: {
   } catch (error) {
     console.error("Failed to send push:", error);
   }
+}
+
+/**
+ * A push to everyone, with a matching in-app record for each user.
+ *
+ * Broadcasts write one notification row per user, which is a lot of rows
+ * — but a push that leaves nothing behind is gone the moment it's
+ * swiped away, and the user has no way to look it up again.
+ */
+export async function broadcast(options: {
+  event: NotificationEvent;
+  title: string;
+  body: string;
+  url?: string;
+}): Promise<SendResult> {
+  const { event, title, body, url = "" } = options;
+
+  const setting = await eventSetting(event);
+
+  // Skipped entirely when the event is off — no push and no rows, since
+  // writing history for something nobody was told about is just noise.
+  if (!setting.enabled) {
+    return { recipients: 0, delivered: 0, failed: 0, error: "" };
+  }
+
+  const users = setting.saveInApp
+    ? await prisma.user.findMany({ where: { isBanned: false }, select: { id: true } })
+    : [];
+
+  if (users.length > 0) {
+    await prisma.notification.createMany({
+      data: users.map((user) => ({
+        userId: user.id,
+        type: "GENERIC" as const,
+        title,
+        message: body,
+      })),
+    });
+  }
+
+  return sendPush({ event, title, body, url });
+}
+
+/**
+ * Whether an event's notification should be kept in the app.
+ *
+ * Exposed for the places that write their own record — inside a
+ * transaction, or with fields `notify` doesn't carry — so they can
+ * honour the same switch.
+ */
+export async function shouldSaveInApp(event: NotificationEvent): Promise<boolean> {
+  return (await eventSetting(event)).saveInApp;
 }

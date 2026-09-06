@@ -5,7 +5,7 @@ import { payInviterIfDue } from "../services/referralService";
 import { splitPrizes } from "../utils/prizeSplitting";
 import { createContestSchema, joinContestSchema } from "../utils/validators";
 import { debitCoins, creditCoins, InsufficientCoinsError } from "../services/walletService";
-import { sendPush } from "../services/pushService";
+import { sendPush, broadcast, shouldSaveInApp } from "../services/pushService";
 
 // ---------- Admin ----------
 
@@ -40,7 +40,7 @@ export async function createContest(req: Request, res: Response) {
     include: { teamA: true, teamB: true },
   });
 
-  await sendPush({
+  await broadcast({
     event: "NEW_CONTEST",
     title: "New contest open",
     body: `${contest.name} — ${fixture?.teamA?.shortName ?? "?"} vs ${fixture?.teamB?.shortName ?? "?"}`,
@@ -402,7 +402,21 @@ export async function distributePrizes(req: Request, res: Response) {
     await tx.contest.update({ where: { id: contestId }, data: { prizesDistributed: true } });
   });
 
-  // One push per winner, batched by the service.
+  // Winners get both: a push now, and a record they can find later.
+  // Coins arriving with nothing in the notification list to explain them
+  // is how a payout starts looking like a mistake.
+  if (await shouldSaveInApp("CONTEST_PRIZE")) {
+    await prisma.notification.createMany({
+      data: payouts.map((payout) => ({
+        userId: payout.userId,
+        type: "COIN_BONUS" as const,
+        title: `You won ${payout.coins.toLocaleString()} coins!`,
+        message: `Rank #${payout.rank} in ${contest.name}.`,
+        coinAmount: payout.coins,
+      })),
+    });
+  }
+
   for (const payout of payouts) {
     await sendPush({
       event: "CONTEST_PRIZE",

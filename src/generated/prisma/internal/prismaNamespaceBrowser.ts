@@ -296,6 +296,7 @@ export type PushTokenScalarFieldEnum = (typeof PushTokenScalarFieldEnum)[keyof t
 export const NotificationSettingScalarFieldEnum = {
   event: 'event',
   enabled: 'enabled',
+  saveInApp: 'saveInApp',
   updatedAt: 'updatedAt'
 } as const
 

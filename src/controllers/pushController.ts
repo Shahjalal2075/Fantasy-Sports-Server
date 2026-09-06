@@ -108,7 +108,7 @@ export async function setPushPreference(req: Request, res: Response) {
 // GET /api/admin/notifications/settings
 export async function getSettings(_req: Request, res: Response) {
   const rows = await prisma.notificationSetting.findMany();
-  const byEvent = new Map(rows.map((row) => [row.event, row.enabled]));
+  const byEvent = new Map(rows.map((row) => [row.event, row]));
 
   const [tokens, settings] = await Promise.all([
     prisma.pushToken.count({ where: { isActive: true, user: { pushEnabled: true } } }),
@@ -118,11 +118,15 @@ export async function getSettings(_req: Request, res: Response) {
   return res.status(200).json({
     groups: EVENT_GROUPS.map((group) => ({
       group: group.group,
-      events: group.events.map((event) => ({
-        event,
-        // Unknown means never touched, which is on.
-        enabled: byEvent.get(event) ?? true,
-      })),
+      events: group.events.map((event) => {
+        const row = byEvent.get(event);
+        return {
+          event,
+          // Unknown means never touched, which is on for both.
+          enabled: row?.enabled ?? true,
+          saveInApp: row?.saveInApp ?? true,
+        };
+      }),
     })),
     reachableDevices: tokens,
     logoUrl: settings.notificationLogoUrl,
@@ -131,7 +135,10 @@ export async function getSettings(_req: Request, res: Response) {
 
 const settingSchema = z.object({
   event: z.string().min(1),
-  enabled: z.boolean(),
+  // Either may be sent alone, so a single switch can be flipped without
+  // the panel having to send both.
+  enabled: z.boolean().optional(),
+  saveInApp: z.boolean().optional(),
 });
 
 // PATCH /api/admin/notifications/settings
@@ -142,14 +149,22 @@ export async function updateSetting(req: Request, res: Response) {
   }
 
   const event = parsed.data.event as NotificationEvent;
+  const { enabled, saveInApp } = parsed.data;
 
-  await prisma.notificationSetting.upsert({
+  const setting = await prisma.notificationSetting.upsert({
     where: { event },
-    create: { event, enabled: parsed.data.enabled },
-    update: { enabled: parsed.data.enabled },
+    create: { event, enabled: enabled ?? true, saveInApp: saveInApp ?? true },
+    update: {
+      ...(enabled !== undefined ? { enabled } : {}),
+      ...(saveInApp !== undefined ? { saveInApp } : {}),
+    },
   });
 
-  return res.status(200).json({ event, enabled: parsed.data.enabled });
+  return res.status(200).json({
+    event,
+    enabled: setting.enabled,
+    saveInApp: setting.saveInApp,
+  });
 }
 
 const sendSchema = z.object({
@@ -161,6 +176,8 @@ const sendSchema = z.object({
   userIds: z.array(z.string().uuid()).max(5000).optional(),
   /** Sends only to the admin's own devices. */
   testOnly: z.boolean().optional(),
+  /** Whether it's also kept in the app's notification list. */
+  saveInApp: z.boolean().optional(),
 });
 
 /**
@@ -176,7 +193,7 @@ export async function sendCustom(req: Request, res: Response) {
     return res.status(400).json({ error: parsed.error.issues[0].message });
   }
 
-  const { title, body, url, imageUrl, userIds, testOnly } = parsed.data;
+  const { title, body, url, imageUrl, userIds, testOnly, saveInApp = true } = parsed.data;
 
   const targets = testOnly
     ? [req.userId as string]
@@ -195,9 +212,10 @@ export async function sendCustom(req: Request, res: Response) {
     force: !!testOnly,
   });
 
-  // Only real sends get an in-app record; a test shouldn't clutter
-  // anyone's notification list, including the admin's.
-  if (!testOnly) {
+  // A test never leaves a record — it shouldn't clutter anyone's list,
+  // including the admin's — and neither does a send the admin marked as
+  // push-only.
+  if (!testOnly && saveInApp) {
     const recipients = targets
       ? targets
       : (await prisma.user.findMany({ where: { isBanned: false }, select: { id: true } })).map(

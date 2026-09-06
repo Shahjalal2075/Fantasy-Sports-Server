@@ -446,7 +446,18 @@ model PushToken {
 // Whether a given event sends a push, and the artwork it carries.
 model NotificationSetting {
   event   NotificationEvent @id
+  /** Whether this event sends a push at all. */
   enabled Boolean           @default(true)
+
+  /**
+   * Whether it also lands in the app's notification list.
+   *
+   * Separate from `enabled` because the two answer different questions:
+   * a match reminder is worth interrupting someone for but pointless to
+   * keep, while a prize needs to stay findable long after the push has
+   * been swiped away.
+   */
+  saveInApp Boolean @default(true)
 
   updatedAt DateTime @updatedAt
 

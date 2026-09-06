@@ -1,6 +1,7 @@
 import { Prisma, CoinTransactionType, NotificationType } from "../generated/prisma/client";
 import prisma from "../config/prisma";
 import { creditBucket, planDebit } from "../utils/coinBuckets";
+import { sendPush } from "./pushService";
 
 // Coins are a virtual, non-purchasable, non-withdrawable in-app currency.
 // They are NEVER exchanged for real money in either direction. This file
@@ -187,7 +188,7 @@ export async function creditCoins(
 // Admin gives a user bonus coins (custom amount + reason), and the user
 // gets a Notification about it. Wrapped in one transaction.
 export async function adminGiveBonus(userId: string, amount: number, reason: string) {
-  return prisma.$transaction(async (tx) => {
+  const balance = await prisma.$transaction(async (tx) => {
     const balance = await creditCoins(tx, userId, amount, CoinTransactionType.ADMIN_BONUS, { reason });
     await tx.notification.create({
       data: {
@@ -200,13 +201,24 @@ export async function adminGiveBonus(userId: string, amount: number, reason: str
     });
     return balance;
   });
+
+  // Sent after the transaction commits. A push that fails must never
+  // roll back coins the user has already been given.
+  await sendPush({
+    event: "ADMIN_BONUS",
+    title: `You received ${amount} bonus coins`,
+    body: reason,
+    userIds: [userId],
+  });
+
+  return balance;
 }
 
 // Admin fines a user (deducts coins, custom amount + reason). The fine is
 // clamped to the user's current balance so it can never go negative — if
 // they have fewer coins than the fine amount, they're taken to zero.
 export async function adminGiveFine(userId: string, amount: number, reason: string) {
-  return prisma.$transaction(async (tx) => {
+  const outcome = await prisma.$transaction(async (tx) => {
     const user = await tx.user.findUniqueOrThrow({ where: { id: userId } });
     const actualAmount = Math.min(amount, user.coins);
 
@@ -245,6 +257,15 @@ export async function adminGiveFine(userId: string, amount: number, reason: stri
       },
     });
 
-    return updated.coins;
+    return { coins: updated.coins, actualAmount };
   });
+
+  await sendPush({
+    event: "ADMIN_FINE",
+    title: `You were fined ${outcome.actualAmount} coins`,
+    body: reason,
+    userIds: [userId],
+  });
+
+  return outcome.coins;
 }

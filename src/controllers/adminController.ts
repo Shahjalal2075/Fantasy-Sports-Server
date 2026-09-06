@@ -9,6 +9,7 @@ import bcrypt from "bcryptjs";
 import { adminResetPasswordSchema } from "../utils/validators";
 import { paySignupBonusIfDue } from "../services/referralService";
 import { compareVersions, invalidateSettingsCache } from "./appConfigController";
+import { sendPush } from "../services/pushService";
 
 // GET /api/admin/coin-adjustments  (admin only)
 // Audit log of every ADMIN_BONUS / ADMIN_FINE ever given, across all users.
@@ -271,6 +272,13 @@ export async function banUser(req: Request, res: Response) {
     });
   });
 
+  await sendPush({
+    event: "ACCOUNT_BANNED",
+    title: "Your account has been banned",
+    body: parsed.data.reason || "Contact support for more information.",
+    userIds: [userId],
+  });
+
   return res.status(200).json({ message: "User banned" });
 }
 
@@ -426,6 +434,15 @@ export async function setUserVerified(req: Request, res: Response) {
     },
   });
 
+  await sendPush({
+    event: isVerified ? "ACCOUNT_VERIFIED" : "VERIFICATION_REMOVED",
+    title: isVerified ? "You're verified" : "Verification removed",
+    body: isVerified
+      ? "A blue tick now appears next to your name."
+      : "Your account verification has been removed.",
+    userIds: [userId],
+  });
+
   // Verification is what unlocks the referral joining bonus, so pay it
   // now. Idempotent, so unverify/re-verify can't pay twice.
   if (isVerified) {
@@ -468,6 +485,13 @@ export async function adminResetUserPassword(req: Request, res: Response) {
       message:
         "An administrator set a new password for your account. If you didn't request this, contact support immediately.",
     },
+  });
+
+  await sendPush({
+    event: "PASSWORD_RESET",
+    title: "Your password was reset",
+    body: "An administrator set a new password. If you didn't request this, contact support.",
+    userIds: [userId],
   });
 
   return res.status(200).json({ message: "Password reset" });

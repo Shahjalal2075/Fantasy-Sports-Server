@@ -1,5 +1,6 @@
 import prisma from "../config/prisma";
 import { creditCoins } from "./walletService";
+import { sendPush } from "./pushService";
 
 // Ambiguous characters (0/O, 1/I/L) are left out: these codes get read
 // off a screen and typed by hand, so confusable pairs cause failed
@@ -113,6 +114,13 @@ export async function paySignupBonusIfDue(userId: string): Promise<void> {
       },
     });
   });
+
+  await sendPush({
+    event: "REFERRAL_BONUS",
+    title: "Referral bonus",
+    body: `You received ${signupBonus} coins for signing up with a referral code.`,
+    userIds: [userId],
+  });
 }
 
 /**
@@ -167,6 +175,13 @@ export async function payInviterIfDue(userId: string, entryCost: number): Promis
         coinAmount: inviterBonus,
       },
     });
+  });
+
+  await sendPush({
+    event: "REFERRAL_REWARD",
+    title: "Referral reward",
+    body: `${user.name} joined their first paid contest. You earned ${inviterBonus} coins!`,
+    userIds: [user.referredById as string],
   });
 }
 

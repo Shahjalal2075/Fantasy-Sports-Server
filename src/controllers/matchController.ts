@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import prisma from "../config/prisma";
 import { createMatchSchema, updateMatchSchema } from "../utils/validators";
 import { calculateMatchPlayerPoints, recalculateMatchPoints, getCaptainMultipliers } from "../services/pointsService";
+import { sendPush } from "../services/pushService";
 
 // A match's status is only ever moved to COMPLETED/CANCELLED explicitly by
 // an admin, but UPCOMING -> LIVE happens automatically once the lock time
@@ -146,6 +147,25 @@ export async function updateMatch(req: Request, res: Response) {
     },
     include: { teamA: true, teamB: true },
   });
+
+  // Only when the start actually moved. Saving the same form twice, or
+  // editing the venue, shouldn't tell everyone the time changed.
+  const movedTo = data.startTime ? new Date(data.startTime).getTime() : null;
+  if (movedTo !== null && movedTo !== existing.startTime.getTime()) {
+    const fixture = `${match.teamA?.shortName ?? "?"} vs ${match.teamB?.shortName ?? "?"}`;
+
+    await sendPush({
+      event: "MATCH_TIME_CHANGED",
+      title: `${fixture} has been rescheduled`,
+      body: `New start time: ${match.startTime.toLocaleString("en-GB", {
+        day: "numeric",
+        month: "short",
+        hour: "2-digit",
+        minute: "2-digit",
+      })}`,
+      url: `match:${id}`,
+    });
+  }
 
   return res.status(200).json({ match });
 }

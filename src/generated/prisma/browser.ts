@@ -58,6 +58,21 @@ export type CoinCoupon = Prisma.CoinCouponModel
  */
 export type CoinRequest = Prisma.CoinRequestModel
 /**
+ * Model PushToken
+ * 
+ */
+export type PushToken = Prisma.PushTokenModel
+/**
+ * Model NotificationSetting
+ * 
+ */
+export type NotificationSetting = Prisma.NotificationSettingModel
+/**
+ * Model PushLog
+ * 
+ */
+export type PushLog = Prisma.PushLogModel
+/**
  * Model ContactMethod
  * 
  */

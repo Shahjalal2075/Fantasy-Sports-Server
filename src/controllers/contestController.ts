@@ -5,6 +5,7 @@ import { payInviterIfDue } from "../services/referralService";
 import { splitPrizes } from "../utils/prizeSplitting";
 import { createContestSchema, joinContestSchema } from "../utils/validators";
 import { debitCoins, creditCoins, InsufficientCoinsError } from "../services/walletService";
+import { sendPush } from "../services/pushService";
 
 // ---------- Admin ----------
 
@@ -30,6 +31,20 @@ export async function createContest(req: Request, res: Response) {
       entryCost: entryCost ?? 0,
       prizeDistribution: prizeDistribution ?? [],
     },
+  });
+
+  // Broadcast: a new contest is worth telling everyone about, not just
+  // the people already looking at that match.
+  const fixture = await prisma.match.findUnique({
+    where: { id: matchId },
+    include: { teamA: true, teamB: true },
+  });
+
+  await sendPush({
+    event: "NEW_CONTEST",
+    title: "New contest open",
+    body: `${contest.name} — ${fixture?.teamA?.shortName ?? "?"} vs ${fixture?.teamB?.shortName ?? "?"}`,
+    url: `match:${matchId}`,
   });
 
   return res.status(201).json({ contest });
@@ -386,6 +401,16 @@ export async function distributePrizes(req: Request, res: Response) {
 
     await tx.contest.update({ where: { id: contestId }, data: { prizesDistributed: true } });
   });
+
+  // One push per winner, batched by the service.
+  for (const payout of payouts) {
+    await sendPush({
+      event: "CONTEST_PRIZE",
+      title: `You won ${payout.coins.toLocaleString()} coins!`,
+      body: `Rank #${payout.rank} in ${contest.name}.`,
+      userIds: [payout.userId],
+    });
+  }
 
   return res.status(200).json({ message: "Prizes distributed", payouts });
 }

@@ -51,6 +51,13 @@ import {
   updateCoupon,
   deleteCoupon,
 } from "../controllers/coinRequestController";
+import {
+  getSettings as getNotificationSettings,
+  updateSetting as updateNotificationSetting,
+  sendCustom,
+  getLog as getNotificationLog,
+  searchRecipients,
+} from "../controllers/pushController";
 import { requireAuth, requireAdmin } from "../middleware/auth";
 
 const router = Router();
@@ -88,6 +95,13 @@ router.delete("/matches/:id/live-link", removeMatchLink);
 router.patch("/match-players/:matchPlayerId/live-code", setPlayerLiveCode);
 router.post("/match-players/:matchPlayerId/live-code/generate", generatePlayerLiveCode);
 router.delete("/match-players/:matchPlayerId/live-code", clearPlayerLiveCode);
+
+// Notifications
+router.get("/notifications/settings", getNotificationSettings);
+router.patch("/notifications/settings", updateNotificationSetting);
+router.post("/notifications/send", sendCustom);
+router.get("/notifications/log", getNotificationLog);
+router.get("/notifications/recipients", searchRecipients);
 
 // Coin requests
 router.get("/coin-requests", listCoinRequests);

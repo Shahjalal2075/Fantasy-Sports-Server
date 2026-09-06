@@ -1,6 +1,7 @@
 import prisma from "../config/prisma";
 import { evaluateCoupon } from "../utils/coinCoupons";
 import { creditCoins } from "./walletService";
+import { sendPush } from "./pushService";
 
 /**
  * Coin requests.
@@ -190,6 +191,16 @@ export async function approveCoinRequest(
     });
   });
 
+  await sendPush({
+    event: "COIN_REQUEST_APPROVED",
+    title: `${totalAmount.toLocaleString()} coins added`,
+    body:
+      bonusAmount > 0
+        ? `Your request was approved, with a ${bonusAmount.toLocaleString()} coin bonus.`
+        : "Your coin request was approved.",
+    userIds: [request.userId],
+  });
+
   return { ok: true, credited: totalAmount };
 }
 
@@ -230,6 +241,13 @@ export async function setCoinRequestStatus(
     },
   });
 
+  await sendPush({
+    event: "COIN_REQUEST_DECLINED",
+    title: status === "HELD" ? "Your coin request is on hold" : "Your coin request wasn't approved",
+    body: note.trim(),
+    userIds: [request.userId],
+  });
+
   return { ok: true };
 }
 
@@ -262,6 +280,15 @@ export async function rejectAllOpen(note: string): Promise<number> {
       })),
     }),
   ]);
+
+  // One call for the whole batch rather than one per user: a day's
+  // rejections can run to hundreds.
+  await sendPush({
+    event: "COIN_REQUEST_DECLINED",
+    title: "Your coin request wasn't approved",
+    body: note.trim(),
+    userIds: open.map((row) => row.userId),
+  });
 
   return open.length;
 }

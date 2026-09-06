@@ -59,6 +59,9 @@ export const ModelName = {
   RequestAgent: 'RequestAgent',
   CoinCoupon: 'CoinCoupon',
   CoinRequest: 'CoinRequest',
+  PushToken: 'PushToken',
+  NotificationSetting: 'NotificationSetting',
+  PushLog: 'PushLog',
   ContactMethod: 'ContactMethod',
   Banner: 'Banner',
   ActiveSession: 'ActiveSession',
@@ -124,7 +127,8 @@ export const UserScalarFieldEnum = {
   referralSignupBonusPaid: 'referralSignupBonusPaid',
   isVerified: 'isVerified',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  pushEnabled: 'pushEnabled'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -172,6 +176,7 @@ export const AppSettingsScalarFieldEnum = {
   coinRequestMinCoins: 'coinRequestMinCoins',
   coinRequestMaxPending: 'coinRequestMaxPending',
   coinRequestNote: 'coinRequestNote',
+  notificationLogoUrl: 'notificationLogoUrl',
   depositMessage: 'depositMessage',
   depositButtonText: 'depositButtonText',
   depositButtonLogo: 'depositButtonLogo',
@@ -272,6 +277,49 @@ export const CoinRequestScalarFieldEnum = {
 } as const
 
 export type CoinRequestScalarFieldEnum = (typeof CoinRequestScalarFieldEnum)[keyof typeof CoinRequestScalarFieldEnum]
+
+
+export const PushTokenScalarFieldEnum = {
+  id: 'id',
+  token: 'token',
+  userId: 'userId',
+  platform: 'platform',
+  isActive: 'isActive',
+  lastSeenAt: 'lastSeenAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PushTokenScalarFieldEnum = (typeof PushTokenScalarFieldEnum)[keyof typeof PushTokenScalarFieldEnum]
+
+
+export const NotificationSettingScalarFieldEnum = {
+  event: 'event',
+  enabled: 'enabled',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NotificationSettingScalarFieldEnum = (typeof NotificationSettingScalarFieldEnum)[keyof typeof NotificationSettingScalarFieldEnum]
+
+
+export const PushLogScalarFieldEnum = {
+  id: 'id',
+  event: 'event',
+  title: 'title',
+  body: 'body',
+  url: 'url',
+  imageUrl: 'imageUrl',
+  targetUserId: 'targetUserId',
+  recipients: 'recipients',
+  delivered: 'delivered',
+  failed: 'failed',
+  status: 'status',
+  error: 'error',
+  isTest: 'isTest',
+  createdAt: 'createdAt'
+} as const
+
+export type PushLogScalarFieldEnum = (typeof PushLogScalarFieldEnum)[keyof typeof PushLogScalarFieldEnum]
 
 
 export const ContactMethodScalarFieldEnum = {

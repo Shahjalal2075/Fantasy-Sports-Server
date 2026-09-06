@@ -47,6 +47,50 @@ enum NotificationType {
   GENERIC
 }
 
+/**
+ * Every event that can raise a notification.
+ *
+ * Each one is switchable from the admin panel. Turning one off stops the
+ * push only — the in-app record is still written, so a user's history
+ * stays complete whatever the current settings are.
+ */
+enum NotificationEvent {
+  // Match
+  MATCH_REMINDER_30
+  MATCH_REMINDER_15
+  MATCH_TIME_CHANGED
+  NEW_CONTEST
+
+  // Coins
+  CONTEST_PRIZE
+  ADMIN_BONUS
+  ADMIN_FINE
+  REFERRAL_BONUS
+  REFERRAL_REWARD
+
+  // Requests
+  COIN_REQUEST_APPROVED
+  COIN_REQUEST_DECLINED
+  GIFT_APPROVED
+  GIFT_CANCELLED
+  GIFT_EXPIRED
+
+  // Account
+  ACCOUNT_VERIFIED
+  VERIFICATION_REMOVED
+  PASSWORD_RESET
+  ACCOUNT_BANNED
+
+  // Sent by hand
+  CUSTOM
+}
+
+enum PushStatus {
+  QUEUED
+  SENT
+  FAILED
+}
+
 model User {
   id               String    @id @default(uuid())
   name             String
@@ -109,6 +153,11 @@ model User {
   activeSessions  ActiveSession[]
   giftRequests    GiftRequest[]
   coinRequests    CoinRequest[]
+  pushTokens      PushToken[]
+
+  // User's own switch. Off means no pushes at all, whatever the admin
+  // settings say — Play Store expects this to exist.
+  pushEnabled     Boolean @default(true)
 
   @@map("users")
 }
@@ -170,6 +219,11 @@ model AppSettings {
   // requests count, or parking them would sidestep the limit.
   coinRequestMaxPending  Int     @default(3)
   coinRequestNote        String  @default("")
+
+  // Shown as the large icon inside a notification. The small status-bar
+  // icon is a monochrome silhouette bundled at build time — Android
+  // strips colour from it, so it can't be set from here.
+  notificationLogoUrl String @default("")
 
   // Deposit isn't supported — coins can't be bought. This is the copy
   // and call-to-action shown when someone taps Deposit anyway, editable
@@ -364,6 +418,72 @@ model CoinRequest {
   @@index([status, createdAt])
   @@index([userId, createdAt])
   @@map("coin_requests")
+}
+
+// One device that can receive push notifications.
+//
+// Keyed by the Expo token rather than the user: reinstalling gives a new
+// token, and the same device can be handed to a different account.
+model PushToken {
+  id     String @id @default(uuid())
+  token  String @unique
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  platform String @default("android")
+  // Cleared when Expo reports the device is gone, rather than deleted,
+  // so a reinstall on the same device doesn't look like a new user.
+  isActive Boolean @default(true)
+
+  lastSeenAt DateTime @default(now())
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([userId, isActive])
+  @@map("push_tokens")
+}
+
+// Whether a given event sends a push, and the artwork it carries.
+model NotificationSetting {
+  event   NotificationEvent @id
+  enabled Boolean           @default(true)
+
+  updatedAt DateTime @updatedAt
+
+  @@map("notification_settings")
+}
+
+// A record of what was sent, to how many, and how it went.
+//
+// Without this there's no way to know whether notifications are actually
+// arriving — a push that silently fails looks exactly like one nobody
+// tapped.
+model PushLog {
+  id    String            @id @default(uuid())
+  event NotificationEvent
+
+  title   String
+  body    String
+  /** Opened when the notification is tapped. Optional. */
+  url     String @default("")
+  imageUrl String @default("")
+
+  // Null for a broadcast.
+  targetUserId String?
+
+  recipients Int        @default(0)
+  delivered  Int        @default(0)
+  failed     Int        @default(0)
+  status     PushStatus @default(QUEUED)
+  error      String     @default("")
+
+  /** True for an admin's test send to their own device. */
+  isTest Boolean @default(false)
+
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+  @@map("push_logs")
 }
 
 // A way for the admin to reach a user about their gift — WhatsApp,

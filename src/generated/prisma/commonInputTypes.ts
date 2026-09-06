@@ -287,6 +287,40 @@ export type EnumCoinRequestStatusWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumCoinRequestStatusFilter<$PrismaModel>
 }
 
+export type EnumNotificationEventFilter<$PrismaModel = never> = {
+  equals?: $Enums.NotificationEvent | Prisma.EnumNotificationEventFieldRefInput<$PrismaModel>
+  in?: $Enums.NotificationEvent[] | Prisma.ListEnumNotificationEventFieldRefInput<$PrismaModel>
+  notIn?: $Enums.NotificationEvent[] | Prisma.ListEnumNotificationEventFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumNotificationEventFilter<$PrismaModel> | $Enums.NotificationEvent
+}
+
+export type EnumNotificationEventWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.NotificationEvent | Prisma.EnumNotificationEventFieldRefInput<$PrismaModel>
+  in?: $Enums.NotificationEvent[] | Prisma.ListEnumNotificationEventFieldRefInput<$PrismaModel>
+  notIn?: $Enums.NotificationEvent[] | Prisma.ListEnumNotificationEventFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumNotificationEventWithAggregatesFilter<$PrismaModel> | $Enums.NotificationEvent
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumNotificationEventFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumNotificationEventFilter<$PrismaModel>
+}
+
+export type EnumPushStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.PushStatus | Prisma.EnumPushStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.PushStatus[] | Prisma.ListEnumPushStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.PushStatus[] | Prisma.ListEnumPushStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumPushStatusFilter<$PrismaModel> | $Enums.PushStatus
+}
+
+export type EnumPushStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.PushStatus | Prisma.EnumPushStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.PushStatus[] | Prisma.ListEnumPushStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.PushStatus[] | Prisma.ListEnumPushStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumPushStatusWithAggregatesFilter<$PrismaModel> | $Enums.PushStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumPushStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumPushStatusFilter<$PrismaModel>
+}
+
 export type EnumSportTypeFilter<$PrismaModel = never> = {
   equals?: $Enums.SportType | Prisma.EnumSportTypeFieldRefInput<$PrismaModel>
   in?: $Enums.SportType[] | Prisma.ListEnumSportTypeFieldRefInput<$PrismaModel>
@@ -700,6 +734,40 @@ export type NestedEnumCoinRequestStatusWithAggregatesFilter<$PrismaModel = never
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumCoinRequestStatusFilter<$PrismaModel>
   _max?: Prisma.NestedEnumCoinRequestStatusFilter<$PrismaModel>
+}
+
+export type NestedEnumNotificationEventFilter<$PrismaModel = never> = {
+  equals?: $Enums.NotificationEvent | Prisma.EnumNotificationEventFieldRefInput<$PrismaModel>
+  in?: $Enums.NotificationEvent[] | Prisma.ListEnumNotificationEventFieldRefInput<$PrismaModel>
+  notIn?: $Enums.NotificationEvent[] | Prisma.ListEnumNotificationEventFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumNotificationEventFilter<$PrismaModel> | $Enums.NotificationEvent
+}
+
+export type NestedEnumNotificationEventWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.NotificationEvent | Prisma.EnumNotificationEventFieldRefInput<$PrismaModel>
+  in?: $Enums.NotificationEvent[] | Prisma.ListEnumNotificationEventFieldRefInput<$PrismaModel>
+  notIn?: $Enums.NotificationEvent[] | Prisma.ListEnumNotificationEventFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumNotificationEventWithAggregatesFilter<$PrismaModel> | $Enums.NotificationEvent
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumNotificationEventFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumNotificationEventFilter<$PrismaModel>
+}
+
+export type NestedEnumPushStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.PushStatus | Prisma.EnumPushStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.PushStatus[] | Prisma.ListEnumPushStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.PushStatus[] | Prisma.ListEnumPushStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumPushStatusFilter<$PrismaModel> | $Enums.PushStatus
+}
+
+export type NestedEnumPushStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.PushStatus | Prisma.EnumPushStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.PushStatus[] | Prisma.ListEnumPushStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.PushStatus[] | Prisma.ListEnumPushStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumPushStatusWithAggregatesFilter<$PrismaModel> | $Enums.PushStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumPushStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumPushStatusFilter<$PrismaModel>
 }
 
 export type NestedEnumSportTypeFilter<$PrismaModel = never> = {

@@ -54,6 +54,40 @@ export const NotificationType = {
 export type NotificationType = (typeof NotificationType)[keyof typeof NotificationType]
 
 
+export const NotificationEvent = {
+  MATCH_REMINDER_30: 'MATCH_REMINDER_30',
+  MATCH_REMINDER_15: 'MATCH_REMINDER_15',
+  MATCH_TIME_CHANGED: 'MATCH_TIME_CHANGED',
+  NEW_CONTEST: 'NEW_CONTEST',
+  CONTEST_PRIZE: 'CONTEST_PRIZE',
+  ADMIN_BONUS: 'ADMIN_BONUS',
+  ADMIN_FINE: 'ADMIN_FINE',
+  REFERRAL_BONUS: 'REFERRAL_BONUS',
+  REFERRAL_REWARD: 'REFERRAL_REWARD',
+  COIN_REQUEST_APPROVED: 'COIN_REQUEST_APPROVED',
+  COIN_REQUEST_DECLINED: 'COIN_REQUEST_DECLINED',
+  GIFT_APPROVED: 'GIFT_APPROVED',
+  GIFT_CANCELLED: 'GIFT_CANCELLED',
+  GIFT_EXPIRED: 'GIFT_EXPIRED',
+  ACCOUNT_VERIFIED: 'ACCOUNT_VERIFIED',
+  VERIFICATION_REMOVED: 'VERIFICATION_REMOVED',
+  PASSWORD_RESET: 'PASSWORD_RESET',
+  ACCOUNT_BANNED: 'ACCOUNT_BANNED',
+  CUSTOM: 'CUSTOM'
+} as const
+
+export type NotificationEvent = (typeof NotificationEvent)[keyof typeof NotificationEvent]
+
+
+export const PushStatus = {
+  QUEUED: 'QUEUED',
+  SENT: 'SENT',
+  FAILED: 'FAILED'
+} as const
+
+export type PushStatus = (typeof PushStatus)[keyof typeof PushStatus]
+
+
 export const CoinRequestStatus = {
   PENDING: 'PENDING',
   HELD: 'HELD',

@@ -2,8 +2,12 @@
 // point. NOT used by Vercel — see api/index.ts for the serverless entry,
 // which imports the same app from src/app.ts but never calls .listen().
 import app from "./app";
+import { startReminderLoop } from "./services/matchReminderService";
 
 const PORT = process.env.PORT || 5000;
+
+// Match reminders run on a timer in this process.
+startReminderLoop();
 
 app.listen(PORT, () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`);

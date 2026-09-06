@@ -64,6 +64,7 @@ export type AppSettingsMinAggregateOutputType = {
   coinRequestMinCoins: number | null
   coinRequestMaxPending: number | null
   coinRequestNote: string | null
+  notificationLogoUrl: string | null
   depositMessage: string | null
   depositButtonText: string | null
   depositButtonLogo: string | null
@@ -101,6 +102,7 @@ export type AppSettingsMaxAggregateOutputType = {
   coinRequestMinCoins: number | null
   coinRequestMaxPending: number | null
   coinRequestNote: string | null
+  notificationLogoUrl: string | null
   depositMessage: string | null
   depositButtonText: string | null
   depositButtonLogo: string | null
@@ -138,6 +140,7 @@ export type AppSettingsCountAggregateOutputType = {
   coinRequestMinCoins: number
   coinRequestMaxPending: number
   coinRequestNote: number
+  notificationLogoUrl: number
   depositMessage: number
   depositButtonText: number
   depositButtonLogo: number
@@ -201,6 +204,7 @@ export type AppSettingsMinAggregateInputType = {
   coinRequestMinCoins?: true
   coinRequestMaxPending?: true
   coinRequestNote?: true
+  notificationLogoUrl?: true
   depositMessage?: true
   depositButtonText?: true
   depositButtonLogo?: true
@@ -238,6 +242,7 @@ export type AppSettingsMaxAggregateInputType = {
   coinRequestMinCoins?: true
   coinRequestMaxPending?: true
   coinRequestNote?: true
+  notificationLogoUrl?: true
   depositMessage?: true
   depositButtonText?: true
   depositButtonLogo?: true
@@ -275,6 +280,7 @@ export type AppSettingsCountAggregateInputType = {
   coinRequestMinCoins?: true
   coinRequestMaxPending?: true
   coinRequestNote?: true
+  notificationLogoUrl?: true
   depositMessage?: true
   depositButtonText?: true
   depositButtonLogo?: true
@@ -399,6 +405,7 @@ export type AppSettingsGroupByOutputType = {
   coinRequestMinCoins: number
   coinRequestMaxPending: number
   coinRequestNote: string
+  notificationLogoUrl: string
   depositMessage: string
   depositButtonText: string
   depositButtonLogo: string
@@ -459,6 +466,7 @@ export type AppSettingsWhereInput = {
   coinRequestMinCoins?: Prisma.IntFilter<"AppSettings"> | number
   coinRequestMaxPending?: Prisma.IntFilter<"AppSettings"> | number
   coinRequestNote?: Prisma.StringFilter<"AppSettings"> | string
+  notificationLogoUrl?: Prisma.StringFilter<"AppSettings"> | string
   depositMessage?: Prisma.StringFilter<"AppSettings"> | string
   depositButtonText?: Prisma.StringFilter<"AppSettings"> | string
   depositButtonLogo?: Prisma.StringFilter<"AppSettings"> | string
@@ -496,6 +504,7 @@ export type AppSettingsOrderByWithRelationInput = {
   coinRequestMinCoins?: Prisma.SortOrder
   coinRequestMaxPending?: Prisma.SortOrder
   coinRequestNote?: Prisma.SortOrder
+  notificationLogoUrl?: Prisma.SortOrder
   depositMessage?: Prisma.SortOrder
   depositButtonText?: Prisma.SortOrder
   depositButtonLogo?: Prisma.SortOrder
@@ -536,6 +545,7 @@ export type AppSettingsWhereUniqueInput = Prisma.AtLeast<{
   coinRequestMinCoins?: Prisma.IntFilter<"AppSettings"> | number
   coinRequestMaxPending?: Prisma.IntFilter<"AppSettings"> | number
   coinRequestNote?: Prisma.StringFilter<"AppSettings"> | string
+  notificationLogoUrl?: Prisma.StringFilter<"AppSettings"> | string
   depositMessage?: Prisma.StringFilter<"AppSettings"> | string
   depositButtonText?: Prisma.StringFilter<"AppSettings"> | string
   depositButtonLogo?: Prisma.StringFilter<"AppSettings"> | string
@@ -573,6 +583,7 @@ export type AppSettingsOrderByWithAggregationInput = {
   coinRequestMinCoins?: Prisma.SortOrder
   coinRequestMaxPending?: Prisma.SortOrder
   coinRequestNote?: Prisma.SortOrder
+  notificationLogoUrl?: Prisma.SortOrder
   depositMessage?: Prisma.SortOrder
   depositButtonText?: Prisma.SortOrder
   depositButtonLogo?: Prisma.SortOrder
@@ -618,6 +629,7 @@ export type AppSettingsScalarWhereWithAggregatesInput = {
   coinRequestMinCoins?: Prisma.IntWithAggregatesFilter<"AppSettings"> | number
   coinRequestMaxPending?: Prisma.IntWithAggregatesFilter<"AppSettings"> | number
   coinRequestNote?: Prisma.StringWithAggregatesFilter<"AppSettings"> | string
+  notificationLogoUrl?: Prisma.StringWithAggregatesFilter<"AppSettings"> | string
   depositMessage?: Prisma.StringWithAggregatesFilter<"AppSettings"> | string
   depositButtonText?: Prisma.StringWithAggregatesFilter<"AppSettings"> | string
   depositButtonLogo?: Prisma.StringWithAggregatesFilter<"AppSettings"> | string
@@ -655,6 +667,7 @@ export type AppSettingsCreateInput = {
   coinRequestMinCoins?: number
   coinRequestMaxPending?: number
   coinRequestNote?: string
+  notificationLogoUrl?: string
   depositMessage?: string
   depositButtonText?: string
   depositButtonLogo?: string
@@ -692,6 +705,7 @@ export type AppSettingsUncheckedCreateInput = {
   coinRequestMinCoins?: number
   coinRequestMaxPending?: number
   coinRequestNote?: string
+  notificationLogoUrl?: string
   depositMessage?: string
   depositButtonText?: string
   depositButtonLogo?: string
@@ -729,6 +743,7 @@ export type AppSettingsUpdateInput = {
   coinRequestMinCoins?: Prisma.IntFieldUpdateOperationsInput | number
   coinRequestMaxPending?: Prisma.IntFieldUpdateOperationsInput | number
   coinRequestNote?: Prisma.StringFieldUpdateOperationsInput | string
+  notificationLogoUrl?: Prisma.StringFieldUpdateOperationsInput | string
   depositMessage?: Prisma.StringFieldUpdateOperationsInput | string
   depositButtonText?: Prisma.StringFieldUpdateOperationsInput | string
   depositButtonLogo?: Prisma.StringFieldUpdateOperationsInput | string
@@ -766,6 +781,7 @@ export type AppSettingsUncheckedUpdateInput = {
   coinRequestMinCoins?: Prisma.IntFieldUpdateOperationsInput | number
   coinRequestMaxPending?: Prisma.IntFieldUpdateOperationsInput | number
   coinRequestNote?: Prisma.StringFieldUpdateOperationsInput | string
+  notificationLogoUrl?: Prisma.StringFieldUpdateOperationsInput | string
   depositMessage?: Prisma.StringFieldUpdateOperationsInput | string
   depositButtonText?: Prisma.StringFieldUpdateOperationsInput | string
   depositButtonLogo?: Prisma.StringFieldUpdateOperationsInput | string
@@ -803,6 +819,7 @@ export type AppSettingsCreateManyInput = {
   coinRequestMinCoins?: number
   coinRequestMaxPending?: number
   coinRequestNote?: string
+  notificationLogoUrl?: string
   depositMessage?: string
   depositButtonText?: string
   depositButtonLogo?: string
@@ -840,6 +857,7 @@ export type AppSettingsUpdateManyMutationInput = {
   coinRequestMinCoins?: Prisma.IntFieldUpdateOperationsInput | number
   coinRequestMaxPending?: Prisma.IntFieldUpdateOperationsInput | number
   coinRequestNote?: Prisma.StringFieldUpdateOperationsInput | string
+  notificationLogoUrl?: Prisma.StringFieldUpdateOperationsInput | string
   depositMessage?: Prisma.StringFieldUpdateOperationsInput | string
   depositButtonText?: Prisma.StringFieldUpdateOperationsInput | string
   depositButtonLogo?: Prisma.StringFieldUpdateOperationsInput | string
@@ -877,6 +895,7 @@ export type AppSettingsUncheckedUpdateManyInput = {
   coinRequestMinCoins?: Prisma.IntFieldUpdateOperationsInput | number
   coinRequestMaxPending?: Prisma.IntFieldUpdateOperationsInput | number
   coinRequestNote?: Prisma.StringFieldUpdateOperationsInput | string
+  notificationLogoUrl?: Prisma.StringFieldUpdateOperationsInput | string
   depositMessage?: Prisma.StringFieldUpdateOperationsInput | string
   depositButtonText?: Prisma.StringFieldUpdateOperationsInput | string
   depositButtonLogo?: Prisma.StringFieldUpdateOperationsInput | string
@@ -914,6 +933,7 @@ export type AppSettingsCountOrderByAggregateInput = {
   coinRequestMinCoins?: Prisma.SortOrder
   coinRequestMaxPending?: Prisma.SortOrder
   coinRequestNote?: Prisma.SortOrder
+  notificationLogoUrl?: Prisma.SortOrder
   depositMessage?: Prisma.SortOrder
   depositButtonText?: Prisma.SortOrder
   depositButtonLogo?: Prisma.SortOrder
@@ -963,6 +983,7 @@ export type AppSettingsMaxOrderByAggregateInput = {
   coinRequestMinCoins?: Prisma.SortOrder
   coinRequestMaxPending?: Prisma.SortOrder
   coinRequestNote?: Prisma.SortOrder
+  notificationLogoUrl?: Prisma.SortOrder
   depositMessage?: Prisma.SortOrder
   depositButtonText?: Prisma.SortOrder
   depositButtonLogo?: Prisma.SortOrder
@@ -1000,6 +1021,7 @@ export type AppSettingsMinOrderByAggregateInput = {
   coinRequestMinCoins?: Prisma.SortOrder
   coinRequestMaxPending?: Prisma.SortOrder
   coinRequestNote?: Prisma.SortOrder
+  notificationLogoUrl?: Prisma.SortOrder
   depositMessage?: Prisma.SortOrder
   depositButtonText?: Prisma.SortOrder
   depositButtonLogo?: Prisma.SortOrder
@@ -1051,6 +1073,7 @@ export type AppSettingsSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   coinRequestMinCoins?: boolean
   coinRequestMaxPending?: boolean
   coinRequestNote?: boolean
+  notificationLogoUrl?: boolean
   depositMessage?: boolean
   depositButtonText?: boolean
   depositButtonLogo?: boolean
@@ -1088,6 +1111,7 @@ export type AppSettingsSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   coinRequestMinCoins?: boolean
   coinRequestMaxPending?: boolean
   coinRequestNote?: boolean
+  notificationLogoUrl?: boolean
   depositMessage?: boolean
   depositButtonText?: boolean
   depositButtonLogo?: boolean
@@ -1125,6 +1149,7 @@ export type AppSettingsSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   coinRequestMinCoins?: boolean
   coinRequestMaxPending?: boolean
   coinRequestNote?: boolean
+  notificationLogoUrl?: boolean
   depositMessage?: boolean
   depositButtonText?: boolean
   depositButtonLogo?: boolean
@@ -1162,6 +1187,7 @@ export type AppSettingsSelectScalar = {
   coinRequestMinCoins?: boolean
   coinRequestMaxPending?: boolean
   coinRequestNote?: boolean
+  notificationLogoUrl?: boolean
   depositMessage?: boolean
   depositButtonText?: boolean
   depositButtonLogo?: boolean
@@ -1185,7 +1211,7 @@ export type AppSettingsSelectScalar = {
   updatedAt?: boolean
 }
 
-export type AppSettingsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "dailyBonusAmount" | "giftRequestsEnabled" | "giftRequestMinCoins" | "giftRequestExpiryDays" | "giftRequestCooldownHours" | "giftRequestNote" | "coinRequestEnabled" | "coinRequestMessenger" | "coinRequestTelegram" | "coinRequestMinCoins" | "coinRequestMaxPending" | "coinRequestNote" | "depositMessage" | "depositButtonText" | "depositButtonLogo" | "depositButtonUrl" | "referralSignupBonus" | "referralInviterBonus" | "privacyPolicy" | "termsAndConditions" | "legalUpdatedAt" | "maintenanceMode" | "maintenanceMessage" | "latestAppVersion" | "minSupportedVersion" | "updateUrl" | "updateMessage" | "supportEmail" | "supportPhone" | "supportWhatsapp" | "supportFacebook" | "supportHours" | "updatedAt", ExtArgs["result"]["appSettings"]>
+export type AppSettingsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "dailyBonusAmount" | "giftRequestsEnabled" | "giftRequestMinCoins" | "giftRequestExpiryDays" | "giftRequestCooldownHours" | "giftRequestNote" | "coinRequestEnabled" | "coinRequestMessenger" | "coinRequestTelegram" | "coinRequestMinCoins" | "coinRequestMaxPending" | "coinRequestNote" | "notificationLogoUrl" | "depositMessage" | "depositButtonText" | "depositButtonLogo" | "depositButtonUrl" | "referralSignupBonus" | "referralInviterBonus" | "privacyPolicy" | "termsAndConditions" | "legalUpdatedAt" | "maintenanceMode" | "maintenanceMessage" | "latestAppVersion" | "minSupportedVersion" | "updateUrl" | "updateMessage" | "supportEmail" | "supportPhone" | "supportWhatsapp" | "supportFacebook" | "supportHours" | "updatedAt", ExtArgs["result"]["appSettings"]>
 
 export type $AppSettingsPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "AppSettings"
@@ -1204,6 +1230,7 @@ export type $AppSettingsPayload<ExtArgs extends runtime.Types.Extensions.Interna
     coinRequestMinCoins: number
     coinRequestMaxPending: number
     coinRequestNote: string
+    notificationLogoUrl: string
     depositMessage: string
     depositButtonText: string
     depositButtonLogo: string
@@ -1661,6 +1688,7 @@ export interface AppSettingsFieldRefs {
   readonly coinRequestMinCoins: Prisma.FieldRef<"AppSettings", 'Int'>
   readonly coinRequestMaxPending: Prisma.FieldRef<"AppSettings", 'Int'>
   readonly coinRequestNote: Prisma.FieldRef<"AppSettings", 'String'>
+  readonly notificationLogoUrl: Prisma.FieldRef<"AppSettings", 'String'>
   readonly depositMessage: Prisma.FieldRef<"AppSettings", 'String'>
   readonly depositButtonText: Prisma.FieldRef<"AppSettings", 'String'>
   readonly depositButtonLogo: Prisma.FieldRef<"AppSettings", 'String'>

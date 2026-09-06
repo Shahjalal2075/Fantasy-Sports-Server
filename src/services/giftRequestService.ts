@@ -1,5 +1,6 @@
 import prisma from "../config/prisma";
 import { creditCoins, debitCoins } from "./walletService";
+import { sendPush } from "./pushService";
 
 async function loadSettings() {
   return prisma.appSettings.upsert({ where: { id: 1 }, create: { id: 1 }, update: {} });
@@ -25,6 +26,10 @@ export async function expireStaleRequests(): Promise<number> {
   if (stale.length === 0) return 0;
 
   let expired = 0;
+
+  // Collected inside the loop, pushed after — a slow push shouldn't
+  // hold a transaction open.
+  const refunded: { userId: string; coins: number }[] = [];
 
   for (const request of stale) {
     await prisma.$transaction(async (tx) => {
@@ -56,6 +61,16 @@ export async function expireStaleRequests(): Promise<number> {
       });
 
       expired += 1;
+      refunded.push({ userId: request.userId, coins: request.coinAmount });
+    });
+  }
+
+  for (const row of refunded) {
+    await sendPush({
+      event: "GIFT_EXPIRED",
+      title: "Coins returned",
+      body: `Your gift request wasn't selected, so ${row.coins.toLocaleString()} coins are back in your balance.`,
+      userIds: [row.userId],
     });
   }
 
@@ -193,6 +208,13 @@ export async function approveGiftRequest(
     });
   });
 
+  await sendPush({
+    event: "GIFT_APPROVED",
+    title: "Your gift is on the way!",
+    body: `Approved. Tracking ID: ${trackingId.trim()}`,
+    userIds: [request.userId],
+  });
+
   return { ok: true };
 }
 
@@ -239,6 +261,13 @@ export async function cancelGiftRequest(
         coinAmount: request.coinAmount,
       },
     });
+  });
+
+  await sendPush({
+    event: "GIFT_CANCELLED",
+    title: "Coins returned",
+    body: `${request.coinAmount.toLocaleString()} coins are back in your balance. ${cancelReason.trim()}`,
+    userIds: [request.userId],
   });
 
   return { ok: true };

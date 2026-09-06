@@ -156,13 +156,17 @@ export async function updateMatch(req: Request, res: Response) {
 
     await broadcast({
       event: "MATCH_TIME_CHANGED",
-      title: `${fixture} has been rescheduled`,
-      body: `New start time: ${match.startTime.toLocaleString("en-GB", {
-        day: "numeric",
-        month: "short",
-        hour: "2-digit",
-        minute: "2-digit",
-      })}`,
+      vars: {
+        fixture,
+        teamA: match.teamA?.name ?? "",
+        teamB: match.teamB?.name ?? "",
+        startTime: match.startTime.toLocaleString("en-GB", {
+          day: "numeric",
+          month: "short",
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
+      },
       url: `match:${id}`,
     });
   }

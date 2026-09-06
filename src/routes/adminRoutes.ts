@@ -57,6 +57,7 @@ import {
   sendCustom,
   getLog as getNotificationLog,
   searchRecipients,
+  previewTemplate,
 } from "../controllers/pushController";
 import { requireAuth, requireAdmin } from "../middleware/auth";
 
@@ -101,6 +102,7 @@ router.get("/notifications/settings", getNotificationSettings);
 router.patch("/notifications/settings", updateNotificationSetting);
 router.post("/notifications/send", sendCustom);
 router.get("/notifications/log", getNotificationLog);
+router.post("/notifications/preview", previewTemplate);
 router.get("/notifications/recipients", searchRecipients);
 
 // Coin requests

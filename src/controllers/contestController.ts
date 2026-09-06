@@ -5,7 +5,8 @@ import { payInviterIfDue } from "../services/referralService";
 import { splitPrizes } from "../utils/prizeSplitting";
 import { createContestSchema, joinContestSchema } from "../utils/validators";
 import { debitCoins, creditCoins, InsufficientCoinsError } from "../services/walletService";
-import { sendPush, broadcast, shouldSaveInApp } from "../services/pushService";
+import { sendPush, broadcast, shouldSaveInApp, eventSetting } from "../services/pushService";
+import { resolveTemplate } from "../utils/notificationTemplates";
 
 // ---------- Admin ----------
 
@@ -42,8 +43,13 @@ export async function createContest(req: Request, res: Response) {
 
   await broadcast({
     event: "NEW_CONTEST",
-    title: "New contest open",
-    body: `${contest.name} — ${fixture?.teamA?.shortName ?? "?"} vs ${fixture?.teamB?.shortName ?? "?"}`,
+    vars: {
+      contest: contest.name,
+      fixture: `${fixture?.teamA?.shortName ?? "?"} vs ${fixture?.teamB?.shortName ?? "?"}`,
+      teamA: fixture?.teamA?.name ?? "",
+      teamB: fixture?.teamB?.name ?? "",
+      entryCost: contest.entryCost,
+    },
     url: `match:${matchId}`,
   });
 
@@ -406,22 +412,33 @@ export async function distributePrizes(req: Request, res: Response) {
   // Coins arriving with nothing in the notification list to explain them
   // is how a payout starts looking like a mistake.
   if (await shouldSaveInApp("CONTEST_PRIZE")) {
+    const setting = await eventSetting("CONTEST_PRIZE");
+
     await prisma.notification.createMany({
-      data: payouts.map((payout) => ({
-        userId: payout.userId,
-        type: "COIN_BONUS" as const,
-        title: `You won ${payout.coins.toLocaleString()} coins!`,
-        message: `Rank #${payout.rank} in ${contest.name}.`,
-        coinAmount: payout.coins,
-      })),
+      data: payouts.map((payout) => {
+        // Rendered per winner so the stored record reads exactly like
+        // the push they received.
+        const text = resolveTemplate(
+          "CONTEST_PRIZE",
+          { title: setting.title, body: setting.body },
+          { coins: payout.coins, rank: payout.rank, contest: contest.name }
+        );
+
+        return {
+          userId: payout.userId,
+          type: "COIN_BONUS" as const,
+          title: text.title,
+          message: text.body,
+          coinAmount: payout.coins,
+        };
+      }),
     });
   }
 
   for (const payout of payouts) {
     await sendPush({
       event: "CONTEST_PRIZE",
-      title: `You won ${payout.coins.toLocaleString()} coins!`,
-      body: `Rank #${payout.rank} in ${contest.name}.`,
+      vars: { coins: payout.coins, rank: payout.rank, contest: contest.name },
       userIds: [payout.userId],
     });
   }

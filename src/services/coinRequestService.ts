@@ -193,11 +193,13 @@ export async function approveCoinRequest(
 
   await sendPush({
     event: "COIN_REQUEST_APPROVED",
-    title: `${totalAmount.toLocaleString()} coins added`,
-    body:
-      bonusAmount > 0
-        ? `Your request was approved, with a ${bonusAmount.toLocaleString()} coin bonus.`
-        : "Your coin request was approved.",
+    vars: {
+      total: totalAmount,
+      requested: request.coinAmount,
+      bonus: bonusAmount,
+      coupon: request.couponCode,
+      agent: request.agentName,
+    },
     userIds: [request.userId],
   });
 
@@ -243,8 +245,7 @@ export async function setCoinRequestStatus(
 
   await sendPush({
     event: "COIN_REQUEST_DECLINED",
-    title: status === "HELD" ? "Your coin request is on hold" : "Your coin request wasn't approved",
-    body: note.trim(),
+    vars: { reason: note.trim(), requested: request.coinAmount, agent: request.agentName },
     userIds: [request.userId],
   });
 
@@ -285,8 +286,7 @@ export async function rejectAllOpen(note: string): Promise<number> {
   // rejections can run to hundreds.
   await sendPush({
     event: "COIN_REQUEST_DECLINED",
-    title: "Your coin request wasn't approved",
-    body: note.trim(),
+    vars: { reason: note.trim() },
     userIds: open.map((row) => row.userId),
   });
 

@@ -274,8 +274,7 @@ export async function banUser(req: Request, res: Response) {
 
   await sendPush({
     event: "ACCOUNT_BANNED",
-    title: "Your account has been banned",
-    body: parsed.data.reason || "Contact support for more information.",
+    vars: { reason: parsed.data.reason || "Contact support for more information." },
     userIds: [userId],
   });
 
@@ -436,10 +435,6 @@ export async function setUserVerified(req: Request, res: Response) {
 
   await sendPush({
     event: isVerified ? "ACCOUNT_VERIFIED" : "VERIFICATION_REMOVED",
-    title: isVerified ? "You're verified" : "Verification removed",
-    body: isVerified
-      ? "A blue tick now appears next to your name."
-      : "Your account verification has been removed.",
     userIds: [userId],
   });
 
@@ -487,12 +482,7 @@ export async function adminResetUserPassword(req: Request, res: Response) {
     },
   });
 
-  await sendPush({
-    event: "PASSWORD_RESET",
-    title: "Your password was reset",
-    body: "An administrator set a new password. If you didn't request this, contact support.",
-    userIds: [userId],
-  });
+  await sendPush({ event: "PASSWORD_RESET", userIds: [userId] });
 
   return res.status(200).json({ message: "Password reset" });
 }

@@ -206,8 +206,7 @@ export async function adminGiveBonus(userId: string, amount: number, reason: str
   // roll back coins the user has already been given.
   await sendPush({
     event: "ADMIN_BONUS",
-    title: `You received ${amount} bonus coins`,
-    body: reason,
+    vars: { coins: amount, reason },
     userIds: [userId],
   });
 
@@ -262,8 +261,7 @@ export async function adminGiveFine(userId: string, amount: number, reason: stri
 
   await sendPush({
     event: "ADMIN_FINE",
-    title: `You were fined ${outcome.actualAmount} coins`,
-    body: reason,
+    vars: { coins: outcome.actualAmount, reason },
     userIds: [userId],
   });
 

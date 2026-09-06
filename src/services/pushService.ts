@@ -1,5 +1,6 @@
 import prisma from "../config/prisma";
 import { NotificationEvent } from "../generated/prisma";
+import { resolveTemplate, TemplateVars } from "../utils/notificationTemplates";
 
 /**
  * Push delivery, through Expo's service.
@@ -44,6 +45,9 @@ export interface EventSetting {
   enabled: boolean;
   /** Also kept in the app's notification list. */
   saveInApp: boolean;
+  /** The admin's wording, blank when they haven't changed it. */
+  title: string;
+  body: string;
 }
 
 /** Both switches for an event. Unknown events default to on. */
@@ -52,6 +56,8 @@ export async function eventSetting(event: NotificationEvent): Promise<EventSetti
   return {
     enabled: setting?.enabled ?? true,
     saveInApp: setting?.saveInApp ?? true,
+    title: setting?.title ?? "",
+    body: setting?.body ?? "",
   };
 }
 
@@ -94,8 +100,11 @@ async function deactivateTokens(tokens: string[]) {
 
 interface SendOptions {
   event: NotificationEvent;
-  title: string;
-  body: string;
+  /** Ignored when the event has a template; CUSTOM always uses these. */
+  title?: string;
+  body?: string;
+  /** Values for the template's placeholders. */
+  vars?: TemplateVars;
   url?: string;
   imageUrl?: string;
   /** Null sends to everyone. */
@@ -108,18 +117,30 @@ interface SendOptions {
 export async function sendPush(options: SendOptions): Promise<SendResult> {
   const {
     event,
-    title,
-    body,
     url = "",
     imageUrl = "",
     userIds = null,
     isTest = false,
     force = false,
+    vars = {},
   } = options;
 
   const result: SendResult = { recipients: 0, delivered: 0, failed: 0, error: "" };
 
-  if (!force && !(await isEventEnabled(event))) {
+  const setting = await eventSetting(event);
+
+  // CUSTOM has no template — the admin typed the words. Everything else
+  // is rendered from the event's wording, so editing it in the panel
+  // changes what actually goes out.
+  const rendered =
+    event === "CUSTOM"
+      ? { title: options.title ?? "", body: options.body ?? "" }
+      : resolveTemplate(event, { title: setting.title, body: setting.body }, vars);
+
+  const title = rendered.title;
+  const body = rendered.body;
+
+  if (!force && !setting.enabled) {
     // Not an error: the admin turned this off on purpose. The in-app
     // notification is still written by the caller.
     return result;
@@ -289,11 +310,10 @@ export async function notifyMany(options: {
  */
 export async function broadcast(options: {
   event: NotificationEvent;
-  title: string;
-  body: string;
+  vars?: TemplateVars;
   url?: string;
 }): Promise<SendResult> {
-  const { event, title, body, url = "" } = options;
+  const { event, url = "", vars = {} } = options;
 
   const setting = await eventSetting(event);
 
@@ -302,6 +322,14 @@ export async function broadcast(options: {
   if (!setting.enabled) {
     return { recipients: 0, delivered: 0, failed: 0, error: "" };
   }
+
+  // Rendered once here so the stored record and the push carry
+  // identical wording.
+  const { title, body } = resolveTemplate(
+    event,
+    { title: setting.title, body: setting.body },
+    vars
+  );
 
   const users = setting.saveInApp
     ? await prisma.user.findMany({ where: { isBanned: false }, select: { id: true } })
@@ -318,7 +346,7 @@ export async function broadcast(options: {
     });
   }
 
-  return sendPush({ event, title, body, url });
+  return sendPush({ event, url, vars });
 }
 
 /**

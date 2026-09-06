@@ -2903,6 +2903,8 @@ export const NotificationSettingScalarFieldEnum = {
   event: 'event',
   enabled: 'enabled',
   saveInApp: 'saveInApp',
+  title: 'title',
+  body: 'body',
   updatedAt: 'updatedAt'
 } as const
 

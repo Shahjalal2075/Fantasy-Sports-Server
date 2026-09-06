@@ -117,8 +117,7 @@ export async function paySignupBonusIfDue(userId: string): Promise<void> {
 
   await sendPush({
     event: "REFERRAL_BONUS",
-    title: "Referral bonus",
-    body: `You received ${signupBonus} coins for signing up with a referral code.`,
+    vars: { coins: signupBonus },
     userIds: [userId],
   });
 }
@@ -179,8 +178,7 @@ export async function payInviterIfDue(userId: string, entryCost: number): Promis
 
   await sendPush({
     event: "REFERRAL_REWARD",
-    title: "Referral reward",
-    body: `${user.name} joined their first paid contest. You earned ${inviterBonus} coins!`,
+    vars: { name: user.name, username: user.username, coins: inviterBonus },
     userIds: [user.referredById as string],
   });
 }

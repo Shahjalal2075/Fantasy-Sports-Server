@@ -68,8 +68,7 @@ export async function expireStaleRequests(): Promise<number> {
   for (const row of refunded) {
     await sendPush({
       event: "GIFT_EXPIRED",
-      title: "Coins returned",
-      body: `Your gift request wasn't selected, so ${row.coins.toLocaleString()} coins are back in your balance.`,
+      vars: { coins: row.coins },
       userIds: [row.userId],
     });
   }
@@ -210,8 +209,7 @@ export async function approveGiftRequest(
 
   await sendPush({
     event: "GIFT_APPROVED",
-    title: "Your gift is on the way!",
-    body: `Approved. Tracking ID: ${trackingId.trim()}`,
+    vars: { trackingId: trackingId.trim(), coins: request.coinAmount },
     userIds: [request.userId],
   });
 
@@ -265,8 +263,7 @@ export async function cancelGiftRequest(
 
   await sendPush({
     event: "GIFT_CANCELLED",
-    title: "Coins returned",
-    body: `${request.coinAmount.toLocaleString()} coins are back in your balance. ${cancelReason.trim()}`,
+    vars: { coins: request.coinAmount, reason: cancelReason.trim() },
     userIds: [request.userId],
   });
 

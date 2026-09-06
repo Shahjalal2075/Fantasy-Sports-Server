@@ -459,6 +459,15 @@ model NotificationSetting {
    */
   saveInApp Boolean @default(true)
 
+  /**
+   * The admin's own wording. Blank means use the built-in text.
+   *
+   * Placeholders like {fixture} or {coins} are filled at send time; each
+   * event supports a different set, listed in the admin panel.
+   */
+  title String @default("")
+  body  String @default("")
+
   updatedAt DateTime @updatedAt
 
   @@map("notification_settings")

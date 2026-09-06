@@ -68,8 +68,12 @@ async function runTick(): Promise<void> {
 
       await broadcast({
         event: reminder.event,
-        title: `${fixture} starts in ${reminder.minutesBefore} minutes`,
-        body: "Pick your team before the lineup locks.",
+        vars: {
+          fixture,
+          minutes: reminder.minutesBefore,
+          teamA: match.teamA?.name ?? "",
+          teamB: match.teamB?.name ?? "",
+        },
         url: `match:${match.id}`,
       });
     }

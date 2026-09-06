@@ -28,6 +28,8 @@ export type NotificationSettingMinAggregateOutputType = {
   event: $Enums.NotificationEvent | null
   enabled: boolean | null
   saveInApp: boolean | null
+  title: string | null
+  body: string | null
   updatedAt: Date | null
 }
 
@@ -35,6 +37,8 @@ export type NotificationSettingMaxAggregateOutputType = {
   event: $Enums.NotificationEvent | null
   enabled: boolean | null
   saveInApp: boolean | null
+  title: string | null
+  body: string | null
   updatedAt: Date | null
 }
 
@@ -42,6 +46,8 @@ export type NotificationSettingCountAggregateOutputType = {
   event: number
   enabled: number
   saveInApp: number
+  title: number
+  body: number
   updatedAt: number
   _all: number
 }
@@ -51,6 +57,8 @@ export type NotificationSettingMinAggregateInputType = {
   event?: true
   enabled?: true
   saveInApp?: true
+  title?: true
+  body?: true
   updatedAt?: true
 }
 
@@ -58,6 +66,8 @@ export type NotificationSettingMaxAggregateInputType = {
   event?: true
   enabled?: true
   saveInApp?: true
+  title?: true
+  body?: true
   updatedAt?: true
 }
 
@@ -65,6 +75,8 @@ export type NotificationSettingCountAggregateInputType = {
   event?: true
   enabled?: true
   saveInApp?: true
+  title?: true
+  body?: true
   updatedAt?: true
   _all?: true
 }
@@ -145,6 +157,8 @@ export type NotificationSettingGroupByOutputType = {
   event: $Enums.NotificationEvent
   enabled: boolean
   saveInApp: boolean
+  title: string
+  body: string
   updatedAt: Date
   _count: NotificationSettingCountAggregateOutputType | null
   _min: NotificationSettingMinAggregateOutputType | null
@@ -173,6 +187,8 @@ export type NotificationSettingWhereInput = {
   event?: Prisma.EnumNotificationEventFilter<"NotificationSetting"> | $Enums.NotificationEvent
   enabled?: Prisma.BoolFilter<"NotificationSetting"> | boolean
   saveInApp?: Prisma.BoolFilter<"NotificationSetting"> | boolean
+  title?: Prisma.StringFilter<"NotificationSetting"> | string
+  body?: Prisma.StringFilter<"NotificationSetting"> | string
   updatedAt?: Prisma.DateTimeFilter<"NotificationSetting"> | Date | string
 }
 
@@ -180,6 +196,8 @@ export type NotificationSettingOrderByWithRelationInput = {
   event?: Prisma.SortOrder
   enabled?: Prisma.SortOrder
   saveInApp?: Prisma.SortOrder
+  title?: Prisma.SortOrder
+  body?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
@@ -190,6 +208,8 @@ export type NotificationSettingWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.NotificationSettingWhereInput | Prisma.NotificationSettingWhereInput[]
   enabled?: Prisma.BoolFilter<"NotificationSetting"> | boolean
   saveInApp?: Prisma.BoolFilter<"NotificationSetting"> | boolean
+  title?: Prisma.StringFilter<"NotificationSetting"> | string
+  body?: Prisma.StringFilter<"NotificationSetting"> | string
   updatedAt?: Prisma.DateTimeFilter<"NotificationSetting"> | Date | string
 }, "event">
 
@@ -197,6 +217,8 @@ export type NotificationSettingOrderByWithAggregationInput = {
   event?: Prisma.SortOrder
   enabled?: Prisma.SortOrder
   saveInApp?: Prisma.SortOrder
+  title?: Prisma.SortOrder
+  body?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.NotificationSettingCountOrderByAggregateInput
   _max?: Prisma.NotificationSettingMaxOrderByAggregateInput
@@ -210,6 +232,8 @@ export type NotificationSettingScalarWhereWithAggregatesInput = {
   event?: Prisma.EnumNotificationEventWithAggregatesFilter<"NotificationSetting"> | $Enums.NotificationEvent
   enabled?: Prisma.BoolWithAggregatesFilter<"NotificationSetting"> | boolean
   saveInApp?: Prisma.BoolWithAggregatesFilter<"NotificationSetting"> | boolean
+  title?: Prisma.StringWithAggregatesFilter<"NotificationSetting"> | string
+  body?: Prisma.StringWithAggregatesFilter<"NotificationSetting"> | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"NotificationSetting"> | Date | string
 }
 
@@ -217,6 +241,8 @@ export type NotificationSettingCreateInput = {
   event: $Enums.NotificationEvent
   enabled?: boolean
   saveInApp?: boolean
+  title?: string
+  body?: string
   updatedAt?: Date | string
 }
 
@@ -224,6 +250,8 @@ export type NotificationSettingUncheckedCreateInput = {
   event: $Enums.NotificationEvent
   enabled?: boolean
   saveInApp?: boolean
+  title?: string
+  body?: string
   updatedAt?: Date | string
 }
 
@@ -231,6 +259,8 @@ export type NotificationSettingUpdateInput = {
   event?: Prisma.EnumNotificationEventFieldUpdateOperationsInput | $Enums.NotificationEvent
   enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   saveInApp?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  body?: Prisma.StringFieldUpdateOperationsInput | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -238,6 +268,8 @@ export type NotificationSettingUncheckedUpdateInput = {
   event?: Prisma.EnumNotificationEventFieldUpdateOperationsInput | $Enums.NotificationEvent
   enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   saveInApp?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  body?: Prisma.StringFieldUpdateOperationsInput | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -245,6 +277,8 @@ export type NotificationSettingCreateManyInput = {
   event: $Enums.NotificationEvent
   enabled?: boolean
   saveInApp?: boolean
+  title?: string
+  body?: string
   updatedAt?: Date | string
 }
 
@@ -252,6 +286,8 @@ export type NotificationSettingUpdateManyMutationInput = {
   event?: Prisma.EnumNotificationEventFieldUpdateOperationsInput | $Enums.NotificationEvent
   enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   saveInApp?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  body?: Prisma.StringFieldUpdateOperationsInput | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -259,6 +295,8 @@ export type NotificationSettingUncheckedUpdateManyInput = {
   event?: Prisma.EnumNotificationEventFieldUpdateOperationsInput | $Enums.NotificationEvent
   enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   saveInApp?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  body?: Prisma.StringFieldUpdateOperationsInput | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -266,6 +304,8 @@ export type NotificationSettingCountOrderByAggregateInput = {
   event?: Prisma.SortOrder
   enabled?: Prisma.SortOrder
   saveInApp?: Prisma.SortOrder
+  title?: Prisma.SortOrder
+  body?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
@@ -273,6 +313,8 @@ export type NotificationSettingMaxOrderByAggregateInput = {
   event?: Prisma.SortOrder
   enabled?: Prisma.SortOrder
   saveInApp?: Prisma.SortOrder
+  title?: Prisma.SortOrder
+  body?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
@@ -280,6 +322,8 @@ export type NotificationSettingMinOrderByAggregateInput = {
   event?: Prisma.SortOrder
   enabled?: Prisma.SortOrder
   saveInApp?: Prisma.SortOrder
+  title?: Prisma.SortOrder
+  body?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
@@ -293,6 +337,8 @@ export type NotificationSettingSelect<ExtArgs extends runtime.Types.Extensions.I
   event?: boolean
   enabled?: boolean
   saveInApp?: boolean
+  title?: boolean
+  body?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["notificationSetting"]>
 
@@ -300,6 +346,8 @@ export type NotificationSettingSelectCreateManyAndReturn<ExtArgs extends runtime
   event?: boolean
   enabled?: boolean
   saveInApp?: boolean
+  title?: boolean
+  body?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["notificationSetting"]>
 
@@ -307,6 +355,8 @@ export type NotificationSettingSelectUpdateManyAndReturn<ExtArgs extends runtime
   event?: boolean
   enabled?: boolean
   saveInApp?: boolean
+  title?: boolean
+  body?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["notificationSetting"]>
 
@@ -314,10 +364,12 @@ export type NotificationSettingSelectScalar = {
   event?: boolean
   enabled?: boolean
   saveInApp?: boolean
+  title?: boolean
+  body?: boolean
   updatedAt?: boolean
 }
 
-export type NotificationSettingOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"event" | "enabled" | "saveInApp" | "updatedAt", ExtArgs["result"]["notificationSetting"]>
+export type NotificationSettingOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"event" | "enabled" | "saveInApp" | "title" | "body" | "updatedAt", ExtArgs["result"]["notificationSetting"]>
 
 export type $NotificationSettingPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "NotificationSetting"
@@ -338,6 +390,15 @@ export type $NotificationSettingPayload<ExtArgs extends runtime.Types.Extensions
      *    * been swiped away.
      */
     saveInApp: boolean
+    /**
+     * *
+     *    * The admin's own wording. Blank means use the built-in text.
+     *    *
+     *    * Placeholders like {fixture} or {coins} are filled at send time; each
+     *    * event supports a different set, listed in the admin panel.
+     */
+    title: string
+    body: string
     updatedAt: Date
   }, ExtArgs["result"]["notificationSetting"]>
   composites: {}
@@ -765,6 +826,8 @@ export interface NotificationSettingFieldRefs {
   readonly event: Prisma.FieldRef<"NotificationSetting", 'NotificationEvent'>
   readonly enabled: Prisma.FieldRef<"NotificationSetting", 'Boolean'>
   readonly saveInApp: Prisma.FieldRef<"NotificationSetting", 'Boolean'>
+  readonly title: Prisma.FieldRef<"NotificationSetting", 'String'>
+  readonly body: Prisma.FieldRef<"NotificationSetting", 'String'>
   readonly updatedAt: Prisma.FieldRef<"NotificationSetting", 'DateTime'>
 }
     

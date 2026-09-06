@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import prisma from "../config/prisma";
+import { loadTotalsForUser, loadUserTotals } from "../services/userTotalsService";
 import { NotificationType } from "../generated/prisma/client";
 import { coinAdjustmentSchema, banUserSchema, updateSettingsSchema } from "../utils/validators";
 import { adminGiveBonus, adminGiveFine } from "../services/walletService";
@@ -65,19 +66,33 @@ export async function listUsers(req: Request, res: Response) {
   `;
   const matchCountMap = new Map(distinctMatchesPerUser.map((r) => [r.userId, Number(r.count)]));
 
-  const result = users.map((u) => ({
-    id: u.id,
-    name: u.name,
-    username: u.username,
-    email: u.email,
-    phone: u.phone,
-    coins: u.coins,
-    isAdmin: u.isAdmin,
-    isBanned: u.isBanned,
-    createdAt: u.createdAt,
-    totalMatchesPlayed: matchCountMap.get(u.id) ?? 0,
-    totalContestsJoined: u._count.entries,
-  }));
+  const totals = await loadUserTotals();
+
+  const result = users.map((u) => {
+    const t = totals.get(u.id);
+
+    return {
+      id: u.id,
+      name: u.name,
+      username: u.username,
+      email: u.email,
+      phone: u.phone,
+      coins: u.coins,
+      isAdmin: u.isAdmin,
+      isBanned: u.isBanned,
+      isVerified: u.isVerified,
+      createdAt: u.createdAt,
+      totalMatchesPlayed: matchCountMap.get(u.id) ?? 0,
+      totalContestsJoined: u._count.entries,
+
+      totalBonus: t?.totalBonus ?? 0,
+      totalWithdraw: t?.totalWithdraw ?? 0,
+      ongoing: t?.ongoing ?? 0,
+      pendingNet: t?.pendingNet ?? 0,
+      pendingIn: t?.pendingIn ?? 0,
+      pendingOut: t?.pendingOut ?? 0,
+    };
+  });
 
   // Which NIDs appear on more than one account. Done as a single
   // grouping rather than a per-user lookup, so the list stays one query.
@@ -164,6 +179,9 @@ export async function getUserDetail(req: Request, res: Response) {
   const totalBonusGiven = transactions.filter((t) => t.type === "ADMIN_BONUS").reduce((s, t) => s + t.amount, 0);
   const totalFineGiven = transactions.filter((t) => t.type === "ADMIN_FINE").reduce((s, t) => s + Math.abs(t.amount), 0);
 
+  // The same figures the users list shows, so both screens agree.
+  const totals = await loadTotalsForUser(userId);
+
   return res.status(200).json({
     user,
     nidDuplicates,
@@ -173,6 +191,13 @@ export async function getUserDetail(req: Request, res: Response) {
       totalCoinsWon,
       totalBonusGiven,
       totalFineGiven,
+
+      totalBonus: totals.totalBonus,
+      totalWithdraw: totals.totalWithdraw,
+      ongoing: totals.ongoing,
+      pendingNet: totals.pendingNet,
+      pendingIn: totals.pendingIn,
+      pendingOut: totals.pendingOut,
     },
     participations: entries.map((e) => ({
       contestId: e.contest.id,

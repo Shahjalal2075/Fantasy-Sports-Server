@@ -181,7 +181,10 @@ export async function updateTeam(req: Request, res: Response) {
 // Any team's per-player point breakdown is hidden until the match has
 // been live for this long. Before the window opens, showing a rival's XI
 // would leak their selection while teams can still be built.
-const BREAKDOWN_DELAY_MS = 5 * 60 * 1000;
+//
+// One minute is enough for that: entries close at lock time, so by the
+// time the match is live nobody can act on what they see.
+const BREAKDOWN_DELAY_MS = 60 * 1000;
 
 // GET /api/teams/:id/breakdown  (auth required)
 // Unlike GET /api/teams/:id this is deliberately NOT owner-only — it's
@@ -223,7 +226,7 @@ export async function getTeamBreakdown(req: Request, res: Response) {
   // Owners can always inspect their own team (that's My Teams -> eye).
   if (!windowOpen && !isOwner && !viewer?.isAdmin) {
     return res.status(403).json({
-      error: "Point breakdowns open a few minutes after the match goes live",
+      error: "Point breakdowns open a minute after the match goes live",
       availableAt: new Date(liveSince + BREAKDOWN_DELAY_MS),
     });
   }

@@ -36,9 +36,9 @@ export async function getPlayerBreakdown(req: Request, res: Response) {
   const match = matchPlayer.match;
 
   // Same guard as the team breakdown: nobody's scorecard is visible
-  // until the match has been under way for a few minutes, so a player's
+  // until the match has been under way for a minute, so a player's
   // detail can't be used to infer lineups while teams are still open.
-  const BREAKDOWN_DELAY_MS = 5 * 60 * 1000;
+  const BREAKDOWN_DELAY_MS = 60 * 1000;
   const liveSince = match.lockTime.getTime();
   const windowOpen =
     match.status === "COMPLETED" ||
@@ -51,7 +51,7 @@ export async function getPlayerBreakdown(req: Request, res: Response) {
 
   if (!windowOpen && !viewer?.isAdmin) {
     return res.status(403).json({
-      error: "Player points open a few minutes after the match goes live",
+      error: "Player points open a minute after the match goes live",
       availableAt: new Date(liveSince + BREAKDOWN_DELAY_MS),
     });
   }

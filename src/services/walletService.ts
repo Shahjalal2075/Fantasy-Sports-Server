@@ -82,12 +82,35 @@ export async function debitCoins(
 ): Promise<number> {
   const before = await tx.user.findUniqueOrThrow({
     where: { id: userId },
-    select: { depositCoins: true, withdrawableCoins: true },
+    select: { coins: true, depositCoins: true, withdrawableCoins: true },
   });
 
-  const plan = planDebit(type, amount, before.depositCoins, before.withdrawableCoins);
+  /**
+   * `coins` is the balance everything else reads, and the two buckets
+   * are meant to add up to it. They can fall behind — coins granted
+   * before the split existed, or set directly in the database — and when
+   * they do, a user with a visible balance is refused a contest they can
+   * plainly afford.
+   *
+   * The shortfall is treated as deposit coins: spendable on entry, not
+   * redeemable for a gift, which is the safe assumption when the origin
+   * is unknown. The repair is written back below so it only happens once.
+   */
+  const bucketed = before.depositCoins + before.withdrawableCoins;
+  const shortfall = Math.max(before.coins - bucketed, 0);
+
+  const deposit = before.depositCoins + shortfall;
+
+  const plan = planDebit(type, amount, deposit, before.withdrawableCoins);
   if (!plan) {
     throw new InsufficientCoinsError();
+  }
+
+  if (shortfall > 0) {
+    await tx.user.update({
+      where: { id: userId },
+      data: { depositCoins: deposit },
+    });
   }
 
   // Conditional update: the WHERE clause repeats the balances we planned
@@ -96,6 +119,7 @@ export async function debitCoins(
   const result = await tx.user.updateMany({
     where: {
       id: userId,
+      // Checked against the repaired figures, not the ones read above.
       depositCoins: { gte: plan.fromDeposit },
       withdrawableCoins: { gte: plan.fromWithdrawable },
     },

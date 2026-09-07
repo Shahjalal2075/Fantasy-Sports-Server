@@ -56,6 +56,7 @@ export const ModelName = {
   Notification: 'Notification',
   AppSettings: 'AppSettings',
   GiftRequest: 'GiftRequest',
+  ContestPreset: 'ContestPreset',
   RequestAgent: 'RequestAgent',
   CoinCoupon: 'CoinCoupon',
   CoinRequest: 'CoinRequest',
@@ -222,6 +223,22 @@ export const GiftRequestScalarFieldEnum = {
 } as const
 
 export type GiftRequestScalarFieldEnum = (typeof GiftRequestScalarFieldEnum)[keyof typeof GiftRequestScalarFieldEnum]
+
+
+export const ContestPresetScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  maxEntries: 'maxEntries',
+  entryCost: 'entryCost',
+  prizeDistribution: 'prizeDistribution',
+  description: 'description',
+  sortOrder: 'sortOrder',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ContestPresetScalarFieldEnum = (typeof ContestPresetScalarFieldEnum)[keyof typeof ContestPresetScalarFieldEnum]
 
 
 export const RequestAgentScalarFieldEnum = {

@@ -402,6 +402,7 @@ export const ModelName = {
   Notification: 'Notification',
   AppSettings: 'AppSettings',
   GiftRequest: 'GiftRequest',
+  ContestPreset: 'ContestPreset',
   RequestAgent: 'RequestAgent',
   CoinCoupon: 'CoinCoupon',
   CoinRequest: 'CoinRequest',
@@ -442,7 +443,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "coinTransaction" | "notification" | "appSettings" | "giftRequest" | "requestAgent" | "coinCoupon" | "coinRequest" | "pushToken" | "notificationSetting" | "pushLog" | "contactMethod" | "banner" | "activeSession" | "visitorStat" | "team" | "player" | "match" | "matchLiveLink" | "playerLiveLink" | "matchPlayerInnings" | "matchInnings" | "matchPlayer" | "userTeam" | "userTeamPlayer" | "contest" | "contestEntry" | "pointSystem" | "promoCode" | "promoCodeClaim"
+    modelProps: "user" | "coinTransaction" | "notification" | "appSettings" | "giftRequest" | "contestPreset" | "requestAgent" | "coinCoupon" | "coinRequest" | "pushToken" | "notificationSetting" | "pushLog" | "contactMethod" | "banner" | "activeSession" | "visitorStat" | "team" | "player" | "match" | "matchLiveLink" | "playerLiveLink" | "matchPlayerInnings" | "matchInnings" | "matchPlayer" | "userTeam" | "userTeamPlayer" | "contest" | "contestEntry" | "pointSystem" | "promoCode" | "promoCodeClaim"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -813,6 +814,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.GiftRequestCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.GiftRequestCountAggregateOutputType> | number
+        }
+      }
+    }
+    ContestPreset: {
+      payload: Prisma.$ContestPresetPayload<ExtArgs>
+      fields: Prisma.ContestPresetFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ContestPresetFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContestPresetPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ContestPresetFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContestPresetPayload>
+        }
+        findFirst: {
+          args: Prisma.ContestPresetFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContestPresetPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ContestPresetFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContestPresetPayload>
+        }
+        findMany: {
+          args: Prisma.ContestPresetFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContestPresetPayload>[]
+        }
+        create: {
+          args: Prisma.ContestPresetCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContestPresetPayload>
+        }
+        createMany: {
+          args: Prisma.ContestPresetCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ContestPresetCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContestPresetPayload>[]
+        }
+        delete: {
+          args: Prisma.ContestPresetDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContestPresetPayload>
+        }
+        update: {
+          args: Prisma.ContestPresetUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContestPresetPayload>
+        }
+        deleteMany: {
+          args: Prisma.ContestPresetDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ContestPresetUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ContestPresetUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContestPresetPayload>[]
+        }
+        upsert: {
+          args: Prisma.ContestPresetUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContestPresetPayload>
+        }
+        aggregate: {
+          args: Prisma.ContestPresetAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateContestPreset>
+        }
+        groupBy: {
+          args: Prisma.ContestPresetGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ContestPresetGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ContestPresetCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ContestPresetCountAggregateOutputType> | number
         }
       }
     }
@@ -2830,6 +2905,22 @@ export const GiftRequestScalarFieldEnum = {
 export type GiftRequestScalarFieldEnum = (typeof GiftRequestScalarFieldEnum)[keyof typeof GiftRequestScalarFieldEnum]
 
 
+export const ContestPresetScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  maxEntries: 'maxEntries',
+  entryCost: 'entryCost',
+  prizeDistribution: 'prizeDistribution',
+  description: 'description',
+  sortOrder: 'sortOrder',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ContestPresetScalarFieldEnum = (typeof ContestPresetScalarFieldEnum)[keyof typeof ContestPresetScalarFieldEnum]
+
+
 export const RequestAgentScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -3376,6 +3467,20 @@ export type ListEnumGiftRequestStatusFieldRefInput<$PrismaModel> = FieldRefInput
 
 
 /**
+ * Reference to a field of type 'Json'
+ */
+export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
+    
+
+
+/**
+ * Reference to a field of type 'QueryMode'
+ */
+export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
+    
+
+
+/**
  * Reference to a field of type 'CouponBonusType'
  */
 export type EnumCouponBonusTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CouponBonusType'>
@@ -3470,20 +3575,6 @@ export type EnumMatchStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$Pris
  * Reference to a field of type 'MatchStatus[]'
  */
 export type ListEnumMatchStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MatchStatus[]'>
-    
-
-
-/**
- * Reference to a field of type 'Json'
- */
-export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
-    
-
-
-/**
- * Reference to a field of type 'QueryMode'
- */
-export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
     
 
 
@@ -3656,6 +3747,7 @@ export type GlobalOmitConfig = {
   notification?: Prisma.NotificationOmit
   appSettings?: Prisma.AppSettingsOmit
   giftRequest?: Prisma.GiftRequestOmit
+  contestPreset?: Prisma.ContestPresetOmit
   requestAgent?: Prisma.RequestAgentOmit
   coinCoupon?: Prisma.CoinCouponOmit
   coinRequest?: Prisma.CoinRequestOmit

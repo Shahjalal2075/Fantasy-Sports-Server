@@ -321,6 +321,35 @@ model GiftRequest {
   @@map("gift_requests")
 }
 
+// A saved contest shape, not tied to any match.
+//
+// The same few contests get created for every fixture — a mega, a head
+// to head, a small paid one. Filling the same numbers in each time is
+// where mistakes creep into prize tables, so they're stored once and
+// applied.
+model ContestPreset {
+  id   String @id @default(uuid())
+  name String
+
+  maxEntries Int @default(10000)
+  entryCost  Int @default(0)
+
+  /** Same shape as Contest.prizeDistribution: [{ rank, coins }]. */
+  prizeDistribution Json @default("[]")
+
+  /** Optional note for the admin — never shown to users. */
+  description String @default("")
+
+  sortOrder Int     @default(0)
+  isActive  Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([isActive, sortOrder])
+  @@map("contest_presets")
+}
+
 // A person who reviews coin requests and decides which to grant.
 //
 // Shown to the user before they submit, so they know who will be reading

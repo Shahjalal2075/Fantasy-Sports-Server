@@ -59,6 +59,12 @@ import {
   searchRecipients,
   previewTemplate,
 } from "../controllers/pushController";
+import {
+  listPresets,
+  createPreset,
+  updatePreset,
+  deletePreset,
+} from "../controllers/contestPresetController";
 import { requireAuth, requireAdmin } from "../middleware/auth";
 
 const router = Router();
@@ -96,6 +102,12 @@ router.delete("/matches/:id/live-link", removeMatchLink);
 router.patch("/match-players/:matchPlayerId/live-code", setPlayerLiveCode);
 router.post("/match-players/:matchPlayerId/live-code/generate", generatePlayerLiveCode);
 router.delete("/match-players/:matchPlayerId/live-code", clearPlayerLiveCode);
+
+// Contest presets
+router.get("/contest-presets", listPresets);
+router.post("/contest-presets", createPreset);
+router.patch("/contest-presets/:id", updatePreset);
+router.delete("/contest-presets/:id", deletePreset);
 
 // Notifications
 router.get("/notifications/settings", getNotificationSettings);

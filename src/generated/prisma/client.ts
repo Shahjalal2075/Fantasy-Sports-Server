@@ -67,6 +67,11 @@ export type AppSettings = Prisma.AppSettingsModel
  */
 export type GiftRequest = Prisma.GiftRequestModel
 /**
+ * Model ContestPreset
+ * 
+ */
+export type ContestPreset = Prisma.ContestPresetModel
+/**
  * Model RequestAgent
  * 
  */

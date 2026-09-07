@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { z } from "zod";
 import prisma from "../config/prisma";
+import { broadcast } from "../services/pushService";
 
 /**
  * Saved contest shapes.
@@ -104,4 +105,88 @@ export async function deletePreset(req: Request, res: Response) {
   await prisma.contestPreset.deleteMany({ where: { id } });
 
   return res.status(200).json({ message: "Preset removed" });
+}
+
+
+const applySchema = z.object({
+  matchId: z.string().uuid(),
+  presetIds: z.array(z.string().uuid()).min(1, "Choose at least one preset").max(50),
+});
+
+/**
+ * POST /api/admin/contest-presets/apply
+ *
+ * Creates a contest on a match from each chosen preset.
+ *
+ * Presets whose name already exists on that match are skipped rather
+ * than duplicated — running this twice by accident shouldn't leave two
+ * identical mega contests for people to split themselves across.
+ */
+export async function applyPresets(req: Request, res: Response) {
+  const parsed = applySchema.safeParse(req.body);
+  if (!parsed.success) {
+    return res.status(400).json({ error: parsed.error.issues[0].message });
+  }
+
+  const { matchId, presetIds } = parsed.data;
+
+  const match = await prisma.match.findUnique({
+    where: { id: matchId },
+    include: { teamA: true, teamB: true },
+  });
+  if (!match) return res.status(404).json({ error: "Match not found" });
+
+  const presets = await prisma.contestPreset.findMany({ where: { id: { in: presetIds } } });
+  if (presets.length === 0) return res.status(400).json({ error: "No presets found" });
+
+  const existing = await prisma.contest.findMany({
+    where: { matchId },
+    select: { name: true },
+  });
+  const taken = new Set(existing.map((row) => row.name.trim().toLowerCase()));
+
+  const created: { id: string; name: string }[] = [];
+  const skipped: string[] = [];
+
+  for (const preset of presets) {
+    if (taken.has(preset.name.trim().toLowerCase())) {
+      skipped.push(preset.name);
+      continue;
+    }
+
+    const contest = await prisma.contest.create({
+      data: {
+        matchId,
+        name: preset.name,
+        maxEntries: preset.maxEntries,
+        entryCost: preset.entryCost,
+        prizeDistribution: preset.prizeDistribution as never,
+      },
+    });
+
+    created.push({ id: contest.id, name: contest.name });
+    // Guards against two presets sharing a name in one request.
+    taken.add(preset.name.trim().toLowerCase());
+  }
+
+  // One notification for the batch, not one per contest. Six pushes in a
+  // row for the same match would read as a fault.
+  if (created.length > 0) {
+    await broadcast({
+      event: "NEW_CONTEST",
+      vars: {
+        contest:
+          created.length === 1
+            ? created[0].name
+            : `${created.length} new contests`,
+        fixture: `${match.teamA?.shortName ?? "?"} vs ${match.teamB?.shortName ?? "?"}`,
+        teamA: match.teamA?.name ?? "",
+        teamB: match.teamB?.name ?? "",
+        entryCost: 0,
+      },
+      url: `match:${matchId}`,
+    });
+  }
+
+  return res.status(201).json({ created, skipped });
 }

@@ -64,6 +64,7 @@ import {
   createPreset,
   updatePreset,
   deletePreset,
+  applyPresets,
 } from "../controllers/contestPresetController";
 import { requireAuth, requireAdmin } from "../middleware/auth";
 
@@ -106,6 +107,7 @@ router.delete("/match-players/:matchPlayerId/live-code", clearPlayerLiveCode);
 // Contest presets
 router.get("/contest-presets", listPresets);
 router.post("/contest-presets", createPreset);
+router.post("/contest-presets/apply", applyPresets);
 router.patch("/contest-presets/:id", updatePreset);
 router.delete("/contest-presets/:id", deletePreset);
 

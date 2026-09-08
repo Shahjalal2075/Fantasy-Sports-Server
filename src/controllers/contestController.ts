@@ -71,7 +71,14 @@ export async function listContests(req: Request, res: Response) {
       isCancelled: false,
     },
     include: { _count: { select: { entries: true } } },
-    orderBy: { createdAt: "asc" },
+    // Busiest first: a contest people have already joined is the one
+    // most players want.
+    //
+    // createdAt breaks the tie, and it earns its place — before a match
+    // every contest sits at zero, and without it Postgres would return
+    // them in whatever order it liked, so the list would reshuffle on
+    // every refresh for no reason anyone could see.
+    orderBy: [{ entries: { _count: "desc" } }, { createdAt: "asc" }],
   });
 
   const mapped = contests.map((c) => ({

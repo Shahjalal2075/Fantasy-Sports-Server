@@ -402,3 +402,23 @@ const playerInningsSchema = z.object({
 export const savePlayerInningsSchema = z.object({
   innings: z.array(playerInningsSchema).max(4),
 });
+
+/**
+ * A batch of players for one team, from a CSV upload.
+ *
+ * Rows are validated individually so one bad line doesn't reject the
+ * file — the importer reports which rows failed and imports the rest.
+ */
+export const bulkPlayerRowSchema = z.object({
+  name: z.string().min(1, "Name is required").max(80),
+  role: z.string().min(1, "Role is required").max(20),
+  creditValue: z.number().min(1, "Credit must be at least 1").max(15, "Credit can't be above 15"),
+  imageUrl: z.string().url("Photo must be a full URL").or(z.literal("")).optional(),
+});
+
+export const bulkPlayerImportSchema = z.object({
+  teamId: z.string().uuid(),
+  rows: z.array(bulkPlayerRowSchema).min(1, "Nothing to import").max(500),
+  /** Skips names already in the team rather than creating a second copy. */
+  skipDuplicates: z.boolean().optional(),
+});

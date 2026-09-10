@@ -71,14 +71,19 @@ export async function listContests(req: Request, res: Response) {
       isCancelled: false,
     },
     include: { _count: { select: { entries: true } } },
-    // Busiest first: a contest people have already joined is the one
-    // most players want.
+    // Busiest first, then cheapest.
     //
-    // createdAt breaks the tie, and it earns its place — before a match
-    // every contest sits at zero, and without it Postgres would return
-    // them in whatever order it liked, so the list would reshuffle on
-    // every refresh for no reason anyone could see.
-    orderBy: [{ entries: { _count: "desc" } }, { createdAt: "asc" }],
+    // Before a match every contest sits at zero, so entry count alone
+    // would leave them tied and Postgres would return them in whatever
+    // order it liked — the list would reshuffle on every refresh for no
+    // reason anyone could see. Cheapest next puts the easiest contest
+    // to join at the top when nothing has been joined yet, and
+    // createdAt settles anything still level.
+    orderBy: [
+      { entries: { _count: "desc" } },
+      { entryCost: "asc" },
+      { createdAt: "asc" },
+    ],
   });
 
   const mapped = contests.map((c) => ({
@@ -254,7 +259,12 @@ export async function getLeaderboard(req: Request, res: Response) {
       // isVerified drives the blue tick beside a name on the leaderboard.
       user: { select: { id: true, name: true, username: true, isVerified: true } },
     },
-    orderBy: { userTeam: { totalPoints: "desc" } },
+    // Level on points, the earlier entry is listed first.
+    //
+    // Without this Postgres decides, so two people on the same score
+    // could swap places between refreshes — and the ranking here has to
+    // agree with the one the scorer stores, which orders the same way.
+    orderBy: [{ userTeam: { totalPoints: "desc" } }, { createdAt: "asc" }],
   });
 
   const leaderboard = entries.map((entry, index) => ({
@@ -278,7 +288,14 @@ export async function getMyEntries(req: Request, res: Response) {
   const entries = await prisma.contestEntry.findMany({
     where: {
       userId,
-      contest: matchId ? { matchId: matchId as string } : undefined,
+      contest: {
+        // A cancelled contest was refunded when it was cancelled, so it
+        // has nothing left to pay out. Left in, it sat in My Contests
+        // for ever waiting on prizes that will never come — the coins
+        // are already back, and the refund shows in coin history.
+        isCancelled: false,
+        ...(matchId ? { matchId: matchId as string } : {}),
+      },
     },
     include: {
       contest: { include: { _count: { select: { entries: true } } } },

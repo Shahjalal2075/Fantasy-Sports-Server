@@ -66,6 +66,15 @@ import {
   deletePreset,
   applyPresets,
 } from "../controllers/contestPresetController";
+import {
+  unlock as unlockAutoTeams,
+  requireToolPin,
+  upcomingMatches as autoTeamMatches,
+  matchPool as autoTeamPool,
+  searchUsers as autoTeamUsers,
+  generate as autoTeamGenerate,
+  joinContest as autoTeamJoin,
+} from "../controllers/autoTeamController";
 import { requireAuth, requireAdmin } from "../middleware/auth";
 
 const router = Router();
@@ -103,6 +112,14 @@ router.delete("/matches/:id/live-link", removeMatchLink);
 router.patch("/match-players/:matchPlayerId/live-code", setPlayerLiveCode);
 router.post("/match-players/:matchPlayerId/live-code/generate", generatePlayerLiveCode);
 router.delete("/match-players/:matchPlayerId/live-code", clearPlayerLiveCode);
+
+// Auto teams — behind its own PIN, since it spends users' coins.
+router.post("/auto-teams/unlock", unlockAutoTeams);
+router.get("/auto-teams/matches", requireToolPin, autoTeamMatches);
+router.get("/auto-teams/matches/:matchId/players", requireToolPin, autoTeamPool);
+router.get("/auto-teams/users", requireToolPin, autoTeamUsers);
+router.post("/auto-teams/generate", requireToolPin, autoTeamGenerate);
+router.post("/auto-teams/join", requireToolPin, autoTeamJoin);
 
 // Contest presets
 router.get("/contest-presets", listPresets);

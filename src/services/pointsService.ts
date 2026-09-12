@@ -1,4 +1,4 @@
-import { Prisma } from "../generated/prisma";
+import { Prisma } from "../generated/prisma/client";
 import prisma from "../config/prisma";
 import { computeTeamPoints } from "../utils/teamRules";
 import {

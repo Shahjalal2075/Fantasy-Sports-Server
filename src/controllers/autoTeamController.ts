@@ -5,7 +5,7 @@ import prisma from "../config/prisma";
 import { generateTeams, PoolPlayer } from "../utils/autoTeamGenerator";
 import { debitCoins, InsufficientCoinsError } from "../services/walletService";
 import { sendPush } from "../services/pushService";
-import { CoinTransactionType } from "../generated/prisma";
+import { CoinTransactionType } from "../generated/prisma/client";
 
 /**
  * Building teams for users automatically.

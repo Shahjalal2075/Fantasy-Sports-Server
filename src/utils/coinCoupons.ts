@@ -1,4 +1,4 @@
-import { CouponBonusType } from "../generated/prisma";
+import { CouponBonusType } from "../generated/prisma/client";
 
 /**
  * Working out a coupon's bonus.

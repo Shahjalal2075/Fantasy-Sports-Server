@@ -1,5 +1,5 @@
 import prisma from "../config/prisma";
-import { NotificationEvent } from "../generated/prisma";
+import { NotificationEvent } from "../generated/prisma/client";
 import { resolveTemplate, TemplateVars } from "../utils/notificationTemplates";
 
 /**

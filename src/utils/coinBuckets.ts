@@ -1,4 +1,4 @@
-import { CoinTransactionType } from "../generated/prisma";
+import { CoinTransactionType } from "../generated/prisma/client";
 
 /**
  * Every coin sits in one of two buckets:

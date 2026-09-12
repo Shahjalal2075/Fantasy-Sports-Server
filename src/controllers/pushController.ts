@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { z } from "zod";
 import prisma from "../config/prisma";
 import { sendPush } from "../services/pushService";
-import { NotificationEvent } from "../generated/prisma";
+import { NotificationEvent } from "../generated/prisma/client";
 import { DEFAULT_TEMPLATES, render } from "../utils/notificationTemplates";
 
 /** Every event, in the order the admin panel groups them. */

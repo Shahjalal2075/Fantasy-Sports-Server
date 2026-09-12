@@ -1,4 +1,4 @@
-import { NotificationEvent } from "../generated/prisma";
+import { NotificationEvent } from "../generated/prisma/client";
 
 /**
  * The wording for every automatic notification.

@@ -7,6 +7,7 @@ import {
   getLeaderboard,
   getMyEntries,
   distributePrizes,
+  distributeAllPrizes,
   cancelContest,
 } from "../controllers/contestController";
 import { requireAuth, requireAdmin } from "../middleware/auth";
@@ -25,6 +26,7 @@ router.post("/:id/join", requireAuth, joinContest);
 
 // Admin only
 router.post("/", requireAuth, requireAdmin, createContest);
+router.post("/distribute-all", requireAuth, requireAdmin, distributeAllPrizes);
 router.post("/:id/distribute-prizes", requireAuth, requireAdmin, distributePrizes);
 router.post("/:id/cancel", requireAuth, requireAdmin, cancelContest);
 

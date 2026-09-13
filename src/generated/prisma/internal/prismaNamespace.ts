@@ -402,6 +402,7 @@ export const ModelName = {
   Notification: 'Notification',
   AppSettings: 'AppSettings',
   GiftRequest: 'GiftRequest',
+  AutoTeamSetup: 'AutoTeamSetup',
   ContestPreset: 'ContestPreset',
   RequestAgent: 'RequestAgent',
   CoinCoupon: 'CoinCoupon',
@@ -443,7 +444,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "coinTransaction" | "notification" | "appSettings" | "giftRequest" | "contestPreset" | "requestAgent" | "coinCoupon" | "coinRequest" | "pushToken" | "notificationSetting" | "pushLog" | "contactMethod" | "banner" | "activeSession" | "visitorStat" | "team" | "player" | "match" | "matchLiveLink" | "playerLiveLink" | "matchPlayerInnings" | "matchInnings" | "matchPlayer" | "userTeam" | "userTeamPlayer" | "contest" | "contestEntry" | "pointSystem" | "promoCode" | "promoCodeClaim"
+    modelProps: "user" | "coinTransaction" | "notification" | "appSettings" | "giftRequest" | "autoTeamSetup" | "contestPreset" | "requestAgent" | "coinCoupon" | "coinRequest" | "pushToken" | "notificationSetting" | "pushLog" | "contactMethod" | "banner" | "activeSession" | "visitorStat" | "team" | "player" | "match" | "matchLiveLink" | "playerLiveLink" | "matchPlayerInnings" | "matchInnings" | "matchPlayer" | "userTeam" | "userTeamPlayer" | "contest" | "contestEntry" | "pointSystem" | "promoCode" | "promoCodeClaim"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -814,6 +815,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.GiftRequestCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.GiftRequestCountAggregateOutputType> | number
+        }
+      }
+    }
+    AutoTeamSetup: {
+      payload: Prisma.$AutoTeamSetupPayload<ExtArgs>
+      fields: Prisma.AutoTeamSetupFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.AutoTeamSetupFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AutoTeamSetupPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.AutoTeamSetupFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AutoTeamSetupPayload>
+        }
+        findFirst: {
+          args: Prisma.AutoTeamSetupFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AutoTeamSetupPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.AutoTeamSetupFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AutoTeamSetupPayload>
+        }
+        findMany: {
+          args: Prisma.AutoTeamSetupFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AutoTeamSetupPayload>[]
+        }
+        create: {
+          args: Prisma.AutoTeamSetupCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AutoTeamSetupPayload>
+        }
+        createMany: {
+          args: Prisma.AutoTeamSetupCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.AutoTeamSetupCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AutoTeamSetupPayload>[]
+        }
+        delete: {
+          args: Prisma.AutoTeamSetupDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AutoTeamSetupPayload>
+        }
+        update: {
+          args: Prisma.AutoTeamSetupUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AutoTeamSetupPayload>
+        }
+        deleteMany: {
+          args: Prisma.AutoTeamSetupDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.AutoTeamSetupUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.AutoTeamSetupUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AutoTeamSetupPayload>[]
+        }
+        upsert: {
+          args: Prisma.AutoTeamSetupUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AutoTeamSetupPayload>
+        }
+        aggregate: {
+          args: Prisma.AutoTeamSetupAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAutoTeamSetup>
+        }
+        groupBy: {
+          args: Prisma.AutoTeamSetupGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AutoTeamSetupGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.AutoTeamSetupCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AutoTeamSetupCountAggregateOutputType> | number
         }
       }
     }
@@ -2905,6 +2980,18 @@ export const GiftRequestScalarFieldEnum = {
 export type GiftRequestScalarFieldEnum = (typeof GiftRequestScalarFieldEnum)[keyof typeof GiftRequestScalarFieldEnum]
 
 
+export const AutoTeamSetupScalarFieldEnum = {
+  matchId: 'matchId',
+  userIds: 'userIds',
+  pool: 'pool',
+  captainIds: 'captainIds',
+  viceCaptainIds: 'viceCaptainIds',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AutoTeamSetupScalarFieldEnum = (typeof AutoTeamSetupScalarFieldEnum)[keyof typeof AutoTeamSetupScalarFieldEnum]
+
+
 export const ContestPresetScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -3747,6 +3834,7 @@ export type GlobalOmitConfig = {
   notification?: Prisma.NotificationOmit
   appSettings?: Prisma.AppSettingsOmit
   giftRequest?: Prisma.GiftRequestOmit
+  autoTeamSetup?: Prisma.AutoTeamSetupOmit
   contestPreset?: Prisma.ContestPresetOmit
   requestAgent?: Prisma.RequestAgentOmit
   coinCoupon?: Prisma.CoinCouponOmit

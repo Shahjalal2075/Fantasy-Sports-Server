@@ -6,6 +6,7 @@ import { generateTeams, PoolPlayer } from "../utils/autoTeamGenerator";
 import { debitCoins, InsufficientCoinsError } from "../services/walletService";
 import { sendPush } from "../services/pushService";
 import { CoinTransactionType } from "../generated/prisma/client";
+import { nextTeamName } from "./teamController";
 
 /**
  * Building teams for users automatically.
@@ -122,6 +123,66 @@ export async function searchUsers(req: Request, res: Response) {
   return res.status(200).json({ users });
 }
 
+// ---------- Saved setup ----------
+
+// GET /api/admin/auto-teams/matches/:matchId/setup
+export async function getSetup(req: Request, res: Response) {
+  const { matchId } = req.params as { matchId: string };
+
+  const setup = await prisma.autoTeamSetup.findUnique({ where: { matchId } });
+
+  return res.status(200).json({
+    setup: setup ?? { userIds: [], pool: [], captainIds: [], viceCaptainIds: [] },
+  });
+}
+
+const setupSchema = z.object({
+  userIds: z.array(z.string().uuid()).max(500),
+  pool: z
+    .array(
+      z.object({
+        matchPlayerId: z.string().uuid(),
+        priority: z.number().int().min(0).max(10).optional(),
+      })
+    )
+    .max(60),
+  captainIds: z.array(z.string().uuid()).max(60),
+  viceCaptainIds: z.array(z.string().uuid()).max(60),
+});
+
+/**
+ * PUT /api/admin/auto-teams/matches/:matchId/setup
+ *
+ * Saved on every change so a refresh, a closed tab or a different
+ * machine picks up exactly where the last one left off.
+ */
+export async function saveSetup(req: Request, res: Response) {
+  const { matchId } = req.params as { matchId: string };
+
+  const parsed = setupSchema.safeParse(req.body);
+  if (!parsed.success) {
+    return res.status(400).json({ error: parsed.error.issues[0].message });
+  }
+
+  const match = await prisma.match.findUnique({ where: { id: matchId }, select: { id: true } });
+  if (!match) return res.status(404).json({ error: "Match not found" });
+
+  const data = {
+    userIds: parsed.data.userIds,
+    pool: parsed.data.pool,
+    captainIds: parsed.data.captainIds,
+    viceCaptainIds: parsed.data.viceCaptainIds,
+  };
+
+  const setup = await prisma.autoTeamSetup.upsert({
+    where: { matchId },
+    create: { matchId, ...data },
+    update: data,
+  });
+
+  return res.status(200).json({ setup });
+}
+
 // ---------- Generate ----------
 
 const generateSchema = z.object({
@@ -231,11 +292,26 @@ export async function generate(req: Request, res: Response) {
       continue;
     }
 
+    // Named the way the app names them — "shahjalal (T1)" — so a user
+    // opening My Teams sees nothing out of place.
+    const owner = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { username: true, name: true },
+    });
+
+    const theirTeams = await prisma.userTeam.findMany({
+      where: { userId, matchId },
+      select: { teamName: true },
+    });
+
     const userTeam = await prisma.userTeam.create({
       data: {
         userId,
         matchId,
-        teamName: `Team ${index + 1}`,
+        teamName: nextTeamName(
+          owner?.username ?? owner?.name ?? "Team",
+          theirTeams.map((row) => row.teamName)
+        ),
         captainId: team.captainId,
         viceCaptainId: team.viceCaptainId,
         players: {
@@ -254,6 +330,13 @@ export async function generate(req: Request, res: Response) {
     replaced,
     teams: created,
     failed: result.failed,
+    // True when the pool couldn't yield a distinct team for everyone.
+    repeated: result.repeated,
+    distinctElevens: result.distinctElevens,
+    // The range of priority totals handed out, so an admin can see the
+    // ranking took effect rather than having to trust it.
+    topScore: result.teams[0]?.priorityScore ?? 0,
+    lowestScore: result.teams[result.teams.length - 1]?.priorityScore ?? 0,
   });
 }
 

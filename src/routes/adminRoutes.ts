@@ -74,6 +74,8 @@ import {
   searchUsers as autoTeamUsers,
   generate as autoTeamGenerate,
   joinContest as autoTeamJoin,
+  getSetup as autoTeamGetSetup,
+  saveSetup as autoTeamSaveSetup,
 } from "../controllers/autoTeamController";
 import { requireAuth, requireAdmin } from "../middleware/auth";
 
@@ -118,6 +120,8 @@ router.post("/auto-teams/unlock", unlockAutoTeams);
 router.get("/auto-teams/matches", requireToolPin, autoTeamMatches);
 router.get("/auto-teams/matches/:matchId/players", requireToolPin, autoTeamPool);
 router.get("/auto-teams/users", requireToolPin, autoTeamUsers);
+router.get("/auto-teams/matches/:matchId/setup", requireToolPin, autoTeamGetSetup);
+router.put("/auto-teams/matches/:matchId/setup", requireToolPin, autoTeamSaveSetup);
 router.post("/auto-teams/generate", requireToolPin, autoTeamGenerate);
 router.post("/auto-teams/join", requireToolPin, autoTeamJoin);
 

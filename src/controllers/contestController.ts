@@ -368,8 +368,17 @@ export async function cancelContest(req: Request, res: Response) {
 // points have been calculated (via sync-live-score or calculate-points),
 // so `rank` on each ContestEntry is final. Idempotent — refuses to run
 // twice for the same contest via the prizesDistributed flag.
+/**
+ * Pays out a contest.
+ *
+ * With `paidOnly`, a winner is paid only if they entered at least one
+ * paid contest on this match. Coins the others would have won are
+ * simply not paid — nothing is redistributed, so the ranking a player
+ * sees never changes because of who else did or didn't pay to enter.
+ */
 export async function distributePrizes(req: Request, res: Response) {
   const { id: contestId } = req.params as { id: string };
+  const paidOnly = req.query.paidOnly === "1" || req.body?.paidOnly === true;
 
   const contest = await prisma.contest.findUnique({ where: { id: contestId } });
   if (!contest) {
@@ -410,10 +419,38 @@ export async function distributePrizes(req: Request, res: Response) {
     prizeMap
   );
 
+  /**
+   * Who has paid to enter something on this match.
+   *
+   * Looked up once for the whole contest rather than per winner — a
+   * mega contest can have thousands of entries.
+   */
+  let paidUsers: Set<string> | null = null;
+
+  if (paidOnly) {
+    const entries = await prisma.contestEntry.findMany({
+      where: {
+        userId: { in: splits.map((split) => split.userId) },
+        contest: { matchId: contest.matchId, entryCost: { gt: 0 }, isCancelled: false },
+      },
+      select: { userId: true },
+    });
+
+    paidUsers = new Set(entries.map((row) => row.userId));
+  }
+
   const payouts: { userId: string; rank: number; coins: number; sharedBy: number }[] = [];
+  const unpaid: { userId: string; rank: number; coins: number }[] = [];
 
   await prisma.$transaction(async (tx) => {
     for (const split of splits) {
+      if (paidUsers && !paidUsers.has(split.userId)) {
+        // Recorded so the admin can see who was passed over and for how
+        // much, rather than the coins quietly disappearing.
+        unpaid.push({ userId: split.userId, rank: split.rank, coins: split.coins });
+        continue;
+      }
+
       await creditCoins(tx, split.userId, split.coins, CoinTransactionType.CONTEST_PRIZE, {
         contestId,
         reason:
@@ -467,5 +504,78 @@ export async function distributePrizes(req: Request, res: Response) {
     });
   }
 
-  return res.status(200).json({ message: "Prizes distributed", payouts });
+  return res.status(200).json({
+    message: "Prizes distributed",
+    payouts,
+    // Winners passed over because they never entered a paid contest on
+    // this match, and what they would have received.
+    unpaid,
+    unpaidCoins: unpaid.reduce((sum, row) => sum + row.coins, 0),
+  });
+}
+
+/**
+ * POST /api/contests/distribute-all   body: { matchId, paidOnly }
+ *
+ * Pays out every contest on a match in one go.
+ *
+ * Contests already settled are skipped rather than treated as an error:
+ * a match usually gets one or two paid late, and having to remember
+ * which is a good way to miss one.
+ */
+export async function distributeAllPrizes(req: Request, res: Response) {
+  const matchId = String(req.body?.matchId ?? "");
+  const paidOnly = req.body?.paidOnly === true;
+
+  if (!matchId) return res.status(400).json({ error: "Which match?" });
+
+  const contests = await prisma.contest.findMany({
+    where: { matchId, isCancelled: false, prizesDistributed: false },
+    select: { id: true, name: true },
+    orderBy: { createdAt: "asc" },
+  });
+
+  if (contests.length === 0) {
+    return res.status(400).json({ error: "Every contest on this match has already been paid." });
+  }
+
+  const done: { name: string; paid: number; coins: number; unpaidCoins: number }[] = [];
+  const failed: { name: string; error: string }[] = [];
+
+  for (const contest of contests) {
+    // Each contest runs through the same handler, so a bulk run and a
+    // single one can never drift apart in behaviour.
+    const captured: { status: number; body: any } = { status: 200, body: {} };
+
+    const fakeRes = {
+      status(code: number) {
+        captured.status = code;
+        return this;
+      },
+      json(body: any) {
+        captured.body = body;
+        return this;
+      },
+    } as unknown as Response;
+
+    await distributePrizes(
+      { params: { id: contest.id }, query: {}, body: { paidOnly } } as unknown as Request,
+      fakeRes
+    );
+
+    if (captured.status >= 400) {
+      failed.push({ name: contest.name, error: captured.body?.error ?? "Failed" });
+      continue;
+    }
+
+    const payouts = captured.body?.payouts ?? [];
+    done.push({
+      name: contest.name,
+      paid: payouts.length,
+      coins: payouts.reduce((sum: number, row: any) => sum + row.coins, 0),
+      unpaidCoins: captured.body?.unpaidCoins ?? 0,
+    });
+  }
+
+  return res.status(200).json({ done, failed });
 }

@@ -9,7 +9,7 @@ import { getCaptainMultipliers } from "../services/pointsService";
 // (count + 1) so that deleting T1 and creating again reuses T1 instead
 // of colliding with an existing T2 on the (userId, matchId, teamName)
 // unique constraint.
-function nextTeamName(username: string, existingNames: string[]): string {
+export function nextTeamName(username: string, existingNames: string[]): string {
   const used = new Set<number>();
   for (const name of existingNames) {
     const match = name.match(/\(T(\d+)\)$/);

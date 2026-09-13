@@ -56,6 +56,7 @@ export const ModelName = {
   Notification: 'Notification',
   AppSettings: 'AppSettings',
   GiftRequest: 'GiftRequest',
+  AutoTeamSetup: 'AutoTeamSetup',
   ContestPreset: 'ContestPreset',
   RequestAgent: 'RequestAgent',
   CoinCoupon: 'CoinCoupon',
@@ -223,6 +224,18 @@ export const GiftRequestScalarFieldEnum = {
 } as const
 
 export type GiftRequestScalarFieldEnum = (typeof GiftRequestScalarFieldEnum)[keyof typeof GiftRequestScalarFieldEnum]
+
+
+export const AutoTeamSetupScalarFieldEnum = {
+  matchId: 'matchId',
+  userIds: 'userIds',
+  pool: 'pool',
+  captainIds: 'captainIds',
+  viceCaptainIds: 'viceCaptainIds',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AutoTeamSetupScalarFieldEnum = (typeof AutoTeamSetupScalarFieldEnum)[keyof typeof AutoTeamSetupScalarFieldEnum]
 
 
 export const ContestPresetScalarFieldEnum = {

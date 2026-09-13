@@ -321,6 +321,29 @@ model GiftRequest {
   @@map("gift_requests")
 }
 
+// What the auto-teams tool was last set up with, for one match.
+//
+// Saved rather than kept in the browser: the pool and its priorities
+// take real effort to put together, and losing them to a refresh — or
+// to opening the panel on a different machine — would mean doing it all
+// again.
+model AutoTeamSetup {
+  matchId String @id
+  match   Match  @relation(fields: [matchId], references: [id], onDelete: Cascade)
+
+  /** User ids chosen to receive a team. */
+  userIds Json @default("[]")
+  /** [{ matchPlayerId, priority }] — the pool and how it's weighted. */
+  pool    Json @default("[]")
+  /** MatchPlayer ids eligible to be captain, and vice-captain. */
+  captainIds     Json @default("[]")
+  viceCaptainIds Json @default("[]")
+
+  updatedAt DateTime @updatedAt
+
+  @@map("auto_team_setups")
+}
+
 // A saved contest shape, not tied to any match.
 //
 // The same few contests get created for every fixture — a mega, a head
@@ -683,6 +706,7 @@ model Match {
   matchPlayers MatchPlayer[]
   innings      MatchInnings[]
   liveLink     MatchLiveLink?
+  autoTeamSetup AutoTeamSetup?
   userTeams    UserTeam[]
   contests     Contest[]
 

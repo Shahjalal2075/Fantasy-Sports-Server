@@ -67,6 +67,11 @@ export type AppSettings = Prisma.AppSettingsModel
  */
 export type GiftRequest = Prisma.GiftRequestModel
 /**
+ * Model AutoTeamSetup
+ * 
+ */
+export type AutoTeamSetup = Prisma.AutoTeamSetupModel
+/**
  * Model ContestPreset
  * 
  */

@@ -145,9 +145,12 @@ const setupSchema = z.object({
         priority: z.number().int().min(0).max(10).optional(),
       })
     )
-    .max(60),
-  captainIds: z.array(z.string().uuid()).max(60),
-  viceCaptainIds: z.array(z.string().uuid()).max(60),
+    // Room for a full squad from both sides with reserves. A cap that
+    // bites would reject the save and leave the admin with no pool and
+    // no explanation.
+    .max(200),
+  captainIds: z.array(z.string().uuid()).max(200),
+  viceCaptainIds: z.array(z.string().uuid()).max(200),
 });
 
 /**

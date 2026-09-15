@@ -110,17 +110,20 @@ export async function searchUsers(req: Request, res: Response) {
             OR: [
               { name: { contains: q, mode: "insensitive" as const } },
               { username: { contains: q, mode: "insensitive" as const } },
+              // Email included so a whole batch can be pulled up by its
+              // domain — "@strongxi.test" finds every seeded account.
+              { email: { contains: q, mode: "insensitive" as const } },
               { phone: { contains: q } },
             ],
           }
         : {}),
     },
-    select: { id: true, name: true, username: true, coins: true },
+    select: { id: true, name: true, username: true, email: true, coins: true },
     orderBy: { createdAt: "desc" },
-    take: q.length >= 2 ? 30 : 50,
+    take: 150,
   });
 
-  return res.status(200).json({ users });
+  return res.status(200).json({ users, total: users.length });
 }
 
 // ---------- Saved setup ----------
